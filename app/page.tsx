@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import html2canvas from "html2canvas";
 import { Download } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { FormInput } from "@/components/ui/form-input";
 
 // Social media image dimensions
 const IMAGE_FORMATS = {
@@ -25,64 +26,89 @@ export default function ThumbnailGeneratorPage() {
   const previewRef = useRef<HTMLDivElement>(null);
 
   const handleDownload = async (formatName: keyof typeof IMAGE_FORMATS) => {
-    if (!previewRef.current) return;
-
     setIsGenerating(true);
 
     try {
       const format = IMAGE_FORMATS[formatName];
 
-      // Ensure fonts are loaded before capturing
+      // Ensure fonts are loaded
       await document.fonts.ready;
 
-      // Capture the preview with improved options
-      const canvas = await html2canvas(previewRef.current, {
-        backgroundColor: "#000000",
-        scale: 2, // Higher quality
-        logging: false,
-        useCORS: true,
-        allowTaint: true,
-        width: previewRef.current.offsetWidth,
-        height: previewRef.current.offsetHeight,
-        onclone: (clonedDoc) => {
-          // Ensure the cloned element is visible and properly styled
-          const clonedElement = clonedDoc.querySelector('[data-cover-generator]');
-          if (clonedElement) {
-            (clonedElement as HTMLElement).style.visibility = 'visible';
-          }
-        },
-      });
-
-      // Create a new canvas with the target dimensions
-      const targetCanvas = document.createElement("canvas");
-      targetCanvas.width = format.width;
-      targetCanvas.height = format.height;
-      const ctx = targetCanvas.getContext("2d");
+      // Create canvas with target dimensions
+      const canvas = document.createElement("canvas");
+      canvas.width = format.width;
+      canvas.height = format.height;
+      const ctx = canvas.getContext("2d");
 
       if (!ctx) return;
 
-      // Fill with black background
+      // Fill black background
       ctx.fillStyle = "#000000";
       ctx.fillRect(0, 0, format.width, format.height);
 
-      // Calculate scaling to fit
-      const scale = Math.max(
-        format.width / canvas.width,
-        format.height / canvas.height
-      );
+      // Draw grid
+      const gridSize = 100; // Desktop grid size
+      ctx.strokeStyle = "#666666";
+      ctx.lineWidth = 1;
+      ctx.globalAlpha = 0.2;
 
-      const scaledWidth = canvas.width * scale;
-      const scaledHeight = canvas.height * scale;
+      // Vertical lines
+      for (let x = 0; x <= format.width; x += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, format.height);
+        ctx.stroke();
+      }
 
-      // Center the image
-      const x = (format.width - scaledWidth) / 2;
-      const y = (format.height - scaledHeight) / 2;
+      // Horizontal lines
+      for (let y = 0; y <= format.height; y += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(format.width, y);
+        ctx.stroke();
+      }
 
-      // Draw the scaled image
-      ctx.drawImage(canvas, x, y, scaledWidth, scaledHeight);
+      // Reset alpha for text
+      ctx.globalAlpha = 1.0;
+
+      // Draw text
+      ctx.fillStyle = "#ffffff";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+
+      // Calculate font size (roughly 8% of width)
+      const fontSize = Math.floor(format.width * 0.08);
+      ctx.font = `bold ${fontSize}px monospace`;
+
+      // Word wrap the title
+      const maxWidth = format.width * 0.9;
+      const words = title.split(" ");
+      const lines: string[] = [];
+      let currentLine = words[0];
+
+      for (let i = 1; i < words.length; i++) {
+        const testLine = currentLine + " " + words[i];
+        const metrics = ctx.measureText(testLine);
+        if (metrics.width > maxWidth) {
+          lines.push(currentLine);
+          currentLine = words[i];
+        } else {
+          currentLine = testLine;
+        }
+      }
+      lines.push(currentLine);
+
+      // Draw each line
+      const lineHeight = fontSize * 1.1;
+      const totalHeight = lines.length * lineHeight;
+      const startY = (format.height - totalHeight) / 2 + fontSize / 2;
+
+      lines.forEach((line, index) => {
+        ctx.fillText(line, format.width / 2, startY + index * lineHeight);
+      });
 
       // Convert to blob and download
-      targetCanvas.toBlob((blob) => {
+      canvas.toBlob((blob) => {
         if (!blob) return;
 
         const url = URL.createObjectURL(blob);
@@ -131,7 +157,8 @@ export default function ThumbnailGeneratorPage() {
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="title">Title Text</Label>
-                  <Input
+                  <FormInput
+                    // startIcon={}
                     id="title"
                     placeholder="Enter your title..."
                     value={title}
@@ -180,7 +207,11 @@ export default function ThumbnailGeneratorPage() {
             <div
               ref={previewRef}
               className="overflow-hidden rounded-lg border shadow-lg"
-              style={{ height: "600px" }}
+              style={{
+                aspectRatio: "16/9",
+                width: "100%",
+                maxHeight: "600px",
+              }}
             >
               <CoverGenerator title={title} />
             </div>

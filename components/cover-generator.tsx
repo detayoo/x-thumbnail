@@ -1,24 +1,11 @@
 /**
  * CoverGenerator - Generates a fullscreen cover/thumbnail with grid background
+ * This component uses only hex colors to ensure html2canvas compatibility
  *
- * @param title - The title text to display (e.g., article title or "avantmag")
- * @param gridSize - Size of each grid cell in pixels (default: auto-calculated) or object with responsive sizes
+ * @param title - The title text to display
+ * @param gridSize - Size of each grid cell in pixels or responsive object
  * @param gridOpacity - Opacity of the grid lines (default: 0.2)
- * @param textSize - Responsive text sizes for different breakpoints (auto-calculated based on title length if not provided)
- *
- * Usage:
- * ```tsx
- * <CoverGenerator title="The Geometry of Innovation" />
- * ```
- *
- * Advanced usage with custom sizes:
- * ```tsx
- * <CoverGenerator
- *   title="Custom Title"
- *   gridSize={{ mobile: 40, tablet: 60, desktop: 80 }}
- *   textSize={{ sm: "text-[3rem]", md: "text-[6rem]", lg: "text-[10rem]" }}
- * />
- * ```
+ * @param textSize - Responsive text sizes (auto-calculated if not provided)
  */
 interface CoverGeneratorProps {
   title: any;
@@ -80,7 +67,11 @@ export function CoverGenerator({
   const finalTextSize = getResponsiveTextSize();
 
   return (
-    <div className="relative h-full w-full overflow-hidden bg-black" data-cover-generator>
+    <div 
+      className="relative h-full w-full overflow-hidden" 
+      data-cover-generator
+      style={{ backgroundColor: "#000000" }}
+    >
       {/* Grid Background using SVG for better html2canvas compatibility */}
       <svg
         className="absolute inset-0 h-full w-full"
@@ -97,7 +88,7 @@ export function CoverGenerator({
             <path
               d={`M ${typeof responsiveGridSize === "number" ? responsiveGridSize : responsiveGridSize.mobile} 0 L 0 0 0 ${typeof responsiveGridSize === "number" ? responsiveGridSize : responsiveGridSize.mobile}`}
               fill="none"
-              stroke="#666"
+              stroke="#666666"
               strokeWidth="1"
               opacity={gridOpacity}
             />
@@ -111,7 +102,7 @@ export function CoverGenerator({
             <path
               d={`M ${typeof responsiveGridSize === "number" ? responsiveGridSize : responsiveGridSize.tablet} 0 L 0 0 0 ${typeof responsiveGridSize === "number" ? responsiveGridSize : responsiveGridSize.tablet}`}
               fill="none"
-              stroke="#666"
+              stroke="#666666"
               strokeWidth="1"
               opacity={gridOpacity}
             />
@@ -125,7 +116,7 @@ export function CoverGenerator({
             <path
               d={`M ${typeof responsiveGridSize === "number" ? responsiveGridSize : responsiveGridSize.desktop} 0 L 0 0 0 ${typeof responsiveGridSize === "number" ? responsiveGridSize : responsiveGridSize.desktop}`}
               fill="none"
-              stroke="#666"
+              stroke="#666666"
               strokeWidth="1"
               opacity={gridOpacity}
             />
@@ -139,10 +130,11 @@ export function CoverGenerator({
       {/* Text Content */}
       <div className="relative flex h-full w-full items-center justify-center px-4 sm:px-8 md:px-12 lg:px-16">
         <h1
-          className="font-mono font-bold tracking-tight text-white text-center break-words hyphens-auto max-w-[90%] leading-[0.9] sm:leading-[0.95] md:leading-[1]"
+          className="font-mono font-bold tracking-tight text-center break-words hyphens-auto max-w-[90%] leading-[0.9] sm:leading-[0.95] md:leading-[1]"
           style={{
             fontFamily: "var(--font-geist-mono)",
             fontSize: "clamp(2.5rem, 8vw, 6rem)",
+            color: "#ffffff",
           }}
         >
           {title}
