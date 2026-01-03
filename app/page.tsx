@@ -33,6 +33,16 @@ export default function ThumbnailGeneratorPage() {
 
       // Ensure fonts are loaded
       await document.fonts.ready;
+      
+      // Calculate font size first
+      const fontSize = Math.floor(format.width * 0.08);
+      
+      // Explicitly load Geist Mono font
+      try {
+        await document.fonts.load(`bold ${fontSize}px "Geist Mono"`);
+      } catch (e) {
+        console.warn("Could not load Geist Mono font, using fallback");
+      }
 
       // Create canvas with target dimensions
       const canvas = document.createElement("canvas");
@@ -75,10 +85,9 @@ export default function ThumbnailGeneratorPage() {
       ctx.fillStyle = "#ffffff";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-
-      // Calculate font size (roughly 8% of width)
-      const fontSize = Math.floor(format.width * 0.08);
-      ctx.font = `bold ${fontSize}px monospace`;
+      
+      // Use Geist Mono font with fallback
+      ctx.font = `bold ${fontSize}px "Geist Mono", monospace`;
 
       // Word wrap the title
       const maxWidth = format.width * 0.9;
