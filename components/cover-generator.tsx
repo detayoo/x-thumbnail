@@ -104,7 +104,7 @@ export function CoverGenerator({
                   : responsiveGridSize.mobile
               }`}
               fill="none"
-              stroke="#666666"
+              stroke="#ffff"
               strokeWidth="1"
               opacity={gridOpacity}
             />
@@ -134,7 +134,7 @@ export function CoverGenerator({
                   : responsiveGridSize.tablet
               }`}
               fill="none"
-              stroke="#666666"
+              stroke="#ffff"
               strokeWidth="1"
               opacity={gridOpacity}
             />
@@ -164,7 +164,7 @@ export function CoverGenerator({
                   : responsiveGridSize.desktop
               }`}
               fill="none"
-              stroke="#666666"
+              stroke="#ffff"
               strokeWidth="1"
               opacity={gridOpacity}
             />
