@@ -9,6 +9,7 @@
  */
 interface CoverGeneratorProps {
   title: any;
+  fontSize?: number;
   gridSize?: number | { mobile: number; tablet: number; desktop: number };
   gridOpacity?: number;
   textSize?: {
@@ -20,6 +21,7 @@ interface CoverGeneratorProps {
 
 export function CoverGenerator({
   title,
+  fontSize = 80,
   gridSize,
   gridOpacity = 0.2,
   textSize,
@@ -196,7 +198,7 @@ export function CoverGenerator({
           className="font-mono font-bold tracking-tight text-left break-words hyphens-auto max-w-[90%] leading-[0.9] sm:leading-[0.95] md:leading-[1]"
           style={{
             fontFamily: "var(--font-geist-mono)",
-            fontSize: "clamp(2.5rem, 8vw, 6rem)",
+            fontSize: `${fontSize}px`,
             color: "#ffffff",
           }}
         >
