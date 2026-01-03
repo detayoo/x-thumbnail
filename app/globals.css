@@ -126,7 +126,7 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: var(--font-avant-garde), var(--font-sans), Arial, sans-serif;
+    font-family: var(--font-mono), var(--font-sans), Arial, sans-serif;
   }
 
   input:-webkit-autofill,

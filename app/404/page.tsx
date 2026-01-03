@@ -1,5 +1,6 @@
-import { CoverGenerator } from "@/components/cover-generator";
+import { notFound } from "next/navigation";
 
-export const NotFound = () => {
-  return <CoverGenerator title="Page Not Found" />;
-};
+export default function Custom404Page() {
+  // Redirect to the proper not-found page
+  notFound();
+}

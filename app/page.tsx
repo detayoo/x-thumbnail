@@ -33,10 +33,10 @@ export default function ThumbnailGeneratorPage() {
 
       // Ensure fonts are loaded
       await document.fonts.ready;
-      
+
       // Calculate font size first
       const fontSize = Math.floor(format.width * 0.08);
-      
+
       // Explicitly load Geist Mono font
       try {
         await document.fonts.load(`bold ${fontSize}px "Geist Mono"`);
@@ -85,7 +85,7 @@ export default function ThumbnailGeneratorPage() {
       ctx.fillStyle = "#ffffff";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      
+
       // Use Geist Mono font with fallback
       ctx.font = `bold ${fontSize}px "Geist Mono", monospace`;
 
