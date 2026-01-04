@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import html2canvas from "html2canvas";
 import { Download } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { FormInput } from "@/components/ui/form-input";
@@ -40,7 +39,6 @@ export default function ThumbnailGeneratorPage() {
   const handleFontSizeChange = (value: string) => {
     setFontSizeInput(value);
 
-    // Validate and update fontSize
     const numValue = parseInt(value);
     if (!isNaN(numValue) && numValue >= 20 && numValue <= 200) {
       setFontSize(numValue);
@@ -64,20 +62,16 @@ export default function ThumbnailGeneratorPage() {
     try {
       const format = IMAGE_FORMATS[formatName];
 
-      // Ensure fonts are loaded
       await document.fonts.ready;
 
-      // Calculate font size based on user input and format width
       const scaledFontSize = Math.floor((fontSize / 80) * format.width * 0.08);
 
-      // Explicitly load Geist Mono font
       try {
         await document.fonts.load(`bold ${scaledFontSize}px "Geist Mono"`);
       } catch (e) {
         console.warn("Could not load Geist Mono font, using fallback");
       }
 
-      // Create canvas with target dimensions
       const canvas = document.createElement("canvas");
       canvas.width = format.width;
       canvas.height = format.height;
@@ -85,7 +79,6 @@ export default function ThumbnailGeneratorPage() {
 
       if (!ctx) return;
 
-      // Fill black background
       ctx.fillStyle = "#000000";
       ctx.fillRect(0, 0, format.width, format.height);
 
@@ -179,7 +172,6 @@ export default function ThumbnailGeneratorPage() {
   return (
     <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        {/* Header */}
         <div className="mb-12 text-center">
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
             x-thumbnail
@@ -191,7 +183,6 @@ export default function ThumbnailGeneratorPage() {
         </div>
 
         <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
-          {/* Form Section */}
           <div className="space-y-6">
             <Card className="border rounded-[30px]">
               <CardHeader className="space-y-1">
@@ -237,7 +228,6 @@ export default function ThumbnailGeneratorPage() {
               </CardContent>
             </Card>
 
-            {/* Download Section */}
             <Card className="border rounded-[30px]">
               <CardHeader className="space-y-1">
                 <CardTitle className="text-xl">export</CardTitle>
@@ -298,7 +288,6 @@ export default function ThumbnailGeneratorPage() {
             </Card>
           </div>
 
-          {/* Preview Section */}
           <div className="space-y-4 lg:sticky lg:top-8 lg:self-start">
             <div className="flex items-center justify-between">
               <div className="text-base font-semibold">live preview</div>
