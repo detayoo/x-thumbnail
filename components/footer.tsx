@@ -19,7 +19,7 @@ export function Footer() {
               variant="outline"
               size="default"
               asChild
-              className="rounded-full shadow-none"
+              className="rounded-full shadow-none font-normal"
             >
               <a
                 href="https://github.com/detayoo"
@@ -33,7 +33,7 @@ export function Footer() {
               variant="outline"
               size="default"
               asChild
-              className="rounded-full shadow-none"
+              className="rounded-full shadow-none font-normal"
             >
               <a
                 href="https://linkedin.com/in/tayo-adedigba"
@@ -47,7 +47,7 @@ export function Footer() {
               variant="outline"
               size="default"
               asChild
-              className="rounded-full border shadow-none"
+              className="rounded-full border shadow-none font-normal"
             >
               <a
                 href="https://x.com/adedigggba"
