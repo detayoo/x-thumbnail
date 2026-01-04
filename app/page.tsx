@@ -18,6 +18,7 @@ import {
   ComboboxEmpty,
 } from "@/components/ui/combobox";
 import { Footer } from "@/components/footer";
+import { SITE_DESCRIPTION } from "@/utils/constants";
 
 // Social media image dimensions
 const IMAGE_FORMATS = {
@@ -202,9 +203,7 @@ export default function ThumbnailGeneratorPage() {
             x-thumbnail
           </h1>
           <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-            writing code is hard work already, let us help! instantly generate a
-            simple thumbnail for your side project in seconds, so you can spend
-            more time coding.
+            {SITE_DESCRIPTION}
           </p>
         </div>
 
