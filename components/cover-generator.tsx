@@ -72,7 +72,10 @@ export function CoverGenerator({
     <div
       className="relative h-full w-full overflow-hidden"
       data-cover-generator
-      style={{ backgroundColor: "#000000" }}
+      style={{ 
+        backgroundColor: "#000000",
+        color: "#ffffff"
+      }}
     >
       {/* Grid Background using SVG for better html2canvas compatibility */}
       <svg
@@ -107,7 +110,7 @@ export function CoverGenerator({
               }`}
               fill="none"
               stroke="#ffff"
-              strokeWidth="1"
+              strokeWidth="3"
               opacity={gridOpacity}
             />
           </pattern>
@@ -137,7 +140,7 @@ export function CoverGenerator({
               }`}
               fill="none"
               stroke="#ffff"
-              strokeWidth="1"
+              strokeWidth="3"
               opacity={gridOpacity}
             />
           </pattern>
@@ -167,7 +170,7 @@ export function CoverGenerator({
               }`}
               fill="none"
               stroke="#ffff"
-              strokeWidth="1"
+              strokeWidth="3"
               opacity={gridOpacity}
             />
           </pattern>
@@ -193,7 +196,7 @@ export function CoverGenerator({
       </svg>
 
       {/* Text Content */}
-      <div className="relative flex h-full w-full items-center justify-center px-4 sm:px-8 md:px-12 lg:px-16">
+      <div className="relative flex h-full w-full items-center justify-start px-4 sm:px-8 md:px-12 lg:px-16">
         <h1
           className="font-mono font-bold tracking-tight text-left break-words hyphens-auto max-w-[90%] leading-[0.9] sm:leading-[0.95] md:leading-[1]"
           style={{

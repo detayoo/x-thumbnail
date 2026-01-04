@@ -62,34 +62,31 @@ export default function ThumbnailGeneratorPage() {
 
     try {
       const format = IMAGE_FORMATS[formatName];
-
       await document.fonts.ready;
 
-      const scaledFontSize = Math.floor((fontSize / 80) * format.width * 0.08);
-
-      try {
-        await document.fonts.load(`bold ${scaledFontSize}px "Geist Mono"`);
-      } catch (e) {
-        console.warn("Could not load Geist Mono font, using fallback");
-      }
-
+      // Create canvas
       const canvas = document.createElement("canvas");
-      canvas.width = format.width;
-      canvas.height = format.height;
+      const scale = 2;
+      canvas.width = format.width * scale;
+      canvas.height = format.height * scale;
+      
       const ctx = canvas.getContext("2d");
-
       if (!ctx) return;
 
+      ctx.scale(scale, scale);
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+
+      // Background
       ctx.fillStyle = "#000000";
       ctx.fillRect(0, 0, format.width, format.height);
 
-      // Draw grid
-      const gridSize = 100; // Desktop grid size
-      ctx.strokeStyle = "#666666";
-      ctx.lineWidth = 1;
+      // Grid
+      const gridSize = 100;
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 3;
       ctx.globalAlpha = 0.2;
 
-      // Vertical lines
       for (let x = 0; x <= format.width; x += gridSize) {
         ctx.beginPath();
         ctx.moveTo(x, 0);
@@ -97,7 +94,6 @@ export default function ThumbnailGeneratorPage() {
         ctx.stroke();
       }
 
-      // Horizontal lines
       for (let y = 0; y <= format.height; y += gridSize) {
         ctx.beginPath();
         ctx.moveTo(0, y);
@@ -105,22 +101,21 @@ export default function ThumbnailGeneratorPage() {
         ctx.stroke();
       }
 
-      // Reset alpha for text
       ctx.globalAlpha = 1.0;
 
-      // Draw text
+      // Text
       ctx.fillStyle = "#ffffff";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "top";
+      ctx.font = `bold ${fontSize}px "Geist Mono", monospace`;
 
-      // Use Geist Mono font with fallback
-      ctx.font = `bold ${scaledFontSize}px "Geist Mono", monospace`;
+      const leftPadding = 64;
+      const maxWidth = format.width * 0.5; // Use 50% of width for text
 
-      // Word wrap the title
-      const maxWidth = format.width * 0.9;
+      // Word wrap
       const words = title.split(" ");
       const lines: string[] = [];
-      let currentLine = words[0];
+      let currentLine = words[0] || "";
 
       for (let i = 1; i < words.length; i++) {
         const testLine = currentLine + " " + words[i];
@@ -132,39 +127,31 @@ export default function ThumbnailGeneratorPage() {
           currentLine = testLine;
         }
       }
-      lines.push(currentLine);
+      if (currentLine) lines.push(currentLine);
 
-      // Draw each line
-      const lineHeight = scaledFontSize * 1.1;
+      // Center vertically
+      const lineHeight = fontSize * 1.0;
       const totalHeight = lines.length * lineHeight;
-      const startY = (format.height - totalHeight) / 2 + scaledFontSize / 2;
+      const startY = (format.height - totalHeight) / 2;
 
       lines.forEach((line, index) => {
-        ctx.fillText(line, format.width / 2, startY + index * lineHeight);
+        ctx.fillText(line, leftPadding, startY + index * lineHeight);
       });
 
-      // Convert to blob and download
+      // Download
       canvas.toBlob((blob) => {
         if (!blob) return;
-
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
-        const fileName = `${title
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, "-")
-          .replace(/^-|-$/g, "")}-${formatName
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, "-")}.png`;
-
         link.href = url;
-        link.download = fileName;
+        link.download = `${title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}-${formatName.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.png`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
       }, "image/png");
     } catch (error) {
-      console.error("Error generating thumbnail:", error);
+      console.error("Error:", error);
     } finally {
       setIsGenerating(false);
     }

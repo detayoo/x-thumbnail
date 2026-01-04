@@ -29,7 +29,7 @@ export function Footer() {
                 github
               </a>
             </Button>
-            <Button
+            {/* <Button
               variant="outline"
               size="default"
               asChild
@@ -42,7 +42,7 @@ export function Footer() {
               >
                 linkedin
               </a>
-            </Button>
+            </Button> */}
             <Button
               variant="outline"
               size="default"
