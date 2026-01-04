@@ -35,6 +35,7 @@ export default function ThumbnailGeneratorPage() {
   const [selectedFormat, setSelectedFormat] =
     useState<keyof typeof IMAGE_FORMATS>("X");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [useFullGrid, setUseFullGrid] = useState(true);
   const previewRef = useRef<HTMLDivElement>(null);
 
   const handleFontSizeChange = (value: string) => {
@@ -69,47 +70,78 @@ export default function ThumbnailGeneratorPage() {
       const scale = 2;
       canvas.width = format.width * scale;
       canvas.height = format.height * scale;
-      
+
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
 
       ctx.scale(scale, scale);
       ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = 'high';
+      ctx.imageSmoothingQuality = "high";
 
       // Background
       ctx.fillStyle = "#000000";
       ctx.fillRect(0, 0, format.width, format.height);
 
-      // Grid with larger spacing
-      const gridSize = 150; // Increased from 100 to 150 for bigger grid cells
+      // Grid rendering
       ctx.strokeStyle = "#ffffff";
       ctx.lineWidth = 3;
       ctx.globalAlpha = 0.2;
 
-      for (let x = 0; x <= format.width; x += gridSize) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, format.height);
-        ctx.stroke();
-      }
+      if (useFullGrid) {
+        // Full grid with larger spacing
+        const gridSize = 150;
+        for (let x = 0; x <= format.width; x += gridSize) {
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, format.height);
+          ctx.stroke();
+        }
 
-      for (let y = 0; y <= format.height; y += gridSize) {
+        for (let y = 0; y <= format.height; y += gridSize) {
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(format.width, y);
+          ctx.stroke();
+        }
+      } else {
+        // Border-only grid - lines running full length with padding from edges
+        const horizontalPadding = 48;
+        const verticalPadding = 32;
+
+        // Left vertical line - full height
         ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(format.width, y);
+        ctx.moveTo(horizontalPadding, 0);
+        ctx.lineTo(horizontalPadding, format.height);
+        ctx.stroke();
+
+        // Right vertical line - full height
+        ctx.beginPath();
+        ctx.moveTo(format.width - horizontalPadding, 0);
+        ctx.lineTo(format.width - horizontalPadding, format.height);
+        ctx.stroke();
+
+        // Top horizontal line - full width
+        ctx.beginPath();
+        ctx.moveTo(0, verticalPadding);
+        ctx.lineTo(format.width, verticalPadding);
+        ctx.stroke();
+
+        // Bottom horizontal line - full width
+        ctx.beginPath();
+        ctx.moveTo(0, format.height - verticalPadding);
+        ctx.lineTo(format.width, format.height - verticalPadding);
         ctx.stroke();
       }
 
       ctx.globalAlpha = 1.0;
 
-      // Text
+      // Text (increase font size by 10 for download)
       ctx.fillStyle = "#ffffff";
       ctx.textAlign = "left";
       ctx.textBaseline = "top";
-      ctx.font = `bold ${fontSize}px "Geist Mono", monospace`;
+      ctx.font = `bold ${fontSize + 25}px "Geist Mono", monospace`;
 
-      const leftPadding = 64;
+      const leftPadding = 100;
       const maxWidth = format.width * 0.5; // Use 50% of width for text
 
       // Word wrap
@@ -129,8 +161,8 @@ export default function ThumbnailGeneratorPage() {
       }
       if (currentLine) lines.push(currentLine);
 
-      // Center vertically
-      const lineHeight = fontSize * 1.0;
+      // Center vertically (use increased font size with more line spacing)
+      const lineHeight = (fontSize + 10) * 1.15;
       const totalHeight = lines.length * lineHeight;
       const startY = (format.height - totalHeight) / 2;
 
@@ -144,7 +176,12 @@ export default function ThumbnailGeneratorPage() {
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-        link.download = `${title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}-${formatName.toLowerCase().replace(/[^a-z0-9]+/g, "-")}.png`;
+        link.download = `${title
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-|-$/g, "")}-${formatName
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")}.png`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -212,6 +249,33 @@ export default function ThumbnailGeneratorPage() {
                   <p className="text-xs text-muted-foreground">
                     Choose between 20-200px
                   </p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="gridType" className="text-base font-medium">
+                    grid style
+                  </Label>
+                  <div className="flex items-center gap-3">
+                    <Button
+                      type="button"
+                      variant={useFullGrid ? "default" : "outline"}
+                      className="flex-1"
+                      onClick={() => setUseFullGrid(true)}
+                    >
+                      full grid
+                    </Button>
+                    <Button
+                      type="button"
+                      variant={!useFullGrid ? "default" : "outline"}
+                      className="flex-1"
+                      onClick={() => setUseFullGrid(false)}
+                    >
+                      border only
+                    </Button>
+                  </div>
+                  {/* <p className="text-xs text-muted-foreground">
+                    {useFullGrid ? "Full grid pattern" : "Simple border frame"}
+                  </p> */}
                 </div>
               </CardContent>
             </Card>
@@ -290,12 +354,16 @@ export default function ThumbnailGeneratorPage() {
                 maxHeight: "600px",
               }}
             >
-              <CoverGenerator title={title} fontSize={fontSize} />
+              <CoverGenerator
+                title={title}
+                fontSize={fontSize}
+                useFullGrid={useFullGrid}
+              />
             </div>
           </div>
         </div>
-        
-        <Footer  />
+
+        <Footer />
       </div>
     </div>
   );
