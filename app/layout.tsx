@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import { Analytics } from "@vercel/analytics/next";
+
 import {
   SITE_NAME,
   SITE_DESCRIPTION,
@@ -52,6 +54,7 @@ export default function RootLayout({
       >
         {children}
         <Toaster position="bottom-center" richColors />
+        <Analytics />
       </body>
     </html>
   );
