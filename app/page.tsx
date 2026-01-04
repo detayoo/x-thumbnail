@@ -81,8 +81,8 @@ export default function ThumbnailGeneratorPage() {
       ctx.fillStyle = "#000000";
       ctx.fillRect(0, 0, format.width, format.height);
 
-      // Grid
-      const gridSize = 100;
+      // Grid with larger spacing
+      const gridSize = 150; // Increased from 100 to 150 for bigger grid cells
       ctx.strokeStyle = "#ffffff";
       ctx.lineWidth = 3;
       ctx.globalAlpha = 0.2;
