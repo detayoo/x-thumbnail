@@ -47,8 +47,11 @@ const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
         <InputGroupInput
           ref={ref}
           className={cn(
-            "text-base md:text-sm touch-manipulation ml-2", 
-            className
+            cn(
+              "text-base md:text-sm touch-manipulation",
+              startIcon && "ml-2",
+              className
+            )
           )}
           style={{ minHeight }}  
           autoComplete={

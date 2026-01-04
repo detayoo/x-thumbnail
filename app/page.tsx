@@ -7,29 +7,39 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import html2canvas from "html2canvas";
-import { Download, Image } from "@hugeicons/core-free-icons";
+import { Download } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { FormInput } from "@/components/ui/form-input";
+import {
+  Combobox,
+  ComboboxInput,
+  ComboboxContent,
+  ComboboxList,
+  ComboboxItem,
+  ComboboxEmpty,
+} from "@/components/ui/combobox";
 
 // Social media image dimensions
 const IMAGE_FORMATS = {
-  "Twitter/X": { width: 1200, height: 675, ratio: "16:9" },
-  "Open Graph": { width: 1200, height: 630, ratio: "1.91:1" },
-  LinkedIn: { width: 1200, height: 627, ratio: "1.91:1" },
-  "Instagram Square": { width: 1080, height: 1080, ratio: "1:1" },
-  "Instagram Portrait": { width: 1080, height: 1350, ratio: "4:5" },
+  X: { width: 1200, height: 675, ratio: "16:9" },
+  "open graph": { width: 1200, height: 630, ratio: "1.91:1" },
+  linkedin: { width: 1200, height: 627, ratio: "1.91:1" },
+  // "instagram Square": { width: 1080, height: 1080, ratio: "1:1" },
+  // "instagram Portrait": { width: 1080, height: 1350, ratio: "4:5" },
 } as const;
 
 export default function ThumbnailGeneratorPage() {
-  const [title, setTitle] = useState("Your Title Here");
-  const [fontSize, setFontSize] = useState(80);
-  const [fontSizeInput, setFontSizeInput] = useState("80");
+  const [title, setTitle] = useState("Your Title");
+  const [fontSize, setFontSize] = useState(60);
+  const [fontSizeInput, setFontSizeInput] = useState("60");
+  const [selectedFormat, setSelectedFormat] =
+    useState<keyof typeof IMAGE_FORMATS>("X");
   const [isGenerating, setIsGenerating] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null);
 
   const handleFontSizeChange = (value: string) => {
     setFontSizeInput(value);
-    
+
     // Validate and update fontSize
     const numValue = parseInt(value);
     if (!isNaN(numValue) && numValue >= 20 && numValue <= 200) {
@@ -167,55 +177,50 @@ export default function ThumbnailGeneratorPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+    <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-12 text-center">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
-            <HugeiconsIcon icon={Image} className="size-4" />
-            Social Media Ready
-          </div>
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-            Thumbnail Generator
+            x-thumbnail
           </h1>
           <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-            Create stunning social media thumbnails in seconds. Perfect for Twitter, Open Graph, LinkedIn, and Instagram.
+            writing code is hard work already, why not generate simple
+            thumbnails without stress?
           </p>
         </div>
 
         <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
           {/* Form Section */}
           <div className="space-y-6">
-            <Card className="shadow-lg border-2">
+            <Card className="border rounded-[30px]">
               <CardHeader className="space-y-1">
-                <CardTitle className="text-xl">Customize Your Thumbnail</CardTitle>
+                <CardTitle className="text-xl">
+                  customize your thumbnail
+                </CardTitle>
                 <p className="text-sm text-muted-foreground">
-                  Adjust the settings to create the perfect thumbnail
+                  adjust the settings to create the perfect thumbnail
                 </p>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="title" className="text-base font-medium">
-                    Title Text
+                    title text
                   </Label>
                   <FormInput
                     id="title"
                     placeholder="Enter your title..."
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    className="font-mono text-base"
                   />
-                  <p className="text-xs text-muted-foreground">
-                    💡 Keep it concise for better readability
-                  </p>
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="fontSize" className="text-base font-medium">
-                    Font Size
+                    font size
                   </Label>
                   <div className="flex items-center gap-3">
-                    <Input
+                    <FormInput
                       id="fontSize"
                       type="number"
                       min="20"
@@ -223,52 +228,72 @@ export default function ThumbnailGeneratorPage() {
                       value={fontSizeInput}
                       onChange={(e) => handleFontSizeChange(e.target.value)}
                       onBlur={handleFontSizeBlur}
-                      className="font-mono text-base"
                     />
-                    <span className="text-sm font-medium text-muted-foreground whitespace-nowrap">
-                      {fontSize}px
-                    </span>
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    📏 Range: 20-200px (current: {fontSize}px)
+                    Choose between 20-200px
                   </p>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Download Buttons */}
-            <Card className="shadow-lg border-2">
+            {/* Download Section */}
+            <Card className="border rounded-[30px]">
               <CardHeader className="space-y-1">
-                <CardTitle className="text-xl">Export Formats</CardTitle>
+                <CardTitle className="text-xl">export</CardTitle>
                 <p className="text-sm text-muted-foreground">
-                  Choose your platform and download
+                  select type and download
                 </p>
               </CardHeader>
-              <CardContent className="space-y-3">
-                {Object.entries(IMAGE_FORMATS).map(([name, format]) => (
-                  <Button
-                    key={name}
-                    onClick={() =>
-                      handleDownload(name as keyof typeof IMAGE_FORMATS)
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="format" className="text-base font-medium">
+                    type
+                  </Label>
+                  <Combobox
+                    value={selectedFormat}
+                    onValueChange={(value) =>
+                      setSelectedFormat(value as keyof typeof IMAGE_FORMATS)
                     }
-                    disabled={isGenerating}
-                    variant="outline"
-                    className="w-full justify-between h-auto py-3 hover:bg-primary/5 hover:border-primary/50 transition-all"
                   >
-                    <span className="flex items-center gap-3">
-                      <HugeiconsIcon icon={Download} className="size-5" />
-                      <span className="font-medium">{name}</span>
-                    </span>
-                    <span className="text-xs font-mono text-muted-foreground bg-muted px-2 py-1 rounded">
-                      {format.width}×{format.height}
-                    </span>
-                  </Button>
-                ))}
-                {isGenerating && (
-                  <p className="text-sm text-center text-muted-foreground animate-pulse">
-                    Generating your thumbnail...
+                    <ComboboxInput
+                      id="format"
+                      placeholder="Select format..."
+                      showClear={false}
+                      value={selectedFormat}
+                      readOnly
+                    />
+                    <ComboboxContent>
+                      <ComboboxList>
+                        <ComboboxEmpty>Select type</ComboboxEmpty>
+                        {Object.entries(IMAGE_FORMATS).map(([name, format]) => (
+                          <ComboboxItem key={name} value={name}>
+                            <div className="flex items-center justify-between w-full">
+                              <span>{name}</span>
+                              <span className="text-xs font-mono text-muted-foreground ml-4">
+                                {format.width}×{format.height}
+                              </span>
+                            </div>
+                          </ComboboxItem>
+                        ))}
+                      </ComboboxList>
+                    </ComboboxContent>
+                  </Combobox>
+                  <p className="text-xs text-muted-foreground">
+                    {IMAGE_FORMATS[selectedFormat].width}×
+                    {IMAGE_FORMATS[selectedFormat].height} (
+                    {IMAGE_FORMATS[selectedFormat].ratio})
                   </p>
-                )}
+                </div>
+
+                <Button
+                  onClick={() => handleDownload(selectedFormat)}
+                  disabled={isGenerating}
+                  className="w-full h-12"
+                >
+                  <HugeiconsIcon icon={Download} className="size-4 mr-2" />
+                  {isGenerating ? "generating..." : "download now"}
+                </Button>
               </CardContent>
             </Card>
           </div>
@@ -276,12 +301,12 @@ export default function ThumbnailGeneratorPage() {
           {/* Preview Section */}
           <div className="space-y-4 lg:sticky lg:top-8 lg:self-start">
             <div className="flex items-center justify-between">
-              <div className="text-base font-semibold">Live Preview</div>
+              <div className="text-base font-semibold">live preview</div>
               <div className="text-sm text-muted-foreground">16:9 Ratio</div>
             </div>
             <div
               ref={previewRef}
-              className="overflow-hidden rounded-xl border-2 shadow-2xl ring-4 ring-primary/10"
+              className="overflow-hidden rounded-[30px]"
               style={{
                 aspectRatio: "16/9",
                 width: "100%",
@@ -289,14 +314,6 @@ export default function ThumbnailGeneratorPage() {
               }}
             >
               <CoverGenerator title={title} fontSize={fontSize} />
-            </div>
-            <div className="rounded-lg bg-muted/50 p-4 space-y-2">
-              <p className="text-xs text-muted-foreground">
-                ℹ️ <strong>Preview Note:</strong> This shows the 16:9 aspect ratio.
-              </p>
-              <p className="text-xs text-muted-foreground">
-                Downloaded images will be optimized for each platform's specifications.
-              </p>
             </div>
           </div>
         </div>

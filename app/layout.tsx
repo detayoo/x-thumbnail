@@ -27,13 +27,13 @@ export const metadata: Metadata = {
     type: "website",
     title: SITE_NAME + " — " + "thumbnails made easy",
     description: SITE_DESCRIPTION,
-    images: [SITE_OG_IMAGE],
+    images: ["/x-thumbnail-open-graph.png"],
   },
   twitter: {
     card: "summary_large_image",
     title: SITE_NAME + " — " + "thumbnails made easy",
     description: SITE_DESCRIPTION,
-    images: [SITE_OG_IMAGE],
+    images: ["/x-thumbnail-x.png"],
   },
   keywords: ["thumbnail", "tayo adedigba", "adedigba", "adedigggba"],
 };

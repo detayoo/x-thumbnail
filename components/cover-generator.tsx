@@ -21,7 +21,7 @@ interface CoverGeneratorProps {
 
 export function CoverGenerator({
   title,
-  fontSize = 80,
+  fontSize = 60,
   gridSize,
   gridOpacity = 0.2,
   textSize,
