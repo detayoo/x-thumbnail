@@ -17,6 +17,7 @@ import {
   ComboboxItem,
   ComboboxEmpty,
 } from "@/components/ui/combobox";
+import { Footer } from "@/components/footer";
 
 // Social media image dimensions
 const IMAGE_FORMATS = {
@@ -306,6 +307,8 @@ export default function ThumbnailGeneratorPage() {
             </div>
           </div>
         </div>
+        
+        <Footer  />
       </div>
     </div>
   );

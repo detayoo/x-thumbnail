@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
-import { SITE_NAME, SITE_DESCRIPTION } from "@/utils/constants";
+import {
+  SITE_NAME,
+  SITE_DESCRIPTION,
+  SITE_TWITTER_IMAGE,
+  SITE_OG_IMAGE,
+} from "@/utils/constants";
 
 const geistSans = Geist({
   variable: "--font-sans",
@@ -20,20 +25,17 @@ export const metadata: Metadata = {
     template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
-  icons: {
-    icon: "/logo.png",
-  },
   openGraph: {
     type: "website",
     title: SITE_NAME + " — " + "thumbnails made easy",
     description: SITE_DESCRIPTION,
-    images: ["/x-thumbnail-open-graph.png"],
+    images: [SITE_OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
     title: SITE_NAME + " — " + "thumbnails made easy",
     description: SITE_DESCRIPTION,
-    images: ["/x-thumbnail-x.png"],
+    images: [SITE_TWITTER_IMAGE],
   },
   keywords: ["thumbnail", "tayo adedigba", "adedigba", "adedigggba"],
 };
