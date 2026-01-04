@@ -220,9 +220,9 @@ export function CoverGenerator({
       )}
 
       {/* Text Content */}
-      <div className="relative flex h-full w-full items-center justify-start px-4 sm:px-8 md:px-12 lg:px-16">
+      <div className="relative flex h-full w-full items-center justify-start pl-8 pr-4 sm:px-8 md:px-12 lg:px-16">
         <h1
-          className="font-mono font-bold tracking-tight text-left break-words hyphens-auto max-w-[90%] leading-[0.9] sm:leading-[0.95] md:leading-[1]"
+          className="font-mono font-bold tracking-tight text-left break-words hyphens-auto max-w-[90%] leading-[1.2] sm:leading-[0.95] md:leading-[1]"
           style={{
             fontFamily: "var(--font-geist-mono)",
             fontSize: `${fontSize}px`,

@@ -162,7 +162,7 @@ export default function ThumbnailGeneratorPage() {
       if (currentLine) lines.push(currentLine);
 
       // Center vertically (use increased font size with more line spacing)
-      const lineHeight = (fontSize + 10) * 1.15;
+      const lineHeight = (fontSize + 25) * 1.15;
       const totalHeight = lines.length * lineHeight;
       const startY = (format.height - totalHeight) / 2;
 
