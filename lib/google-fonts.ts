@@ -109,38 +109,49 @@ export function loadGoogleFont(
   fontName: string,
   weights: number[] = [400, 700]
 ): Promise<void> {
-  return new Promise((resolve, reject) => {
-    // Check if it's a local font
-    const font = GOOGLE_FONTS.find((f) => f.name === fontName);
-    if (font?.isLocal) {
-      // Local fonts are already loaded, just resolve
+  return new Promise((resolve) => {
+    try {
+      // Check if it's a local font
+      const font = GOOGLE_FONTS.find((f) => f.name === fontName);
+      if (font?.isLocal) {
+        // Local fonts are already loaded, just resolve
+        resolve();
+        return;
+      }
+
+      // Check if font is already loaded
+      if (
+        document.querySelector(`link[href*="${fontName.replace(/\s/g, "+")}"]`)
+      ) {
+        resolve();
+        return;
+      }
+
+      // Create link element for Google Fonts
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(
+        /\s/g,
+        "+"
+      )}:wght@${weights.join(";")}&display=swap`;
+
+      link.onload = () => {
+        // Wait a bit to ensure font is actually loaded
+        setTimeout(() => resolve(), 100);
+      };
+
+      // Fail silently - just resolve instead of rejecting
+      link.onerror = () => {
+        // console.warn(`Failed to load font: ${fontName}. Using fallback font.`);
+        resolve();
+      };
+
+      document.head.appendChild(link);
+    } catch (error) {
+      // Fail silently on any error
+      console.warn(`Error loading font ${fontName}:`, error);
       resolve();
-      return;
     }
-
-    // Check if font is already loaded
-    if (
-      document.querySelector(`link[href*="${fontName.replace(/\s/g, "+")}"]`)
-    ) {
-      resolve();
-      return;
-    }
-
-    // Create link element for Google Fonts
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(
-      /\s/g,
-      "+"
-    )}:wght@${weights.join(";")}&display=swap`;
-
-    link.onload = () => {
-      // Wait a bit to ensure font is actually loaded
-      setTimeout(() => resolve(), 100);
-    };
-    link.onerror = () => reject(new Error(`Failed to load font: ${fontName}`));
-
-    document.head.appendChild(link);
   });
 }
 
