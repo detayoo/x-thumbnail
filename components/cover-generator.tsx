@@ -7,6 +7,7 @@
  * @param gridOpacity - Opacity of the grid lines (default: 0.2)
  * @param textSize - Responsive text sizes (auto-calculated if not provided)
  * @param useFullGrid - Whether to use full grid or border-only grid (default: true)
+ * @param fontFamily - Custom font family for the title text
  */
 interface CoverGeneratorProps {
   title: any;
@@ -19,6 +20,7 @@ interface CoverGeneratorProps {
     lg: string;
   };
   useFullGrid?: boolean;
+  fontFamily?: string;
 }
 
 export function CoverGenerator({
@@ -28,6 +30,7 @@ export function CoverGenerator({
   gridOpacity = 0.2,
   textSize,
   useFullGrid = true,
+  fontFamily,
 }: CoverGeneratorProps) {
   // Calculate responsive grid size if not provided
   const responsiveGridSize = gridSize || {
@@ -224,7 +227,7 @@ export function CoverGenerator({
         <h1
           className="font-mono font-bold tracking-tight text-left break-words hyphens-auto max-w-[90%] leading-[1.2] sm:leading-[0.95] md:leading-[1]"
           style={{
-            fontFamily: "var(--font-geist-mono)",
+            fontFamily: fontFamily || "var(--font-geist-mono)",
             fontSize: `${fontSize}px`,
             color: "#ffffff",
           }}

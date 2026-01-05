@@ -25,6 +25,8 @@ import {
 } from "@/components/ui/combobox";
 import { Footer } from "@/components/footer";
 import { SITE_DESCRIPTION } from "@/utils/constants";
+import { FontSelector } from "@/components/font-selector";
+import { DEFAULT_FONT, getFontFamily, loadGoogleFont, GOOGLE_FONTS } from "@/lib/google-fonts";
 
 // Social media image dimensions
 const IMAGE_FORMATS = {
@@ -44,6 +46,7 @@ export default function ThumbnailGeneratorPage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [useFullGrid, setUseFullGrid] = useState(true);
   const [showShareOptions, setShowShareOptions] = useState(false);
+  const [selectedFont, setSelectedFont] = useState(DEFAULT_FONT.name);
   const previewRef = useRef<HTMLDivElement>(null);
   const shareMenuRef = useRef<HTMLDivElement>(null);
 
@@ -85,11 +88,28 @@ export default function ThumbnailGeneratorPage() {
     }
   };
 
+  const handleFontChange = async (fontName: string) => {
+    setSelectedFont(fontName);
+    
+    // Load the font
+    const font = GOOGLE_FONTS.find(f => f.name === fontName);
+    if (font) {
+      await loadGoogleFont(font.name, font.weights);
+    }
+  };
+
   const handleDownload = async (formatName: keyof typeof IMAGE_FORMATS) => {
     setIsGenerating(true);
 
     try {
       const format = IMAGE_FORMATS[formatName];
+      
+      // Ensure selected font is loaded
+      const font = GOOGLE_FONTS.find(f => f.name === selectedFont);
+      if (font) {
+        await loadGoogleFont(font.name, font.weights);
+      }
+      
       await document.fonts.ready;
 
       // Create canvas
@@ -166,7 +186,12 @@ export default function ThumbnailGeneratorPage() {
       ctx.fillStyle = "#ffffff";
       ctx.textAlign = "left";
       ctx.textBaseline = "top";
-      ctx.font = `bold ${fontSize + 25}px "Geist Mono", monospace`;
+      
+      // Use selected font or fallback to Geist Mono
+      const fontFamily = selectedFont !== DEFAULT_FONT.name 
+        ? `"${selectedFont}", sans-serif` 
+        : '"Geist Mono", monospace';
+      ctx.font = `bold ${fontSize + 25}px ${fontFamily}`;
 
       const leftPadding = 100;
       const maxWidth = format.width * 0.5; // Use 50% of width for text
@@ -274,6 +299,17 @@ export default function ThumbnailGeneratorPage() {
                   </div>
                   <p className="text-xs text-muted-foreground">
                     Choose between 20-200px
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <FontSelector
+                    value={selectedFont}
+                    onValueChange={handleFontChange}
+                    label="font family"
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Choose from Google Fonts
                   </p>
                 </div>
 
@@ -395,6 +431,7 @@ export default function ThumbnailGeneratorPage() {
                 title={title}
                 fontSize={fontSize}
                 useFullGrid={useFullGrid}
+                fontFamily={getFontFamily(selectedFont)}
               />
             </div>
           </div>
