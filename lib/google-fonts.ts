@@ -32,17 +32,24 @@ export const GOOGLE_FONTS: GoogleFont[] = [
   },
 
   {
-    name: "Montserrat",
-    displayName: "Montserrat",
-    weights: [400, 500, 600, 700, 800, 900],
+    name: "Bricolage Grotesque",
+    displayName: "Bricolage Grotesque",
+    weights: [400, 500, 700, 900],
     category: "sans-serif",
   },
-  {
-    name: "Open Sans",
-    displayName: "Open Sans",
-    weights: [400, 600, 700, 800],
-    category: "sans-serif",
-  },
+
+  // {
+  //   name: "Montserrat",
+  //   displayName: "Montserrat",
+  //   weights: [400, 500, 600, 700, 800, 900],
+  //   category: "sans-serif",
+  // },
+  // {
+  //   name: "Open Sans",
+  //   displayName: "Open Sans",
+  //   weights: [400, 600, 700, 800],
+  //   category: "sans-serif",
+  // },
 
   {
     name: "Raleway",
