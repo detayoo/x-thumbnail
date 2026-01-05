@@ -26,7 +26,12 @@ import {
 import { Footer } from "@/components/footer";
 import { SITE_DESCRIPTION } from "@/utils/constants";
 import { FontSelector } from "@/components/font-selector";
-import { DEFAULT_FONT, getFontFamily, loadGoogleFont, GOOGLE_FONTS } from "@/lib/google-fonts";
+import {
+  DEFAULT_FONT,
+  getFontFamily,
+  loadGoogleFont,
+  GOOGLE_FONTS,
+} from "@/lib/google-fonts";
 
 // Social media image dimensions
 const IMAGE_FORMATS = {
@@ -90,9 +95,9 @@ export default function ThumbnailGeneratorPage() {
 
   const handleFontChange = async (fontName: string) => {
     setSelectedFont(fontName);
-    
+
     // Load the font
-    const font = GOOGLE_FONTS.find(f => f.name === fontName);
+    const font = GOOGLE_FONTS.find((f) => f.name === fontName);
     if (font) {
       await loadGoogleFont(font.name, font.weights);
     }
@@ -103,13 +108,13 @@ export default function ThumbnailGeneratorPage() {
 
     try {
       const format = IMAGE_FORMATS[formatName];
-      
+
       // Ensure selected font is loaded
-      const font = GOOGLE_FONTS.find(f => f.name === selectedFont);
+      const font = GOOGLE_FONTS.find((f) => f.name === selectedFont);
       if (font) {
         await loadGoogleFont(font.name, font.weights);
       }
-      
+
       await document.fonts.ready;
 
       // Create canvas
@@ -186,11 +191,12 @@ export default function ThumbnailGeneratorPage() {
       ctx.fillStyle = "#ffffff";
       ctx.textAlign = "left";
       ctx.textBaseline = "top";
-      
+
       // Use selected font or fallback to Geist Mono
-      const fontFamily = selectedFont !== DEFAULT_FONT.name 
-        ? `"${selectedFont}", sans-serif` 
-        : '"Geist Mono", monospace';
+      const fontFamily =
+        selectedFont !== DEFAULT_FONT.name
+          ? `"${selectedFont}", sans-serif`
+          : '"Geist Mono", monospace';
       ctx.font = `bold ${fontSize + 25}px ${fontFamily}`;
 
       const leftPadding = 100;
@@ -302,15 +308,13 @@ export default function ThumbnailGeneratorPage() {
                   </p>
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-2 w-full">
                   <FontSelector
                     value={selectedFont}
                     onValueChange={handleFontChange}
                     label="font family"
+                    className="w-full"
                   />
-                  <p className="text-xs text-muted-foreground">
-                    Choose from Google Fonts
-                  </p>
                 </div>
 
                 <div className="space-y-2">
