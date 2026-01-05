@@ -208,7 +208,7 @@ export default function ThumbnailGeneratorPage() {
         </div>
 
         <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
-          <div className="space-y-6">
+          <div className="space-y-6 order-2 lg:order-1">
             <Card className="border rounded-[30px]">
               <CardHeader className="space-y-1">
                 <CardTitle className="text-xl">
@@ -340,7 +340,7 @@ export default function ThumbnailGeneratorPage() {
             </Card>
           </div>
 
-          <div className="space-y-4 lg:sticky lg:top-8 lg:self-start">
+          <div className="space-y-4 lg:sticky lg:top-8 lg:self-start order-1 lg:order-2">
             <div className="flex items-center justify-between">
               <div className="text-base font-semibold">live preview</div>
               <div className="text-sm text-muted-foreground">16:9 Ratio</div>
