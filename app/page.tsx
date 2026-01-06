@@ -44,6 +44,7 @@ const IMAGE_FORMATS = {
 
 export default function ThumbnailGeneratorPage() {
   const [title, setTitle] = useState("Your Title");
+  const [subtitle, setsubtitle] = useState("sample subtitle");
   const [fontSize, setFontSize] = useState(60);
   const [fontSizeInput, setFontSizeInput] = useState("60");
   const [selectedFormat, setSelectedFormat] =
@@ -228,6 +229,38 @@ export default function ThumbnailGeneratorPage() {
         ctx.fillText(line, leftPadding, startY + index * lineHeight);
       });
 
+      // Subtitle (if provided)
+      if (subtitle && subtitle.trim()) {
+        const subtitleFontSize = (fontSize + 25) * 0.4;
+        ctx.font = `${subtitleFontSize}px ${fontFamily}`;
+        ctx.fillStyle = "#f4f4f4";
+        
+        // Word wrap subtitle
+        const subtitleWords = subtitle.trim().split(" ");
+        const subtitleLines: string[] = [];
+        let currentSubtitleLine = subtitleWords[0] || "";
+
+        for (let i = 1; i < subtitleWords.length; i++) {
+          const testLine = currentSubtitleLine + " " + subtitleWords[i];
+          const metrics = ctx.measureText(testLine);
+          if (metrics.width > maxWidth) {
+            subtitleLines.push(currentSubtitleLine);
+            currentSubtitleLine = subtitleWords[i];
+          } else {
+            currentSubtitleLine = testLine;
+          }
+        }
+        if (currentSubtitleLine) subtitleLines.push(currentSubtitleLine);
+        
+        // Position subtitle 15px below the last line of title
+        const subtitleLineHeight = subtitleFontSize * 1.15;
+        let subtitleY = startY + lines.length * lineHeight + 15;
+        
+        subtitleLines.forEach((line, index) => {
+          ctx.fillText(line, leftPadding, subtitleY + index * subtitleLineHeight);
+        });
+      }
+
       // Download
       canvas.toBlob((blob) => {
         if (!blob) return;
@@ -285,6 +318,18 @@ export default function ThumbnailGeneratorPage() {
                     placeholder="Enter your title..."
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="subtitle" className="text-base font-medium">
+                    subtitle text
+                  </Label>
+                  <FormInput
+                    id="subtitle"
+                    placeholder="Enter your subtitle..."
+                    value={subtitle}
+                    onChange={(e) => setsubtitle(e.target.value)}
                   />
                 </div>
 
@@ -433,6 +478,7 @@ export default function ThumbnailGeneratorPage() {
             >
               <CoverGenerator
                 title={title}
+                subtitle={subtitle}
                 fontSize={fontSize}
                 useFullGrid={useFullGrid}
                 fontFamily={getFontFamily(selectedFont)}

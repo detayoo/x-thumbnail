@@ -3,6 +3,7 @@
  * This component uses only hex colors to ensure html2canvas compatibility
  *
  * @param title - The title text to display
+ * @param subtitle - The subtitle text to display below title
  * @param gridSize - Size of each grid cell in pixels or responsive object
  * @param gridOpacity - Opacity of the grid lines (default: 0.2)
  * @param textSize - Responsive text sizes (auto-calculated if not provided)
@@ -11,6 +12,7 @@
  */
 interface CoverGeneratorProps {
   title: any;
+  subtitle?: string;
   fontSize?: number;
   gridSize?: number | { mobile: number; tablet: number; desktop: number };
   gridOpacity?: number;
@@ -25,6 +27,7 @@ interface CoverGeneratorProps {
 
 export function CoverGenerator({
   title,
+  subtitle,
   fontSize = 60,
   gridSize,
   gridOpacity = 0.2,
@@ -78,9 +81,9 @@ export function CoverGenerator({
     <div
       className="relative h-full w-full overflow-hidden"
       data-cover-generator
-      style={{ 
+      style={{
         backgroundColor: "#000000",
-        color: "#ffffff"
+        color: "#ffffff",
       }}
     >
       {/* Grid Background using SVG for better html2canvas compatibility */}
@@ -224,16 +227,30 @@ export function CoverGenerator({
 
       {/* Text Content */}
       <div className="relative flex h-full w-full items-center justify-start pl-8 pr-4 sm:px-8 md:px-12 lg:px-16">
-        <h1
-          className="font-mono font-bold tracking-tight text-left break-words hyphens-auto max-w-[90%] leading-[1.2] sm:leading-[0.95] md:leading-[1]"
-          style={{
-            fontFamily: fontFamily || "var(--font-geist-mono)",
-            fontSize: `${fontSize}px`,
-            color: "#ffffff",
-          }}
-        >
-          {title}
-        </h1>
+        <div className="max-w-[90%]">
+          <h1
+            className="font-mono font-bold tracking-tight text-left break-words hyphens-auto leading-[1.2] sm:leading-[0.95] md:leading-[1]"
+            style={{
+              fontFamily: fontFamily || "var(--font-geist-mono)",
+              fontSize: `${fontSize}px`,
+              color: "#ffffff",
+            }}
+          >
+            {title}
+          </h1>
+          {subtitle && subtitle.trim() && (
+            <p
+              className="font-mono text-left break-words hyphens-auto mt-[15px]"
+              style={{
+                fontFamily: fontFamily || "var(--font-geist-mono)",
+                fontSize: `${fontSize * 0.4}px`,
+                color: "#f4f4f4",
+              }}
+            >
+              {subtitle.trim()}
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );
