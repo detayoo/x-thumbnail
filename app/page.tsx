@@ -39,10 +39,10 @@ const IMAGE_FORMATS = {
 export default function ThumbnailGeneratorPage() {
   const [title, setTitle] = useState("Your Title");
   const [subtitle, setsubtitle] = useState("sample subtitle");
-  const [fontSize, setFontSize] = useState(60);
-  const [fontSizeInput, setFontSizeInput] = useState("60");
-  const [subtitleFontSize, setSubtitleFontSize] = useState(24);
-  const [subtitleFontSizeInput, setSubtitleFontSizeInput] = useState("24");
+  const [fontSize, setFontSize] = useState(40);
+  const [fontSizeInput, setFontSizeInput] = useState("40");
+  const [subtitleFontSize, setSubtitleFontSize] = useState(20);
+  const [subtitleFontSizeInput, setSubtitleFontSizeInput] = useState("20");
   const [selectedFormat, setSelectedFormat] =
     useState<keyof typeof IMAGE_FORMATS>("X");
   const [isGenerating, setIsGenerating] = useState(false);
