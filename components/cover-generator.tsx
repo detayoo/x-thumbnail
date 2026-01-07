@@ -14,6 +14,7 @@ interface CoverGeneratorProps {
   title: any;
   subtitle?: string;
   fontSize?: number;
+  subtitleFontSize?: number;
   gridSize?: number | { mobile: number; tablet: number; desktop: number };
   gridOpacity?: number;
   textSize?: {
@@ -29,6 +30,7 @@ export function CoverGenerator({
   title,
   subtitle,
   fontSize = 60,
+  subtitleFontSize = 24,
   gridSize,
   gridOpacity = 0.2,
   textSize,
@@ -243,7 +245,7 @@ export function CoverGenerator({
               className="font-mono text-left break-words hyphens-auto mt-[15px]"
               style={{
                 fontFamily: fontFamily || "var(--font-geist-mono)",
-                fontSize: `${fontSize * 0.4}px`,
+                fontSize: `${subtitleFontSize}px`,
                 color: "#f4f4f4",
               }}
             >

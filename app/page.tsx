@@ -47,6 +47,8 @@ export default function ThumbnailGeneratorPage() {
   const [subtitle, setsubtitle] = useState("sample subtitle");
   const [fontSize, setFontSize] = useState(60);
   const [fontSizeInput, setFontSizeInput] = useState("60");
+  const [subtitleFontSize, setSubtitleFontSize] = useState(24);
+  const [subtitleFontSizeInput, setSubtitleFontSizeInput] = useState("24");
   const [selectedFormat, setSelectedFormat] =
     useState<keyof typeof IMAGE_FORMATS>("X");
   const [isGenerating, setIsGenerating] = useState(false);
@@ -91,6 +93,26 @@ export default function ThumbnailGeneratorPage() {
     } else if (numValue > 200) {
       setFontSizeInput("200");
       setFontSize(200);
+    }
+  };
+
+  const handleSubtitleFontSizeChange = (value: string) => {
+    setSubtitleFontSizeInput(value);
+
+    const numValue = parseInt(value);
+    if (!isNaN(numValue) && numValue >= 10 && numValue <= 30) {
+      setSubtitleFontSize(numValue);
+    }
+  };
+
+  const handleSubtitleFontSizeBlur = () => {
+    const numValue = parseInt(subtitleFontSizeInput);
+    if (isNaN(numValue) || numValue < 10) {
+      setSubtitleFontSizeInput("10");
+      setSubtitleFontSize(10);
+    } else if (numValue > 30) {
+      setSubtitleFontSizeInput("30");
+      setSubtitleFontSize(30);
     }
   };
 
@@ -223,7 +245,7 @@ export default function ThumbnailGeneratorPage() {
       // Center vertically (use increased font size with more line spacing)
       const lineHeight = (fontSize + 25) * 1.15;
       const totalHeight = lines.length * lineHeight;
-      const startY = (format.height - totalHeight) / 2;
+      const startY = (format.height - totalHeight) / 2 - 40;
 
       lines.forEach((line, index) => {
         ctx.fillText(line, leftPadding, startY + index * lineHeight);
@@ -231,8 +253,8 @@ export default function ThumbnailGeneratorPage() {
 
       // Subtitle (if provided)
       if (subtitle && subtitle.trim()) {
-        const subtitleFontSize = (fontSize + 25) * 0.4;
-        ctx.font = `${subtitleFontSize}px ${fontFamily}`;
+        const downloadSubtitleFontSize = subtitleFontSize + 10;
+        ctx.font = `${downloadSubtitleFontSize}px ${fontFamily}`;
         ctx.fillStyle = "#f4f4f4";
         
         // Word wrap subtitle
@@ -253,7 +275,7 @@ export default function ThumbnailGeneratorPage() {
         if (currentSubtitleLine) subtitleLines.push(currentSubtitleLine);
         
         // Position subtitle 15px below the last line of title
-        const subtitleLineHeight = subtitleFontSize * 1.15;
+        const subtitleLineHeight = downloadSubtitleFontSize * 1.15;
         let subtitleY = startY + lines.length * lineHeight + 15;
         
         subtitleLines.forEach((line, index) => {
@@ -335,7 +357,7 @@ export default function ThumbnailGeneratorPage() {
 
                 <div className="space-y-2">
                   <Label htmlFor="fontSize" className="text-base font-medium">
-                    font size
+                    title font size
                   </Label>
                   <div className="flex items-center gap-3">
                     <FormInput
@@ -350,6 +372,26 @@ export default function ThumbnailGeneratorPage() {
                   </div>
                   <p className="text-xs text-muted-foreground">
                     Choose between 20-200px
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="subtitleFontSize" className="text-base font-medium">
+                    subtitle font size
+                  </Label>
+                  <div className="flex items-center gap-3">
+                    <FormInput
+                      id="subtitleFontSize"
+                      type="number"
+                      min="10"
+                      max="30"
+                      value={subtitleFontSizeInput}
+                      onChange={(e) => handleSubtitleFontSizeChange(e.target.value)}
+                      onBlur={handleSubtitleFontSizeBlur}
+                    />
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Choose between 10-30px
                   </p>
                 </div>
 
@@ -480,6 +522,7 @@ export default function ThumbnailGeneratorPage() {
                 title={title}
                 subtitle={subtitle}
                 fontSize={fontSize}
+                subtitleFontSize={subtitleFontSize}
                 useFullGrid={useFullGrid}
                 fontFamily={getFontFamily(selectedFont)}
               />

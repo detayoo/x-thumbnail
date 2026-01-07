@@ -1,6 +1,6 @@
 export const SITE_NAME = "x-thumbnail";
 export const SITE_DESCRIPTION =
-  "writing code is hard work already, let us help. instantly generate a simple thumbnail for your side project in seconds, so you can spend more time coding.";
+  "writing code is hard work already, let me help!. instantly generate a simple thumbnail for your side project in seconds, so you can spend more time coding.";
 export const SITE_URL = "https://x-thumbnail.adedigba.online";
 export const SITE_OG_IMAGE = "/x-thumbnail-open-graph.png";
 export const SITE_TWITTER = "@adedigggba";

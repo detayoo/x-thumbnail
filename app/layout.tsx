@@ -34,6 +34,7 @@ export const metadata: Metadata = {
     default: SITE_NAME + " — " + "thumbnails made easy",
     template: `%s | ${SITE_NAME}`,
   },
+  icons: "/icon.svg",
   description: SITE_DESCRIPTION,
   keywords: [
     "thumbnail generator",
