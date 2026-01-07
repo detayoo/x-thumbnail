@@ -6,13 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  CheckmarkCircle01Icon,
-  Download,
-  Share08Icon,
-  Tick02Icon,
-  Tick04FreeIcons,
-} from "@hugeicons/core-free-icons";
+import { CheckmarkCircle01Icon, Download } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { FormInput } from "@/components/ui/form-input";
 import {
@@ -256,7 +250,7 @@ export default function ThumbnailGeneratorPage() {
         const downloadSubtitleFontSize = subtitleFontSize + 10;
         ctx.font = `${downloadSubtitleFontSize}px ${fontFamily}`;
         ctx.fillStyle = "#f4f4f4";
-        
+
         // Word wrap subtitle
         const subtitleWords = subtitle.trim().split(" ");
         const subtitleLines: string[] = [];
@@ -273,13 +267,17 @@ export default function ThumbnailGeneratorPage() {
           }
         }
         if (currentSubtitleLine) subtitleLines.push(currentSubtitleLine);
-        
+
         // Position subtitle 15px below the last line of title
         const subtitleLineHeight = downloadSubtitleFontSize * 1.15;
         let subtitleY = startY + lines.length * lineHeight + 15;
-        
+
         subtitleLines.forEach((line, index) => {
-          ctx.fillText(line, leftPadding, subtitleY + index * subtitleLineHeight);
+          ctx.fillText(
+            line,
+            leftPadding,
+            subtitleY + index * subtitleLineHeight
+          );
         });
       }
 
@@ -376,7 +374,10 @@ export default function ThumbnailGeneratorPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="subtitleFontSize" className="text-base font-medium">
+                  <Label
+                    htmlFor="subtitleFontSize"
+                    className="text-base font-medium"
+                  >
                     subtitle font size
                   </Label>
                   <div className="flex items-center gap-3">
@@ -386,7 +387,9 @@ export default function ThumbnailGeneratorPage() {
                       min="10"
                       max="30"
                       value={subtitleFontSizeInput}
-                      onChange={(e) => handleSubtitleFontSizeChange(e.target.value)}
+                      onChange={(e) =>
+                        handleSubtitleFontSizeChange(e.target.value)
+                      }
                       onBlur={handleSubtitleFontSizeBlur}
                     />
                   </div>
