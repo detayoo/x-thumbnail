@@ -216,13 +216,13 @@ export function CoverGenerator({
           {/* Border-only grid with padding - lines running full length */}
           <g stroke="#ffffff" strokeWidth="3" opacity={gridOpacity} fill="none">
             {/* Left vertical line - full height */}
-            <line x1="48" y1="0" x2="48" y2="675" />
+            <line x1="80" y1="0" x2="80" y2="675" />
             {/* Right vertical line - full height */}
-            <line x1="1152" y1="0" x2="1152" y2="675" />
+            <line x1="1120" y1="0" x2="1120" y2="675" />
             {/* Top horizontal line - full width */}
-            <line x1="0" y1="32" x2="1200" y2="32" />
+            <line x1="0" y1="80" x2="1200" y2="80" />
             {/* Bottom horizontal line - full width */}
-            <line x1="0" y1="643" x2="1200" y2="643" />
+            <line x1="0" y1="595" x2="1200" y2="595" />
           </g>
         </svg>
       )}

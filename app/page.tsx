@@ -174,8 +174,8 @@ export default function ThumbnailGeneratorPage() {
         }
       } else {
         // Border-only grid - lines running full length with padding from edges
-        const horizontalPadding = 48;
-        const verticalPadding = 32;
+        const horizontalPadding = 80;
+        const verticalPadding = 80;
 
         // Left vertical line - full height
         ctx.beginPath();
