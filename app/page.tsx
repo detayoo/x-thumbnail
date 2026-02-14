@@ -282,7 +282,8 @@ export default function ThumbnailGeneratorPage() {
         // Show Dynamic Island Toast
         showToast({
           title: "Thumbnail Ready!",
-          description: "Your download has started successfully."
+          description: "Your download has started successfully.",
+          // position: "top-right"
         });
       }, "image/png");
     } catch (error) {

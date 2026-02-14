@@ -2,9 +2,12 @@
 
 import React, { createContext, useContext, useState, useCallback } from "react";
 
+export type ToastPosition = "top-left" | "top-center" | "top-right";
+
 interface ToastProps {
   title: string;
   description: string;
+  position?: ToastPosition;
 }
 
 interface ToastContextType {
@@ -20,14 +23,16 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toast, setToast] = useState<ToastProps | null>(null);
   const [isVisible, setIsVisible] = useState(false);
 
-  const showToast = useCallback(({ title, description }: ToastProps) => {
-    setToast({ title, description });
+  const showToast = useCallback(({ title, description, position = "top-center" }: ToastProps) => {
+    setToast({ title, description, position });
     setIsVisible(true);
     
-    // Auto-hide after 3 seconds
-    setTimeout(() => {
+    // Auto-hide after 4 seconds
+    const timer = setTimeout(() => {
       setIsVisible(false);
     }, 4000);
+
+    return () => clearTimeout(timer);
   }, []);
 
   const hideToast = useCallback(() => {

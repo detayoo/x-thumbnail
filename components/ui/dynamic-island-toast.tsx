@@ -1,30 +1,39 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useToast } from "@/lib/toast-context";
+import { useToast, type ToastPosition } from "@/lib/toast-context";
 import { CheckmarkCircle01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 
+const POSITION_CLASSES: Record<ToastPosition, string> = {
+  "top-left": "top-4 left-4 justify-start",
+  "top-center": "top-4 left-0 right-0 justify-center",
+  "top-right": "top-4 right-4 justify-end",
+};
+
+const ORIGIN_MAP: Record<ToastPosition, number> = {
+  "top-left": 0,
+  "top-center": 0.5,
+  "top-right": 1,
+};
+
 export function DynamicIslandToast() {
   const { isVisible, toast } = useToast();
+  const position = toast?.position || "top-center";
 
   return (
-    <div className="fixed top-4 left-0 right-0 flex justify-center z-[100] pointer-events-none">
+    <div className={`fixed z-[100] flex pointer-events-none ${POSITION_CLASSES[position]}`}>
       <AnimatePresence mode="wait">
         {isVisible && toast && (
           <motion.div
             layout
             initial={{ 
-              // width: 150, 
-              // height: 38, 
               borderRadius: 30, 
               opacity: 0,
               scale: 0.9,
               y: -10
             }}
             animate={{ 
-              width: "auto", 
-              height: "auto", 
               borderRadius: 24, 
               opacity: 1,
               scale: 1,
@@ -42,8 +51,6 @@ export function DynamicIslandToast() {
               }
             }}
             exit={{ 
-              // width: 150, 
-              // height: 38, 
               borderRadius: 30, 
               opacity: 0,
               scale: 0.9,
@@ -54,7 +61,10 @@ export function DynamicIslandToast() {
               }
             }}
             className="bg-black text-white px-5 py-3 flex items-center gap-4 shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-white/10 overflow-hidden min-w-[300px]"
-            style={{ originY: 0 }}
+            style={{ 
+              originY: 0,
+              originX: ORIGIN_MAP[position]
+            }}
           >
             <motion.div
               layout
