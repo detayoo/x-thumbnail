@@ -15,8 +15,8 @@ export function DynamicIslandToast() {
           <motion.div
             layout
             initial={{ 
-              width: 150, 
-              height: 38, 
+              // width: 150, 
+              // height: 38, 
               borderRadius: 30, 
               opacity: 0,
               scale: 0.9,
@@ -42,8 +42,8 @@ export function DynamicIslandToast() {
               }
             }}
             exit={{ 
-              width: 150, 
-              height: 38, 
+              // width: 150, 
+              // height: 38, 
               borderRadius: 30, 
               opacity: 0,
               scale: 0.9,
