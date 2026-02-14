@@ -26,6 +26,7 @@ import {
   loadGoogleFont,
   GOOGLE_FONTS,
 } from "@/lib/google-fonts";
+import { useToast } from "@/lib/toast-context";
 
 // Social media image dimensions
 const IMAGE_FORMATS = {
@@ -49,6 +50,7 @@ export default function ThumbnailGeneratorPage() {
   const [selectedFont, setSelectedFont] = useState(DEFAULT_FONT.name);
   const previewRef = useRef<HTMLDivElement>(null);
   const shareMenuRef = useRef<HTMLDivElement>(null);
+  const { showToast } = useToast();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -276,6 +278,12 @@ export default function ThumbnailGeneratorPage() {
         link.click();
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
+
+        // Show Dynamic Island Toast
+        showToast({
+          title: "Thumbnail Ready!",
+          description: "Your download has started successfully."
+        });
       }, "image/png");
     } catch (error) {
       console.error("Error:", error);

@@ -7,6 +7,8 @@ import {
   StructuredData,
   OrganizationStructuredData,
 } from "@/components/structured-data";
+import { ToastProvider } from "@/lib/toast-context";
+import { DynamicIslandToast } from "@/components/ui/dynamic-island-toast";
 
 import {
   SITE_NAME,
@@ -113,8 +115,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
-        <Toaster position="bottom-center" richColors />
+        <ToastProvider>
+          {children}
+          <DynamicIslandToast />
+          <Toaster position="bottom-center" richColors />
+        </ToastProvider>
         <Analytics />
       </body>
     </html>
