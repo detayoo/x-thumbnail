@@ -27,7 +27,6 @@ export function FontSelector({
   const [selectedFont, setSelectedFont] = useState(value);
   const [loadingFont, setLoadingFont] = useState(false);
 
-  // Preload popular fonts
   useEffect(() => {
     const popularFonts = GOOGLE_FONTS.slice(0, 5);
     popularFonts.forEach((font) => {
@@ -53,7 +52,6 @@ export function FontSelector({
     setLoadingFont(false);
   };
 
-  // Separate local and Google fonts
   const localFonts = GOOGLE_FONTS.filter((f) => f.isLocal);
   const googleFonts = GOOGLE_FONTS.filter((f) => !f.isLocal);
 

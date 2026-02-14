@@ -13,7 +13,6 @@ export default function FeaturesLayout() {
   return (
     <div className="min-h-screen">
       <PageContainer className="py-16 md:py-24">
-        {/* Entry Section */}
         <div className="max-w-[720px] mx-auto">
           <Headline className="mb-6 md:mb-8 text-center">
             The Geometry of Innovation
@@ -32,7 +31,6 @@ export default function FeaturesLayout() {
           <Divider spacing="medium" />
         </div>
 
-        {/* Main Content with Sidebar Layout */}
         <div className="relative">
           <div className="max-w-[720px] mx-auto space-y-[24px] md:space-y-[32px]">
             <Paragraph>
@@ -57,7 +55,6 @@ export default function FeaturesLayout() {
               embrace the unknown."
             </PullQuote>
 
-            {/* Featured Image */}
             <figure className="my-12 md:my-16">
               <div className="relative aspect-16/10 w-full overflow-hidden">
                 <img
@@ -94,7 +91,6 @@ export default function FeaturesLayout() {
             <Divider spacing="large" className="mt-16 md:mt-24" />
           </div>
 
-          {/* Desktop Sidebar - Related Insights */}
           <aside className="hidden lg:block fixed top-1/2 -translate-y-1/2 right-[calc((100vw-1440px)/2+40px)] xl:right-[calc((100vw-1440px)/2+80px)] w-[200px]">
             <div className="border-l-2 border-foreground/10 pl-6">
               <MetaText
@@ -119,7 +115,6 @@ export default function FeaturesLayout() {
           </aside>
         </div>
 
-        {/* Mobile Related Insights */}
         <div className="lg:hidden max-w-[720px] mx-auto pt-4">
           <MetaText as="div" className="font-medium mb-6 tracking-wide">
             Related Insights

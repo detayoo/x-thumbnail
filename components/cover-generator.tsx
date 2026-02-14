@@ -1,15 +1,3 @@
-/**
- * CoverGenerator - Generates a fullscreen cover/thumbnail with grid background
- * This component uses only hex colors to ensure html2canvas compatibility
- *
- * @param title - The title text to display
- * @param subtitle - The subtitle text to display below title
- * @param gridSize - Size of each grid cell in pixels or responsive object
- * @param gridOpacity - Opacity of the grid lines (default: 0.2)
- * @param textSize - Responsive text sizes (auto-calculated if not provided)
- * @param useFullGrid - Whether to use full grid or border-only grid (default: true)
- * @param fontFamily - Custom font family for the title text
- */
 interface CoverGeneratorProps {
   title: any;
   subtitle?: string;
@@ -37,14 +25,12 @@ export function CoverGenerator({
   useFullGrid = true,
   fontFamily,
 }: CoverGeneratorProps) {
-  // Calculate responsive grid size if not provided
   const responsiveGridSize = gridSize || {
     mobile: 50,
     tablet: 75,
     desktop: 100,
   };
 
-  // Calculate responsive text size based on title length if not provided
   const getResponsiveTextSize = () => {
     if (textSize) return textSize;
 
@@ -88,7 +74,6 @@ export function CoverGenerator({
         color: "#ffffff",
       }}
     >
-      {/* Grid Background using SVG for better html2canvas compatibility */}
       {useFullGrid ? (
         <svg
           className="absolute inset-0 h-full w-full"
@@ -213,21 +198,15 @@ export function CoverGenerator({
           viewBox="0 0 1200 675"
           preserveAspectRatio="none"
         >
-          {/* Border-only grid with padding - lines running full length */}
           <g stroke="#ffffff" strokeWidth="3" opacity={gridOpacity} fill="none">
-            {/* Left vertical line - full height */}
             <line x1="80" y1="0" x2="80" y2="675" />
-            {/* Right vertical line - full height */}
             <line x1="1120" y1="0" x2="1120" y2="675" />
-            {/* Top horizontal line - full width */}
             <line x1="0" y1="80" x2="1200" y2="80" />
-            {/* Bottom horizontal line - full width */}
             <line x1="0" y1="595" x2="1200" y2="595" />
           </g>
         </svg>
       )}
 
-      {/* Text Content */}
       <div className="relative flex h-full w-full items-center justify-start pl-8 pr-4 sm:px-8 md:px-12 lg:px-16">
         <div className="max-w-[90%]">
           <h1

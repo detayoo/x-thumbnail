@@ -13,7 +13,6 @@ export default function CoverPage() {
     setFontLoaded(false);
     setSelectedFont(fontName);
     
-    // Load the font
     const font = await import("@/lib/google-fonts").then(m => 
       m.GOOGLE_FONTS.find(f => f.name === fontName)
     );
@@ -26,7 +25,6 @@ export default function CoverPage() {
 
   return (
     <div className="flex h-screen flex-col">
-      {/* Font Selector Controls */}
       <div className="border-b border-border bg-background p-4">
         <div className="mx-auto max-w-md">
           <FontSelector
@@ -37,7 +35,6 @@ export default function CoverPage() {
         </div>
       </div>
 
-      {/* Cover Generator */}
       <div className="flex-1">
         <CoverGenerator
           title={

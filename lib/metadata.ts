@@ -17,11 +17,6 @@ export interface FeatureMetadata {
   keywords?: string[];
 }
 
-/**
- * Generates Next.js metadata for feature articles
- * @param feature - Feature article metadata
- * @returns Metadata object for Next.js
- */
 export function generateFeatureMetadata(feature: FeatureMetadata): Metadata {
   const {
     title,
@@ -37,10 +32,8 @@ export function generateFeatureMetadata(feature: FeatureMetadata): Metadata {
   const url = `${SITE_URL}/features/${slug}`;
   const fullTitle = `${title} | ${SITE_NAME}`;
 
-  // Generate dynamic OG image URL using slug
   const ogImageUrl = image || `${SITE_URL}/api/og/${slug}`;
 
-  // Format date for article metadata
   const publishedTime = new Date(date).toISOString();
 
   return {
@@ -88,11 +81,6 @@ export function generateFeatureMetadata(feature: FeatureMetadata): Metadata {
   };
 }
 
-/**
- * Generates JSON-LD structured data for feature articles
- * @param feature - Feature article metadata
- * @returns JSON-LD object
- */
 export function generateFeatureJsonLd(feature: FeatureMetadata) {
   const { title, description, author, date, slug, image = SITE_OG_IMAGE } = feature;
   const url = `${SITE_URL}/features/${slug}`;

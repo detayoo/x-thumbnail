@@ -12,14 +12,6 @@ export function HeroSection() {
   return (
     <section className="min-h-screen flex items-center justify-center relative overflow-hidden">
       <div className="relative z-10 max-w-[1440px] mx-auto px-4 md:px-8 lg:px-16 py-20 text-center">
-        {/* <div className="mb-6 md:mb-8">
-          <div className="inline-block px-4 py-2 bg-primary/5 border border-primary/10 rounded-full mb-8">
-            <p className="text-sm font-medium tracking-wide">
-              january 2026 • issue 01
-            </p>
-          </div>
-        </div> */}
-
         <Headline className="mb-6 md:mb-8 max-w-5xl mx-auto">
           an all-round magazine for the curious mind
         </Headline>
@@ -30,20 +22,6 @@ export function HeroSection() {
           continuous read. you're exploring a curated network, not junks, useful
           information.
         </Paragraph>
-
-        {/* <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Button size="lg" onClick={scrollToCategories} className="group">
-            explore categories
-            <HugeiconsIcon
-              icon={ArrowDown01Icon}
-              strokeWidth={2}
-              className="text-muted-foreground size-4 pointer-events-none"
-            />
-          </Button>
-          <Button size="lg" variant="outline" asChild>
-            <a href="#knowledge-integration">knowledge integration</a>
-          </Button>
-        </div> */}
 
         <div className="mt-16 md:mt-20 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
           <div className="text-center">

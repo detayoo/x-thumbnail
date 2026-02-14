@@ -16,7 +16,6 @@ import Image from "next/image";
 export default function MagLayout() {
   return (
     <PageContainer withPadding={false}>
-      {/* Entry Frame - Full viewport height */}
       <EntryFrame
         headline="The Art of Editorial Design"
         subheading="Exploring the intersection of typography, rhythm, and digital publishing"
@@ -27,7 +26,6 @@ export default function MagLayout() {
 
       <TransitionState spacing="large" />
 
-      {/* Main Reading Flow */}
       <ReadingFlow>
         <SectionHeader>Introduction to Editorial Excellence</SectionHeader>
 

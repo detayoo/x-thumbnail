@@ -1,4 +1,3 @@
-// Typography Components
 export { Headline } from "./headline";
 export { SectionHeader } from "./section-header";
 export { Paragraph } from "./paragraph";
@@ -7,7 +6,6 @@ export { PullQuote } from "./pull-quote";
 export { Caption } from "./caption";
 export { DisruptionText } from "./disruption-text";
 
-// Layout Components
 export { EntryFrame } from "./entry-frame";
 export { TransitionState } from "./transition-state";
 export { ReadingFlow } from "./reading-flow";
@@ -18,5 +16,4 @@ export { ClosingSection } from "./closing-section";
 export { MetaFooter } from "./meta-footer";
 export { Divider } from "./divider";
 
-// SEO & Metadata
 export { FeatureSchema } from "./feature-schema";

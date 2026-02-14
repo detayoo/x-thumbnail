@@ -10,7 +10,6 @@ export function Footer() {
   const [showShareOptions, setShowShareOptions] = useState(false);
   const shareMenuRef = useRef<HTMLDivElement>(null);
 
-  // Close share menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (

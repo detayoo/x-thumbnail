@@ -19,7 +19,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { categories } from "@/lib/content-data";
 import { RequestCategoryModal } from "./request-category-modal";
-// import { Plus01Icon } from "@hugeicons/core-free-icons";
 
 export function NavigationBar() {
   const firstFiveCategories = categories.slice(0, 5);
@@ -73,12 +72,9 @@ export function NavigationBar() {
                               <DropdownMenuSubContent>
                                 <DropdownMenuItem className="cursor-pointer">
                                   <Link href="https://desci.ng" target="_blank">
-                                    desci NG
+                                     desci NG
                                   </Link>
                                 </DropdownMenuItem>
-                                {/* <DropdownMenuItem>Message</DropdownMenuItem>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem>More...</DropdownMenuItem> */}
                               </DropdownMenuSubContent>
                             </DropdownMenuPortal>
                           </DropdownMenuSub>
@@ -126,10 +122,6 @@ export function NavigationBar() {
                 </DropdownMenuContent>
               </DropdownMenu>
             </ButtonGroup>
-
-            {/* <Button variant="outline" size="sm" asChild>
-              <a href="#knowledge-integration">Knowledge</a>
-            </Button> */}
           </div>
         </div>
       </div>

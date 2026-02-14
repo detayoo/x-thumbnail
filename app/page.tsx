@@ -32,8 +32,6 @@ const IMAGE_FORMATS = {
   X: { width: 1200, height: 675, ratio: "16:9" },
   "open graph": { width: 1200, height: 630, ratio: "1.91:1" },
   linkedin: { width: 1200, height: 627, ratio: "1.91:1" },
-  // "instagram Square": { width: 1080, height: 1080, ratio: "1:1" },
-  // "instagram Portrait": { width: 1080, height: 1350, ratio: "4:5" },
 } as const;
 
 export default function ThumbnailGeneratorPage() {
@@ -52,7 +50,6 @@ export default function ThumbnailGeneratorPage() {
   const previewRef = useRef<HTMLDivElement>(null);
   const shareMenuRef = useRef<HTMLDivElement>(null);
 
-  // Close share menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -126,7 +123,6 @@ export default function ThumbnailGeneratorPage() {
     try {
       const format = IMAGE_FORMATS[formatName];
 
-      // Ensure selected font is loaded
       const font = GOOGLE_FONTS.find((f) => f.name === selectedFont);
       if (font) {
         await loadGoogleFont(font.name, font.weights);
@@ -134,7 +130,6 @@ export default function ThumbnailGeneratorPage() {
 
       await document.fonts.ready;
 
-      // Create canvas
       const canvas = document.createElement("canvas");
       const scale = 2;
       canvas.width = format.width * scale;
@@ -147,17 +142,14 @@ export default function ThumbnailGeneratorPage() {
       ctx.imageSmoothingEnabled = true;
       ctx.imageSmoothingQuality = "high";
 
-      // Background
       ctx.fillStyle = "#000000";
       ctx.fillRect(0, 0, format.width, format.height);
 
-      // Grid rendering
       ctx.strokeStyle = "#ffffff";
       ctx.lineWidth = 3;
       ctx.globalAlpha = 0.2;
 
       if (useFullGrid) {
-        // Full grid with larger spacing
         const gridSize = 150;
         for (let x = 0; x <= format.width; x += gridSize) {
           ctx.beginPath();
@@ -173,29 +165,24 @@ export default function ThumbnailGeneratorPage() {
           ctx.stroke();
         }
       } else {
-        // Border-only grid - lines running full length with padding from edges
         const horizontalPadding = 80;
         const verticalPadding = 80;
 
-        // Left vertical line - full height
         ctx.beginPath();
         ctx.moveTo(horizontalPadding, 0);
         ctx.lineTo(horizontalPadding, format.height);
         ctx.stroke();
 
-        // Right vertical line - full height
         ctx.beginPath();
         ctx.moveTo(format.width - horizontalPadding, 0);
         ctx.lineTo(format.width - horizontalPadding, format.height);
         ctx.stroke();
 
-        // Top horizontal line - full width
         ctx.beginPath();
         ctx.moveTo(0, verticalPadding);
         ctx.lineTo(format.width, verticalPadding);
         ctx.stroke();
 
-        // Bottom horizontal line - full width
         ctx.beginPath();
         ctx.moveTo(0, format.height - verticalPadding);
         ctx.lineTo(format.width, format.height - verticalPadding);
@@ -204,12 +191,10 @@ export default function ThumbnailGeneratorPage() {
 
       ctx.globalAlpha = 1.0;
 
-      // Text (increase font size by 10 for download)
       ctx.fillStyle = "#ffffff";
       ctx.textAlign = "left";
       ctx.textBaseline = "top";
 
-      // Use selected font or fallback to Geist Mono
       const fontFamily =
         selectedFont !== DEFAULT_FONT.name
           ? `"${selectedFont}", sans-serif`
@@ -217,9 +202,8 @@ export default function ThumbnailGeneratorPage() {
       ctx.font = `bold ${fontSize + 25}px ${fontFamily}`;
 
       const leftPadding = 100;
-      const maxWidth = format.width * 0.5; // Use 50% of width for text
+      const maxWidth = format.width * 0.5;
 
-      // Word wrap
       const words = title.split(" ");
       const lines: string[] = [];
       let currentLine = words[0] || "";
@@ -236,7 +220,6 @@ export default function ThumbnailGeneratorPage() {
       }
       if (currentLine) lines.push(currentLine);
 
-      // Center vertically (use increased font size with more line spacing)
       const lineHeight = (fontSize + 25) * 1.15;
       const totalHeight = lines.length * lineHeight;
       const startY = (format.height - totalHeight) / 2 - 40;
@@ -245,13 +228,11 @@ export default function ThumbnailGeneratorPage() {
         ctx.fillText(line, leftPadding, startY + index * lineHeight);
       });
 
-      // Subtitle (if provided)
       if (subtitle && subtitle.trim()) {
         const downloadSubtitleFontSize = subtitleFontSize + 10;
         ctx.font = `${downloadSubtitleFontSize}px ${fontFamily}`;
         ctx.fillStyle = "#f4f4f4";
 
-        // Word wrap subtitle
         const subtitleWords = subtitle.trim().split(" ");
         const subtitleLines: string[] = [];
         let currentSubtitleLine = subtitleWords[0] || "";
@@ -268,7 +249,6 @@ export default function ThumbnailGeneratorPage() {
         }
         if (currentSubtitleLine) subtitleLines.push(currentSubtitleLine);
 
-        // Position subtitle 15px below the last line of title
         const subtitleLineHeight = downloadSubtitleFontSize * 1.15;
         let subtitleY = startY + lines.length * lineHeight + 15;
 
@@ -281,7 +261,6 @@ export default function ThumbnailGeneratorPage() {
         });
       }
 
-      // Download
       canvas.toBlob((blob) => {
         if (!blob) return;
         const url = URL.createObjectURL(blob);

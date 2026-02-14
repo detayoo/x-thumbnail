@@ -9,7 +9,6 @@ import { motion } from "framer-motion";
 export default function NotFound() {
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background">
-      {/* Grid background */}
       <div className="absolute inset-0 opacity-[0.03]">
         <div
           className="h-full w-full"
@@ -23,14 +22,12 @@ export default function NotFound() {
         />
       </div>
 
-      {/* Content */}
       <div className="relative z-10 mx-auto max-w-2xl px-4 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          {/* 404 Text */}
           <div className="mb-6">
             <motion.h1
               className="font-mono text-[clamp(6rem,20vw,12rem)] font-bold leading-none tracking-tight"
@@ -42,7 +39,6 @@ export default function NotFound() {
             </motion.h1>
           </div>
 
-          {/* Message */}
           <motion.div
             className="space-y-3"
             initial={{ opacity: 0 }}
@@ -58,7 +54,6 @@ export default function NotFound() {
             </p>
           </motion.div>
 
-          {/* Action Button */}
           <motion.div
             className="mt-8 flex justify-center gap-4"
             initial={{ opacity: 0, y: 10 }}
@@ -73,7 +68,6 @@ export default function NotFound() {
             </Button>
           </motion.div>
 
-          {/* Additional Info */}
           <motion.p
             className="mt-12 text-xs text-muted-foreground"
             initial={{ opacity: 0 }}

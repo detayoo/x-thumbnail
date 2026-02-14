@@ -37,7 +37,6 @@ export async function generateStaticParams() {
 export default async function ArticleCoverPage({ params }: CoverPageProps) {
   const { slug } = await params;
   
-  // Find the article by slug
   const allArticles = categories.flatMap((category) => category.articles);
   const article = allArticles.find((a) => a.slug === slug);
 

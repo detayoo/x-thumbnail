@@ -1,7 +1,3 @@
-/**
- * Google Fonts utility for dynamically loading fonts
- */
-
 export interface GoogleFont {
   name: string;
   displayName: string;
@@ -37,19 +33,6 @@ export const GOOGLE_FONTS: GoogleFont[] = [
     weights: [400, 500, 700, 900],
     category: "sans-serif",
   },
-
-  // {
-  //   name: "Montserrat",
-  //   displayName: "Montserrat",
-  //   weights: [400, 500, 600, 700, 800, 900],
-  //   category: "sans-serif",
-  // },
-  // {
-  //   name: "Open Sans",
-  //   displayName: "Open Sans",
-  //   weights: [400, 600, 700, 800],
-  //   category: "sans-serif",
-  // },
 
   {
     name: "Raleway",
@@ -96,30 +79,20 @@ export const GOOGLE_FONTS: GoogleFont[] = [
   },
 ];
 
-// Default font
-export const DEFAULT_FONT = GOOGLE_FONTS[0]; // Geist Mono
+export const DEFAULT_FONT = GOOGLE_FONTS[0];
 
-/**
- * Dynamically load a Google Font
- * @param fontName - Name of the font to load
- * @param weights - Array of font weights to load
- * @returns Promise that resolves when font is loaded
- */
 export function loadGoogleFont(
   fontName: string,
   weights: number[] = [400, 700]
 ): Promise<void> {
   return new Promise((resolve) => {
     try {
-      // Check if it's a local font
       const font = GOOGLE_FONTS.find((f) => f.name === fontName);
       if (font?.isLocal) {
-        // Local fonts are already loaded, just resolve
         resolve();
         return;
       }
 
-      // Check if font is already loaded
       if (
         document.querySelector(`link[href*="${fontName.replace(/\s/g, "+")}"]`)
       ) {
@@ -127,7 +100,6 @@ export function loadGoogleFont(
         return;
       }
 
-      // Create link element for Google Fonts
       const link = document.createElement("link");
       link.rel = "stylesheet";
       link.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(
@@ -136,35 +108,25 @@ export function loadGoogleFont(
       )}:wght@${weights.join(";")}&display=swap`;
 
       link.onload = () => {
-        // Wait a bit to ensure font is actually loaded
         setTimeout(() => resolve(), 100);
       };
 
-      // Fail silently - just resolve instead of rejecting
       link.onerror = () => {
-        // console.warn(`Failed to load font: ${fontName}. Using fallback font.`);
         resolve();
       };
 
       document.head.appendChild(link);
     } catch (error) {
-      // Fail silently on any error
       console.warn(`Error loading font ${fontName}:`, error);
       resolve();
     }
   });
 }
 
-/**
- * Get font family CSS value
- * @param fontName - Name of the font
- * @returns CSS font-family value
- */
 export function getFontFamily(fontName: string): string {
   const font = GOOGLE_FONTS.find((f) => f.name === fontName);
   if (!font) return fontName;
 
-  // Handle Geist Mono specially
   if (fontName === "Geist Mono") {
     return "var(--font-geist-mono)";
   }

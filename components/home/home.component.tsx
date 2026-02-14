@@ -13,10 +13,6 @@ export function Home() {
 
       <HeroSection />
 
-      {/* <StatsSection /> */}
-
-      {/* <FeaturedSection /> */}
-
       <footer className="py-8 border-t border-border">
         <div className="max-w-[1440px] mx-auto px-4 md:px-8 lg:px-16">
           <div className="flex flex-col md:flex-row justify-center items-center gap-4 text-sm text-muted-foreground">
@@ -24,8 +20,6 @@ export function Home() {
           </div>
         </div>
       </footer>
-
-      {/* <EnhancedAside /> */}
     </div>
   );
 }
