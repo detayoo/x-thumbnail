@@ -47,7 +47,7 @@ export function DynamicIslandToast() {
   const toastsByPosition = toasts.reduce((acc, toast) => {
     const pos = toast.position || "top-center";
     if (!acc[pos]) acc[pos] = [];
-    acc[pos].push(toast);
+    acc[pos].push(toast); // Newest is at index 0 because of setToasts([{id,...}, ...prev])
     return acc;
   }, {} as Record<ToastPosition, typeof toasts>);
 
@@ -56,78 +56,86 @@ export function DynamicIslandToast() {
       {Object.entries(toastsByPosition).map(([pos, posToasts]) => (
         <div 
           key={pos}
-          className={`fixed z-[100] flex flex-col gap-2 pointer-events-none ${POSITION_CLASSES[pos as ToastPosition]}`}
+          className={`fixed z-[100] flex flex-col pointer-events-none ${POSITION_CLASSES[pos as ToastPosition]}`}
         >
-          <AnimatePresence mode="popLayout">
-            {posToasts.map((toast) => {
-              const config = TYPE_CONFIG[toast.type || "success"];
-              return (
-                <motion.div
-                  key={toast.id}
-                  layout
-                  initial={{ 
-                    borderRadius: 30, 
-                    opacity: 0,
-                    scale: 0.85,
-                    y: -20
-                  }}
-                  animate={{ 
-                    borderRadius: 24, 
-                    opacity: 1,
-                    scale: 1,
-                    y: 0,
-                    transition: {
-                      type: "spring",
-                      stiffness: 400,
-                      damping: 30,
-                      mass: 0.8,
-                      layout: {
+          <div className="relative">
+            <AnimatePresence mode="popLayout">
+              {posToasts.map((toast, index) => {
+                const config = TYPE_CONFIG[toast.type || "success"];
+                // Index 0 is newest (front)
+                // Index 1, 2 are behind
+                const isFront = index === 0;
+                
+                return (
+                  <motion.div
+                    key={toast.id}
+                    layout
+                    initial={{ 
+                      borderRadius: 30, 
+                      opacity: 0,
+                      scale: 0.8,
+                      y: -20
+                    }}
+                    animate={{ 
+                      borderRadius: 24, 
+                      opacity: 1 - index * 0.15, // Fade out slightly as they go back
+                      scale: 1 - index * 0.05, // Scale down slightly as they go back
+                      y: index * 12, // Shift down slightly as they go back
+                      zIndex: 50 - index,
+                      transition: {
                         type: "spring",
                         stiffness: 400,
-                        damping: 30
+                        damping: 32,
+                        mass: 1,
+                        layout: {
+                          type: "spring",
+                          stiffness: 400,
+                          damping: 32
+                        }
                       }
-                    }
-                  }}
-                  exit={{ 
-                    opacity: 0,
-                    scale: 0.85,
-                    y: -20,
-                    transition: {
-                      duration: 0.2,
-                      ease: "easeOut"
-                    }
-                  }}
-                  className="bg-black text-white px-5 py-3 flex items-center gap-4 shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-white/10 overflow-hidden min-w-[300px]"
-                  style={{ 
-                    originY: 0,
-                    originX: ORIGIN_MAP[pos as ToastPosition]
-                  }}
-                >
-                  <motion.div
-                    layout
-                    initial={{ scale: 0.5, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    className={`${config.bgColor} rounded-full p-1.5 flex-shrink-0 flex items-center justify-center`}
+                    }}
+                    exit={{ 
+                      opacity: 0,
+                      scale: 0.8,
+                      y: -20,
+                      transition: {
+                        duration: 0.2,
+                        ease: "easeOut"
+                      }
+                    }}
+                    className={`${index === 0 ? "relative" : "absolute inset-0"} bg-black text-white px-5 py-3 flex items-center gap-4 shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-white/10 overflow-hidden min-w-[300px]`}
+                    style={{ 
+                      originY: 0,
+                      originX: ORIGIN_MAP[pos as ToastPosition],
+                      pointerEvents: isFront ? "auto" : "none" // Only front toast is clickable/interactable if we add events later
+                    }}
                   >
-                    <HugeiconsIcon icon={config.icon} className={`size-5 ${config.color}`} />
+                    <motion.div
+                      layout
+                      initial={{ scale: 0.5, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      className={`${config.bgColor} rounded-full p-1.5 flex-shrink-0 flex items-center justify-center`}
+                    >
+                      <HugeiconsIcon icon={config.icon} className={`size-5 ${config.color}`} />
+                    </motion.div>
+                    <motion.div
+                      layout
+                      initial={{ opacity: 0, x: 5 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      className="flex flex-col min-w-0"
+                    >
+                      <span className="text-[15px] font-bold leading-none mb-1 tracking-tight truncate">
+                        {toast.title}
+                      </span>
+                      <span className="text-[13px] text-white/50 font-medium leading-none truncate">
+                        {toast.description}
+                      </span>
+                    </motion.div>
                   </motion.div>
-                  <motion.div
-                    layout
-                    initial={{ opacity: 0, x: 5 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="flex flex-col min-w-0"
-                  >
-                    <span className="text-[15px] font-bold leading-none mb-1 tracking-tight truncate">
-                      {toast.title}
-                    </span>
-                    <span className="text-[13px] text-white/50 font-medium leading-none truncate">
-                      {toast.description}
-                    </span>
-                  </motion.div>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
+                );
+              })}
+            </AnimatePresence>
+          </div>
         </div>
       ))}
     </>
