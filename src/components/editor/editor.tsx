@@ -5,10 +5,10 @@ import * as React from "react";
 import { Toaster, TooltipProvider } from "@/toolcraft/ui";
 import { useEditor } from "@/store/editor";
 import { Stage } from "./stage";
-import { Inspector } from "./inspector";
-import { Filmstrip } from "./filmstrip";
-import { TopBar } from "./top-bar";
-import { stepZoom } from "./zoom";
+import { TemplatesPanel } from "./templates-panel";
+import { PropertiesPanel } from "./properties-panel";
+import { MiniHeader, stepZoom } from "./mini-header";
+import { Toolbar } from "./toolbar";
 import { copyPng, exportPng } from "./export-actions";
 import { applyTheme, useTheme } from "./use-theme";
 import { MobileNotice, useIsPhone } from "./mobile-notice";
@@ -116,16 +116,19 @@ function EditorApp() {
 
   return (
     <TooltipProvider delay={350}>
-      <main className="fixed inset-0 flex flex-col overflow-hidden bg-[color:var(--canvas)]" data-hydrated={hydrated}>
-        <TopBar onHelp={() => setShowHelp((v) => !v)} />
-        <div className="flex min-h-0 flex-1 flex-col md:flex-row">
-          <div className="flex min-h-0 min-w-0 flex-1 flex-col">
-            <div className="relative min-h-0 flex-1">{hydrated ? <Stage /> : null}</div>
-            {hydrated ? <Filmstrip /> : null}
-          </div>
-          {hydrated ? <Inspector /> : null}
+      <main className="fixed inset-0 overflow-hidden" data-hydrated={hydrated}>
+        {hydrated ? <Stage /> : <div className="absolute inset-0" style={{ background: "var(--canvas)" }} />}
+        <div className="pointer-events-none absolute inset-0">
+          {hydrated ? (
+            <>
+              <TemplatesPanel />
+              <PropertiesPanel />
+              <Toolbar />
+            </>
+          ) : null}
+          <MiniHeader onHelp={() => setShowHelp((v) => !v)} />
+          {showHelp ? <ShortcutSheet onClose={() => setShowHelp(false)} /> : null}
         </div>
-        {showHelp ? <ShortcutSheet onClose={() => setShowHelp(false)} /> : null}
         <Toaster position="top-center" theme={theme} />
       </main>
     </TooltipProvider>
@@ -135,7 +138,7 @@ function EditorApp() {
 function ShortcutSheet({ onClose }: { onClose: () => void }) {
   return (
     <div
-      className="toolcraft-panel-surface floating-popup-surface pointer-events-auto absolute top-[64px] right-3 z-30 w-72 rounded-xl border p-3"
+      className="toolcraft-panel-surface floating-popup-surface pointer-events-auto absolute top-[60px] right-3 z-10 w-72 rounded-lg border p-3"
       role="dialog"
       aria-label="Keyboard shortcuts"
     >

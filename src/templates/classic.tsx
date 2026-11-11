@@ -20,11 +20,11 @@ function Classic({ content, style, width, height }: TemplateProps) {
       )}
       <div style={{ position: "relative", flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: "0 100px", gap: 22 }}>
         <div style={{ maxWidth: 820 }}>
-          <Fit text={content.title} max={style.titleSize} lines={4} font={titleFont} weight={700} lineHeight={1.08} tracking="-0.02em" />
+          <Fit field="title" text={content.title} max={style.titleSize} lines={4} font={titleFont} weight={700} lineHeight={1.08} tracking="-0.02em" />
         </div>
         {content.subtitle ? (
           <div style={{ maxWidth: 760 }}>
-            <Text font={bodyFont} size={style.bodySize} color={p.muted} lines={2}>
+            <Text field="subtitle" font={bodyFont} size={style.bodySize} color={p.muted} lines={2}>
               {content.subtitle}
             </Text>
           </div>
@@ -48,7 +48,7 @@ export const classic: TemplateDef = {
     palette("paper", "Paper", { bg: "#fafafa", fg: "#0a0a0a", accent: "#0a0a0a", muted: "#3f3f46" }),
     palette("blueprint", "Blueprint", { bg: "#0b3fa8", fg: "#ffffff", accent: "#9fd0ff", muted: "#dbe8ff" }),
   ],
-  defaults: { titleFont: "geist-mono", bodyFont: "geist-mono", titleSize: 84, bodySize: 30 },
+  defaults: { titleFont: "local-mono", bodyFont: "local-mono", titleSize: 84, bodySize: 30 },
   titleRange: [40, 160],
   bodyRange: [18, 48],
   options: [

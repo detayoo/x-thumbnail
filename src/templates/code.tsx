@@ -12,7 +12,7 @@ const KEYWORDS = new Set(
 
 const TOKEN = /(\/\/.*|#.*|"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|\b\d+(?:\.\d+)?\b|\b[A-Za-z_$][\w$]*\b|[{}()[\];,.:=<>+\-*/!?&|])/g;
 
-function highlight(code: string, p: Palette): React.ReactNode[] {
+export function highlight(code: string, p: Palette): React.ReactNode[] {
   const [keyword, string, number] = [p.colors[0] ?? p.accent, p.colors[1] ?? p.fg, p.colors[2] ?? p.fg];
   const out: React.ReactNode[] = [];
   let last = 0;
@@ -45,14 +45,14 @@ function Code({ content, style, width, height }: TemplateProps) {
         <div style={{ width: 470, flexShrink: 0, display: "flex", flexDirection: "column", padding: "60px 40px 60px 72px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             {content.site ? <span style={{ width: 14, height: 14, borderRadius: 4, background: p.accent }} /> : null}
-            <Text font={bodyFont} size={bodySize - 2} color={p.muted} lines={1}>
+            <Text field="site" font={bodyFont} size={bodySize - 2} color={p.muted} lines={1}>
               {content.site}
             </Text>
           </div>
           <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: 22, minHeight: 0 }}>
-            <Fit text={content.title} max={style.titleSize} lines={5} font={titleFont} weight={650} lineHeight={1.08} tracking="-0.03em" />
+            <Fit field="title" text={content.title} max={style.titleSize} lines={5} font={titleFont} weight={650} lineHeight={1.08} tracking="-0.03em" />
             {content.subtitle ? (
-              <Text font={titleFont} size={bodySize + 2} color={p.muted} lines={3}>
+              <Text field="subtitle" font={titleFont} size={bodySize + 2} color={p.muted} lines={3}>
                 {content.subtitle}
               </Text>
             ) : null}
@@ -79,7 +79,7 @@ function Code({ content, style, width, height }: TemplateProps) {
               <span key={c} style={{ width: 14, height: 14, borderRadius: 14, background: c }} />
             ))}
             <div style={{ flex: 1, display: "flex", justifyContent: "center", paddingRight: 60 }}>
-              <Text font={bodyFont} size={18} color={p.muted} lines={1}>
+              <Text field="eyebrow" font={bodyFont} size={18} color={p.muted} lines={1}>
                 {content.eyebrow}
               </Text>
             </div>
@@ -125,7 +125,7 @@ export const code: TemplateDef = {
     palette("dawn", "Dawn", { bg: "#eef0f5", fg: "#1d2030", muted: "#6b7085", surface: "#ffffff", line: "#dfe2ea", accent: "#d6336c", colors: ["#d6336c", "#2f9e44", "#e8590c"] }),
     palette("aurora", "Aurora", { bg: "#07130f", fg: "#e7fff5", muted: "#6f9a88", surface: "#0c1d17", line: "#18342a", accent: "#34d399", colors: ["#34d399", "#facc15", "#60a5fa"] }),
   ],
-  defaults: { titleFont: "geist", bodyFont: "jetbrains-mono", titleSize: 58, bodySize: 22 },
+  defaults: { titleFont: "geist", bodyFont: "local-mono", titleSize: 58, bodySize: 22 },
   titleRange: [36, 84],
   bodyRange: [14, 30],
   sample: { eyebrow: "app/layout.tsx", title: "Add share images in one line", subtitle: "Point your metadata at a PNG and every link gets a card." },

@@ -28,6 +28,7 @@ import {
   Anton,
   Archivo_Black,
   Bebas_Neue,
+  Caveat,
   Geist_Mono,
   JetBrains_Mono,
   IBM_Plex_Mono,
@@ -256,6 +257,13 @@ const bebasNeue = Bebas_Neue({
   preload: false,
 });
 
+const caveat = Caveat({
+  subsets: ["latin"],
+  variable: "--font-caveat",
+  display: "swap",
+  preload: false,
+});
+
 const geistMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-geist-mono",
@@ -338,6 +346,7 @@ export const fontVariables = [
   anton.variable,
   archivoBlack.variable,
   bebasNeue.variable,
+  caveat.variable,
   geistMono.variable,
   jetbrainsMono.variable,
   ibmPlexMono.variable,

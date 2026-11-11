@@ -12,17 +12,17 @@ function Editorial({ content, style, width, height }: TemplateProps) {
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 24, paddingBottom: 22, borderBottom: `2px solid ${p.fg}` }}>
           <div style={{ display: "flex", alignItems: "center", gap: 14, minWidth: 0 }}>
             {content.eyebrow ? <span style={{ width: 12, height: 12, borderRadius: 12, background: p.accent, flexShrink: 0 }} /> : null}
-            <Text font={bodyFont} size={bodySize} weight={600} uppercase tracking="0.14em" lines={1}>
+            <Text field="eyebrow" font={bodyFont} size={bodySize} weight={600} uppercase tracking="0.14em" lines={1}>
               {content.eyebrow}
             </Text>
           </div>
-          <Text font={bodyFont} size={bodySize} color={p.muted} lines={1}>
+          <Text field="site" font={bodyFont} size={bodySize} color={p.muted} lines={1}>
             {content.site}
           </Text>
         </div>
         <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0, padding: "28px 0 30px" }}>
           <Fit
-            text={content.title}
+            field="title" text={content.title}
             max={style.titleSize}
             fill
             align="end"
@@ -38,7 +38,7 @@ function Editorial({ content, style, width, height }: TemplateProps) {
             <Text font={bodyFont} size={bodySize} color={p.muted} lines={1}>
               {meta}
             </Text>
-            <Text font={bodyFont} size={bodySize} color={p.muted} lines={1}>
+            <Text field="role" font={bodyFont} size={bodySize} color={p.muted} lines={1}>
               {content.role}
             </Text>
           </div>

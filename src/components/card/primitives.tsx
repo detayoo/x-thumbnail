@@ -4,7 +4,59 @@ import * as React from "react";
 
 import { resolveWeight, type FontDef } from "@/lib/fonts";
 import { initials } from "@/lib/thumbnail/content";
-import type { ResolvedStyle } from "@/lib/thumbnail/types";
+import type { ResolvedStyle, TextKey } from "@/lib/thumbnail/types";
+
+export type EditApi = { commit: (field: TextKey, value: string) => void };
+
+export const EditContext = React.createContext<EditApi | null>(null);
+
+function useEditable(field: TextKey | undefined, value: string) {
+  const api = React.useContext(EditContext);
+  const [version, setVersion] = React.useState(0);
+  if (!api || !field) return { version, props: null };
+  const finish = (el: HTMLElement, save: boolean) => {
+    const next = el.innerText.replace(/\u00a0/g, " ").replace(/\n+$/, "");
+    el.contentEditable = "false";
+    el.removeAttribute("data-editing");
+    if (save && next !== value) api.commit(field, next);
+    setVersion((v) => v + 1);
+  };
+  const props = {
+    "data-field": field,
+    "data-editable": "",
+    title: "Click to edit",
+    onClick: (e: React.MouseEvent<HTMLElement>) => {
+      const el = e.currentTarget;
+      if (el.isContentEditable) return;
+      e.stopPropagation();
+      el.contentEditable = "plaintext-only";
+      el.setAttribute("data-editing", "");
+      el.focus();
+      const range = document.createRange();
+      range.selectNodeContents(el);
+      const selection = window.getSelection();
+      selection?.removeAllRanges();
+      selection?.addRange(range);
+    },
+    onBlur: (e: React.FocusEvent<HTMLElement>) => {
+      if (e.currentTarget.isContentEditable) finish(e.currentTarget, true);
+    },
+    onKeyDown: (e: React.KeyboardEvent<HTMLElement>) => {
+      if (!e.currentTarget.isContentEditable) return;
+      e.stopPropagation();
+      if (e.key === "Escape") {
+        e.preventDefault();
+        const el = e.currentTarget;
+        finish(el, false);
+        el.blur();
+      } else if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        e.currentTarget.blur();
+      }
+    },
+  };
+  return { version, props };
+}
 
 type Align = "start" | "center" | "end";
 
@@ -26,6 +78,7 @@ type FitProps = {
   textAlign?: "left" | "center" | "right";
   style?: React.CSSProperties;
   suffix?: React.ReactNode;
+  field?: TextKey;
 };
 
 const INK_PAD = 0.2;
@@ -50,7 +103,9 @@ export function Fit({
   textAlign,
   style,
   suffix,
+  field,
 }: FitProps) {
+  const editable = useEditable(field, text);
   const boxRef = React.useRef<HTMLDivElement>(null);
   const textRef = React.useRef<HTMLDivElement>(null);
   const floor = Math.max(10, Math.round(min ?? max * 0.4));
@@ -78,7 +133,7 @@ export function Fit({
 
   React.useLayoutEffect(() => {
     fit();
-  }, [fit, text, font.family, weight, italic, tracking, uppercase]);
+  }, [fit, text, font.family, weight, italic, tracking, uppercase, editable.version]);
 
   React.useEffect(() => {
     const box = boxRef.current;
@@ -109,7 +164,9 @@ export function Fit({
       }}
     >
       <div
+        key={editable.version}
         ref={textRef}
+        {...editable.props}
         style={{
           fontFamily: font.family,
           fontWeight: resolveWeight(font, weight),
@@ -150,8 +207,10 @@ export function Text({
   lineHeight = 1.35,
   italic,
   style,
+  field,
 }: {
   children: React.ReactNode;
+  field?: TextKey;
   font: FontDef;
   size: number;
   weight?: number;
@@ -163,8 +222,11 @@ export function Text({
   italic?: boolean;
   style?: React.CSSProperties;
 }) {
+  const editable = useEditable(field, typeof children === "string" ? children : "");
   return (
     <div
+      key={editable.version}
+      {...editable.props}
       style={{
         fontFamily: font.family,
         fontWeight: resolveWeight(font, weight),

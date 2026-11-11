@@ -7,7 +7,7 @@ import { LOCAL_FONT_FILES } from "@/lib/fonts";
 import type { Content, FormatId, StyleOverride, ThumbnailDoc } from "@/lib/thumbnail/types";
 import { DEFAULT_TEMPLATE_ID, getTemplate, TEMPLATES } from "@/templates";
 
-const STORAGE_KEY = "x-thumbnail:doc";
+const STORAGE_KEY = "x-thumbnail:doc:v2";
 const HISTORY_LIMIT = 100;
 const COALESCE_MS = 900;
 
@@ -47,6 +47,15 @@ type EditorState = {
 };
 
 let lastCommit = { key: "", at: 0 };
+
+function withTemplate(doc: ThumbnailDoc, id: string): ThumbnailDoc {
+  const next = getTemplate(id);
+  const previous = getTemplate(doc.templateId);
+  let formatId = doc.formatId;
+  if (next.preferredFormat) formatId = next.preferredFormat;
+  else if (previous.preferredFormat && doc.formatId === previous.preferredFormat) formatId = "og";
+  return { ...doc, templateId: next.id, formatId };
+}
 let saveTimer: ReturnType<typeof setTimeout> | undefined;
 
 function persist(doc: ThumbnailDoc) {
@@ -107,14 +116,14 @@ export const useEditor = create<EditorState>((set, get) => {
     setTemplate: (id) => {
       const { doc } = get();
       if (doc.templateId === id) return;
-      commit({ ...doc, templateId: getTemplate(id).id });
+      commit(withTemplate(doc, id));
     },
 
     stepTemplate: (delta) => {
       const { doc } = get();
       const index = TEMPLATES.findIndex((t) => t.id === doc.templateId);
       const next = TEMPLATES[(index + delta + TEMPLATES.length) % TEMPLATES.length];
-      commit({ ...doc, templateId: next.id });
+      commit(withTemplate(doc, next.id));
     },
 
     setFormat: (formatId) => {

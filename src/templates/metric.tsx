@@ -13,22 +13,22 @@ function Metric({ content, style, width, height }: TemplateProps) {
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 24 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             {content.site ? <span style={{ width: 14, height: 14, borderRadius: 14, background: p.accent }} /> : null}
-            <Text font={bodyFont} size={bodySize} weight={600} lines={1}>
+            <Text field="site" font={bodyFont} size={bodySize} weight={600} lines={1}>
               {content.site}
             </Text>
           </div>
-          <Text font={bodyFont} size={bodySize} color={p.muted} lines={1}>
+          <Text field="eyebrow" font={bodyFont} size={bodySize} color={p.muted} lines={1}>
             {content.eyebrow}
           </Text>
         </div>
         <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 48, minHeight: 0 }}>
           <div style={{ width: 540, flexShrink: 0 }}>
-            <Fit text={content.stat} max={style.titleSize} lines={1} font={titleFont} weight={800} lineHeight={1} tracking="-0.05em" color={p.accent} balance={false} />
+            <Fit field="stat" text={content.stat} max={style.titleSize} lines={1} font={titleFont} weight={800} lineHeight={1} tracking="-0.05em" color={p.accent} balance={false} />
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 16, minWidth: 0, flex: 1 }}>
-            <Fit text={content.title} max={52} min={30} lines={3} font={bodyFont} weight={600} lineHeight={1.12} tracking="-0.02em" />
+            <Fit field="title" text={content.title} max={52} min={30} lines={3} font={bodyFont} weight={600} lineHeight={1.12} tracking="-0.02em" />
             {content.subtitle ? (
-              <Text font={bodyFont} size={bodySize} color={p.muted} lines={2}>
+              <Text field="subtitle" font={bodyFont} size={bodySize} color={p.muted} lines={2}>
                 {content.subtitle}
               </Text>
             ) : null}

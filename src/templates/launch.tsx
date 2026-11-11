@@ -33,7 +33,7 @@ function Launch({ content, style, width, height }: TemplateProps) {
       {content.site ? (
         <div style={{ position: "absolute", top: 52, left: 64, display: "flex", alignItems: "center", gap: 12 }}>
           <span style={{ width: 18, height: 18, borderRadius: 5, background: p.accent }} />
-          <Text font={bodyFont} size={bodySize - 2} weight={500} color={p.muted} lines={1}>
+          <Text field="site" font={bodyFont} size={bodySize - 2} weight={500} color={p.muted} lines={1}>
             {content.site}
           </Text>
         </div>
@@ -52,17 +52,17 @@ function Launch({ content, style, width, height }: TemplateProps) {
             }}
           >
             <span style={{ width: 10, height: 10, borderRadius: 10, background: p.accent, boxShadow: `0 0 12px ${p.accent}` }} />
-            <Text font={bodyFont} size={bodySize} weight={500} lines={1}>
+            <Text field="eyebrow" font={bodyFont} size={bodySize} weight={500} lines={1}>
               {content.eyebrow}
             </Text>
           </div>
         ) : null}
         <div style={{ width: "100%" }}>
-          <Fit text={content.title} max={style.titleSize} lines={2} font={titleFont} weight={600} lineHeight={1.04} tracking="-0.035em" textAlign="center" />
+          <Fit field="title" text={content.title} max={style.titleSize} lines={2} font={titleFont} weight={600} lineHeight={1.04} tracking="-0.035em" textAlign="center" />
         </div>
         {content.subtitle ? (
           <div style={{ maxWidth: 820 }}>
-            <Text font={bodyFont} size={bodySize + 4} color={p.muted} lines={2} style={{ textAlign: "center" }}>
+            <Text field="subtitle" font={bodyFont} size={bodySize + 4} color={p.muted} lines={2} style={{ textAlign: "center" }}>
               {content.subtitle}
             </Text>
           </div>

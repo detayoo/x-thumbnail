@@ -36,23 +36,23 @@ function Article({ content, style, width, height }: TemplateProps) {
       <div style={{ position: "relative", flex: 1, width: 820, display: "flex", flexDirection: "column", padding: "60px 72px 60px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           {content.site ? <span style={{ width: 16, height: 16, borderRadius: 4, background: p.accent }} /> : null}
-          <Text font={bodyFont} size={bodySize} weight={600} lines={1}>
+          <Text field="site" font={bodyFont} size={bodySize} weight={600} lines={1}>
             {content.site}
           </Text>
         </div>
         <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", minHeight: 0, gap: 20, padding: "24px 0" }}>
           {content.eyebrow ? (
-            <Text font={bodyFont} size={bodySize - 2} weight={600} uppercase tracking="0.12em" color={p.accent} lines={1}>
+            <Text field="eyebrow" font={bodyFont} size={bodySize - 2} weight={600} uppercase tracking="0.12em" color={p.accent} lines={1}>
               {content.eyebrow}
             </Text>
           ) : null}
-          <Fit text={content.title} max={style.titleSize} lines={4} font={titleFont} weight={700} lineHeight={1.08} tracking="-0.03em" />
+          <Fit field="title" text={content.title} max={style.titleSize} lines={4} font={titleFont} weight={700} lineHeight={1.08} tracking="-0.03em" />
         </div>
         {content.author ? (
           <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
             <Monogram name={content.author} size={60} bg={p.accent} fg={p.accentFg} font={bodyFont} />
             <div style={{ display: "flex", flexDirection: "column", gap: 4, minWidth: 0 }}>
-              <Text font={bodyFont} size={bodySize + 2} weight={600} lines={1}>
+              <Text field="author" font={bodyFont} size={bodySize + 2} weight={600} lines={1}>
                 {content.author}
               </Text>
               <Text font={bodyFont} size={bodySize - 2} color={p.muted} lines={1}>

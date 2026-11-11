@@ -24,7 +24,7 @@ function Quote({ content, style, width, height }: TemplateProps) {
       <div style={{ position: "relative", flex: 1, display: "flex", flexDirection: "column", padding: "150px 80px 60px 80px" }}>
         <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0, paddingBottom: 36 }}>
           <Fit
-            text={content.title}
+            field="title" text={content.title}
             max={style.titleSize}
             fill
             align="center"
@@ -38,14 +38,14 @@ function Quote({ content, style, width, height }: TemplateProps) {
         <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
           {content.author ? <Monogram name={content.author} size={58} bg={p.accent} fg={p.accentFg} font={bodyFont} /> : null}
           <div style={{ display: "flex", flexDirection: "column", gap: 4, minWidth: 0, flex: 1 }}>
-            <Text font={bodyFont} size={bodySize + 2} weight={600} lines={1}>
+            <Text field="author" font={bodyFont} size={bodySize + 2} weight={600} lines={1}>
               {content.author}
             </Text>
-            <Text font={bodyFont} size={bodySize - 2} color={p.muted} lines={1}>
+            <Text field="role" font={bodyFont} size={bodySize - 2} color={p.muted} lines={1}>
               {content.role}
             </Text>
           </div>
-          <Text font={bodyFont} size={bodySize - 2} color={p.muted} lines={1}>
+          <Text field="site" font={bodyFont} size={bodySize - 2} color={p.muted} lines={1}>
             {content.site}
           </Text>
         </div>

@@ -76,6 +76,7 @@ export type TemplateDef = {
   bodyRange: readonly [number, number];
   options?: readonly OptionDef[];
   sample?: Partial<Content>;
+  preferredFormat?: FormatId;
   Component: React.ComponentType<TemplateProps>;
 };
 

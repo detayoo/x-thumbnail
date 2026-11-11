@@ -62,6 +62,7 @@ export const FONTS: readonly FontDef[] = [
   google("anton", "Anton", "display", [400]),
   google("archivo-black", "Archivo Black", "display", [400]),
   google("bebas-neue", "Bebas Neue", "display", [400]),
+  google("caveat", "Caveat", "display", range(400, 700), false, "cursive"),
 
   google("geist-mono", "Geist Mono", "mono", range(100, 900)),
   google("jetbrains-mono", "JetBrains Mono", "mono", range(100, 800)),

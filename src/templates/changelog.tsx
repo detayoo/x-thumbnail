@@ -16,21 +16,21 @@ function Changelog({ content, style, width, height }: TemplateProps) {
         <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
           {content.eyebrow ? (
             <div style={{ padding: "8px 14px", borderRadius: 10, background: p.accent, color: p.accentFg }}>
-              <Text font={bodyFont} size={bodySize} weight={600} lines={1}>
+              <Text field="eyebrow" font={bodyFont} size={bodySize} weight={600} lines={1}>
                 {content.eyebrow}
               </Text>
             </div>
           ) : null}
-          <Text font={bodyFont} size={bodySize} color={p.muted} lines={1}>
+          <Text field="date" font={bodyFont} size={bodySize} color={p.muted} lines={1}>
             {content.date}
           </Text>
           <div style={{ flex: 1 }} />
-          <Text font={bodyFont} size={bodySize} color={p.muted} lines={1}>
+          <Text field="site" font={bodyFont} size={bodySize} color={p.muted} lines={1}>
             {content.site}
           </Text>
         </div>
         <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: 34, minHeight: 0, paddingLeft: 56 }}>
-          <Fit text={content.title} max={style.titleSize} lines={2} font={titleFont} weight={650} lineHeight={1.06} tracking="-0.03em" />
+          <Fit field="title" text={content.title} max={style.titleSize} lines={2} font={titleFont} weight={650} lineHeight={1.06} tracking="-0.03em" />
           {items.length ? (
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               {items.map((item, i) => (
@@ -79,7 +79,7 @@ export const changelog: TemplateDef = {
     palette("midnight", "Midnight", { bg: "#0b1026", fg: "#e6e9ff", muted: "#8e95c2", accent: "#38bdf8", accentFg: "#06222f" }),
     palette("sand", "Sand", { bg: "#f3efe6", fg: "#2a2118", muted: "#7a6d5d", accent: "#d9480f", accentFg: "#ffffff" }),
   ],
-  defaults: { titleFont: "geist", bodyFont: "geist-mono", titleSize: 76, bodySize: 22 },
+  defaults: { titleFont: "geist", bodyFont: "local-mono", titleSize: 76, bodySize: 22 },
   titleRange: [44, 110],
   bodyRange: [16, 30],
   sample: {

@@ -30,8 +30,7 @@ export function ExportPopover() {
             <button
               type="button"
               className={cn(
-                "ml-1.5 flex h-8 items-center gap-1.5 rounded-full bg-[color:var(--accent)] pr-2.5 pl-3.5 text-xs-plus font-medium text-white",
-                "shadow-[0_1px_0_rgba(255,255,255,0.18)_inset,0_6px_16px_-6px_color-mix(in_oklab,var(--accent)_80%,transparent)]",
+                "flex h-7 items-center gap-1 rounded-md bg-[color:var(--accent)] pr-1.5 pl-2 text-[12px] leading-none font-medium text-white",
                 "transition-[filter,transform] duration-100 hover:brightness-110 active:scale-[0.97] [&_svg]:size-3.5",
               )}
               data-testid="export-button"
