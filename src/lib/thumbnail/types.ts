@@ -33,7 +33,7 @@ export type OptionDef = {
   defaultValue: string;
 };
 
-export type TemplateCategory = "Editorial" | "Product" | "Developer" | "Graphic" | "Social";
+export type TemplateCategory = "Featured" | "YouTube" | "Product" | "Editorial" | "Developer" | "Graphic" | "Social";
 
 export type TemplateDefaults = {
   titleFont: string;
@@ -79,7 +79,7 @@ export type TemplateDef = {
   Component: React.ComponentType<TemplateProps>;
 };
 
-export type FormatId = "og" | "x" | "linkedin";
+export type FormatId = "og" | "x" | "linkedin" | "youtube";
 
 export type Format = {
   id: FormatId;

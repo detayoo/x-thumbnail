@@ -5,6 +5,7 @@ import * as React from "react";
 import { CanvasDotPattern } from "@/toolcraft/ui";
 import { useEditor } from "@/store/editor";
 import { useThumbnail } from "./use-thumbnail";
+import { ZoomPill } from "./zoom";
 
 export function getCardNode() {
   return document.querySelector<HTMLElement>("[data-stage] [data-card-root]");
@@ -24,7 +25,7 @@ function useSize(ref: React.RefObject<HTMLElement | null>) {
 
 export function useFitScale(width: number, height: number, area: { width: number; height: number }) {
   if (!area.width || !area.height) return 0;
-  return Math.min((area.width - 64) / width, (area.height - 88) / height, 1);
+  return Math.min((area.width - 80) / width, (area.height - 104) / height, 1);
 }
 
 export function Stage() {
@@ -48,7 +49,7 @@ export function Stage() {
       <CanvasDotPattern offset={{ x: 0, y: 0 }} scale={1} color="color-mix(in oklab, var(--foreground) 22%, transparent)" />
       <div
         ref={areaRef}
-        className="absolute inset-x-3 top-3 bottom-[76px] overflow-auto md:right-[336px] md:bottom-[76px] md:left-[272px]"
+        className="absolute inset-0 overflow-auto"
         data-stage
       >
         {scale > 0 ? (
@@ -77,6 +78,7 @@ export function Stage() {
           </div>
         ) : null}
       </div>
+      <ZoomPill />
     </div>
   );
 }

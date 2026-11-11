@@ -7,6 +7,7 @@ import { downloadBlob, renderPng } from "@/lib/thumbnail/export";
 import { getFormat } from "@/lib/thumbnail/formats";
 import { resolveContent } from "@/lib/thumbnail/content";
 import { useEditor } from "@/store/editor";
+import type { FormatId } from "@/lib/thumbnail/types";
 import { getTemplate } from "@/templates";
 import { getCardNode } from "./stage";
 
@@ -18,9 +19,22 @@ function current() {
 
 let busy = false;
 
-export async function exportPng(pixelRatio = 1) {
+const nextFrame = () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+
+async function ensureFormat(formatId?: FormatId) {
+  const { doc, setFormat } = useEditor.getState();
+  if (!formatId || doc.formatId === formatId) return;
+  setFormat(formatId);
+  await nextFrame();
+  await nextFrame();
+  await new Promise((resolve) => setTimeout(resolve, 60));
+}
+
+export async function exportPng(pixelRatio = 1, formatId?: FormatId) {
+  if (busy) return;
+  await ensureFormat(formatId);
   const node = getCardNode();
-  if (!node || busy) return;
+  if (!node) return;
   busy = true;
   const { format, content } = current();
   const width = format.width * pixelRatio;
@@ -39,7 +53,8 @@ export async function exportPng(pixelRatio = 1) {
   }
 }
 
-export async function copyPng() {
+export async function copyPng(formatId?: FormatId) {
+  await ensureFormat(formatId);
   const node = getCardNode();
   if (!node) return;
   const { format } = current();
