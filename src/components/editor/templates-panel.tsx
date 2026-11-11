@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { CheckIcon } from "@phosphor-icons/react";
+import { CaretDownIcon, CheckIcon } from "@phosphor-icons/react";
 
 import { PanelSurface } from "@/toolcraft/ui";
 import { cn } from "@/toolcraft/ui/lib/utils";
@@ -12,6 +12,7 @@ import { contentFor, resolveContent } from "@/lib/thumbnail/content";
 import { resolveStyle } from "@/lib/thumbnail/style";
 import type { Content, StyleOverride, TemplateCategory, TemplateDef } from "@/lib/thumbnail/types";
 import { TEMPLATES } from "@/templates";
+import { CanvasContextMenu } from "./context-menu";
 
 const THUMB_WIDTH = 210;
 const CARD = { width: 1200, height: 630 };
@@ -53,6 +54,8 @@ export function TemplatesPanel() {
   const setTemplate = useEditor((s) => s.setTemplate);
   const listRef = React.useRef<HTMLDivElement>(null);
   const [filter, setFilter] = React.useState<TemplateCategory | "All">("All");
+  const [menu, setMenu] = React.useState<{ x: number; y: number } | null>(null);
+  const filterRef = React.useRef<HTMLButtonElement>(null);
   const shown = CATEGORIES.filter((c) => (filter === "All" || filter === c) && TEMPLATES.some((t) => t.category === c));
 
   React.useEffect(() => {
@@ -72,24 +75,36 @@ export function TemplatesPanel() {
           <p className="m-0 truncate text-2xs text-[color:var(--muted-foreground)]">Share images · auto-saved</p>
         </div>
       </div>
-      <div className="flex shrink-0 flex-wrap gap-1 border-b px-2.5 py-2" role="tablist" aria-label="Template category">
-        {(["All", ...CATEGORIES.filter((c) => TEMPLATES.some((t) => t.category === c))] as const).map((c) => (
-          <button
-            key={c}
-            type="button"
-            role="tab"
-            aria-selected={filter === c}
-            onClick={() => setFilter(c)}
-            className={cn(
-              "h-6 rounded-full border px-2.5 text-2xs transition-colors",
-              filter === c
-                ? "border-[color:var(--accent)] bg-[color:var(--accent)] text-white"
-                : "border-[color:var(--tint-10)] text-[color:var(--muted-foreground)] hover:border-[color:var(--tint-25)] hover:text-[color:var(--foreground)]",
-            )}
-          >
-            {c}
-          </button>
-        ))}
+      <div className="flex h-9 shrink-0 items-center justify-between px-3">
+        <p className="m-0 text-2xs font-medium tracking-wide text-[color:var(--muted-foreground)] uppercase">Templates</p>
+        <button
+          ref={filterRef}
+          type="button"
+          aria-haspopup="menu"
+          aria-expanded={menu !== null}
+          aria-label={`Filter templates: ${filter}`}
+          onClick={() => {
+            const rect = filterRef.current?.getBoundingClientRect();
+            if (rect) setMenu(menu ? null : { x: rect.right - 208, y: rect.bottom + 4 });
+          }}
+          className="-mr-1.5 flex h-6 items-center gap-1 rounded-md px-1.5 text-2xs text-[color:var(--muted-foreground)] hover:bg-[color:var(--tint-5)] hover:text-[color:var(--foreground)]"
+        >
+          {filter === "All" ? "All" : filter}
+          <CaretDownIcon className="size-3" />
+        </button>
+        {menu ? (
+          <CanvasContextMenu
+            x={menu.x}
+            y={menu.y}
+            onClose={() => setMenu(null)}
+            items={(["All", ...CATEGORIES.filter((c) => TEMPLATES.some((t) => t.category === c))] as const).map((c) => ({
+              kind: "item" as const,
+              label: c === "All" ? "All templates" : c,
+              shortcut: filter === c ? "✓" : String(c === "All" ? TEMPLATES.length : TEMPLATES.filter((t) => t.category === c).length),
+              onSelect: () => setFilter(c),
+            }))}
+          />
+        ) : null}
       </div>
       <div ref={listRef} className="min-h-0 flex-1 overflow-y-auto px-2 pb-3" role="listbox" aria-label="Templates">
         {shown.map((category) => {
@@ -97,7 +112,7 @@ export function TemplatesPanel() {
           if (!items.length) return null;
           return (
             <div key={category} className="flex flex-col gap-1">
-              <p className="m-0 px-1.5 pt-3 pb-1 text-2xs font-medium tracking-wide text-[color:var(--muted-foreground)] uppercase">{category}</p>
+              <p className="m-0 px-1.5 pt-2 pb-1 text-2xs text-[color:var(--muted-foreground)]">{category}</p>
               {items.map((template) => {
                 const active = template.id === templateId;
                 return (

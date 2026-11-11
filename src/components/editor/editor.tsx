@@ -38,21 +38,40 @@ export function Editor() {
   return <EditorApp />;
 }
 
-const SHORTCUTS: [string, string][] = [
-  ["Previous / next template", "[ / ]"],
-  ["Next palette", "P"],
-  ["Safe area guides", "G"],
-  ["Edit selected text", "Enter or double-click"],
-  ["Hide selected element", "⌫"],
-  ["Move selected element", "Drag or arrows (⇧ ×10)"],
-  ["Download PNG", "⌘ E"],
-  ["Download PNG 2×", "⇧ ⌘ E"],
-  ["Copy image", "⇧ ⌘ C"],
-  ["Light / dark mode", "⇧ D"],
-  ["Undo / redo", "⌘ Z / ⇧ ⌘ Z"],
-  ["Zoom to fit", "⇧ 1"],
-  ["Zoom 100%", "⇧ 0"],
-  ["Zoom in / out", "⌘ + / ⌘ −"],
+const SHORTCUTS: { group: string; items: [string, string[]][] }[] = [
+  {
+    group: "Templates",
+    items: [
+      ["Previous / next", ["[", "]"]],
+      ["Next palette", ["P"]],
+    ],
+  },
+  {
+    group: "Canvas",
+    items: [
+      ["Edit selected text", ["↵"]],
+      ["Hide selected", ["⌫"]],
+      ["Nudge selected", ["←", "→"]],
+      ["Safe-area guides", ["G"]],
+      ["Undo / redo", ["⌘", "Z"]],
+    ],
+  },
+  {
+    group: "Export",
+    items: [
+      ["Download PNG", ["⌘", "E"]],
+      ["Download 2×", ["⇧", "⌘", "E"]],
+      ["Copy image", ["⇧", "⌘", "C"]],
+    ],
+  },
+  {
+    group: "View",
+    items: [
+      ["Zoom to fit", ["⇧", "1"]],
+      ["Zoom 100%", ["⇧", "0"]],
+      ["Light / dark", ["⇧", "D"]],
+    ],
+  },
 ];
 
 function EditorApp() {
@@ -160,24 +179,35 @@ function EditorApp() {
 function ShortcutSheet({ onClose }: { onClose: () => void }) {
   return (
     <div
-      className="toolcraft-panel-surface floating-popup-surface pointer-events-auto absolute top-[60px] right-3 z-10 w-72 rounded-lg border p-3"
+      className="pointer-events-auto absolute top-[60px] right-3 z-50 w-[300px] rounded-xl border bg-[color:var(--popover)] p-1.5 shadow-2xl"
       role="dialog"
       aria-label="Keyboard shortcuts"
     >
-      <div className="mb-2 flex items-center justify-between">
+      <div className="flex items-center justify-between px-2 pt-1 pb-1.5">
         <p className="m-0 text-xs-plus font-medium">Keyboard shortcuts</p>
-        <button type="button" onClick={onClose} className="text-2xs text-[color:var(--muted-foreground)] hover:text-[color:var(--foreground)]">
-          Close
+        <button type="button" onClick={onClose} className="rounded px-1.5 py-0.5 text-2xs text-[color:var(--muted-foreground)] hover:bg-[color:var(--tint-8)] hover:text-[color:var(--foreground)]">
+          Esc
         </button>
       </div>
-      <ul className="m-0 flex list-none flex-col gap-1.5 p-0">
-        {SHORTCUTS.map(([label, keys]) => (
-          <li key={label} className="flex items-center justify-between text-2xs text-[color:var(--muted-foreground)]">
-            <span>{label}</span>
-            <kbd className="rounded border border-[color:var(--tint-10)] bg-[color:var(--tint-5)] px-1 py-px font-sans text-2xs text-[color:var(--foreground)]">{keys}</kbd>
-          </li>
-        ))}
-      </ul>
+      {SHORTCUTS.map((section) => (
+        <div key={section.group} className="border-t border-[color:var(--tint-8)] px-2 py-2">
+          <p className="m-0 mb-1.5 text-2xs text-[color:var(--muted-foreground)]">{section.group}</p>
+          <ul className="m-0 flex list-none flex-col gap-1 p-0">
+            {section.items.map(([label, keys]) => (
+              <li key={label} className="flex h-6 items-center justify-between text-xs-plus">
+                <span>{label}</span>
+                <span className="flex gap-0.5">
+                  {keys.map((k) => (
+                    <kbd key={k} className="grid h-5 min-w-5 place-items-center rounded bg-[color:var(--tint-8)] px-1 font-sans text-2xs text-[color:var(--muted-foreground)]">
+                      {k}
+                    </kbd>
+                  ))}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
     </div>
   );
 }
