@@ -23,7 +23,13 @@ export function ExportPopover() {
   };
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover
+      open={open}
+      onOpenChange={(next, details) => {
+        if (!next && details.reason === "focus-out") return;
+        setOpen(next);
+      }}
+    >
       <Hint label="Export" description="Pick a size and scale, then download or copy." keys={["⌘", "E"]} side="bottom">
         <PopoverTrigger
           render={

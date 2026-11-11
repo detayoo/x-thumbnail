@@ -154,6 +154,7 @@ type FitProps = {
 };
 
 const INK_PAD = 0.2;
+const HEADROOM = 1.03;
 
 function countLines(el: HTMLElement) {
   const range = document.createRange();
@@ -200,18 +201,20 @@ export function Fit({
     const el = textRef.current;
     if (!box || !el) return;
     const fits = (size: number) => {
-      el.style.fontSize = `${size}px`;
+      el.style.fontSize = `${size * HEADROOM}px`;
       const overflowX = el.scrollWidth > el.clientWidth + 1;
       if (lines) return !overflowX && countLines(el) <= lines;
       return !overflowX && el.scrollHeight <= box.clientHeight + 1;
     };
-    if (fits(max)) return;
-    let lo = floor;
-    let hi = max;
-    while (hi - lo > 1) {
-      const mid = Math.floor((lo + hi) / 2);
-      if (fits(mid)) lo = mid;
-      else hi = mid;
+    let lo = max;
+    if (!fits(max)) {
+      lo = floor;
+      let hi = max;
+      while (hi - lo > 1) {
+        const mid = Math.floor((lo + hi) / 2);
+        if (fits(mid)) lo = mid;
+        else hi = mid;
+      }
     }
     el.style.fontSize = `${lo}px`;
   }, [max, floor, lines]);
