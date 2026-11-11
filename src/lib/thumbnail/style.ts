@@ -37,5 +37,6 @@ export function resolveStyle(template: TemplateDef, override: StyleOverride | un
     palette: o.accent ? { ...base, accent: o.accent, colors: [o.accent, ...base.colors.slice(1)] } : base,
     options,
     hidden: new Set(o.hidden ?? []),
+    layout: o.layout ?? {},
   };
 }

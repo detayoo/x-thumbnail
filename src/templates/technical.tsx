@@ -20,8 +20,6 @@ const CELLS = [
   [0, 1, 1, 1, 0],
   [1, 1, 1, 1, 2],
   [2, 1, 1, 1, 1],
-  [0, 2, 2, 1, 0],
-  [2, 2, 2, 1, 1],
 ] as const;
 
 function Technical({ content, style, width, height }: TemplateProps) {
@@ -30,7 +28,6 @@ function Technical({ content, style, width, height }: TemplateProps) {
   const baseY = height - 104;
   const cell = (width - splitX - 40) / 4;
   const data = lines(content.subtitle, 5);
-  const fan = Array.from({ length: 11 }, (_, i) => i);
 
   return (
     <CardRoot width={width} height={height} style={style}>
@@ -38,7 +35,7 @@ function Technical({ content, style, width, height }: TemplateProps) {
       <div aria-hidden style={{ position: "absolute", left: 0, right: 0, top: baseY, height: 1, background: p.line }} />
       {style.hidden.has("art") ? null : (
       <Part name="art">
-      <div style={{ position: "absolute", left: splitX + 20, top: 40, width: cell * 4, height: cell * 3 }}>
+      <div style={{ position: "absolute", left: splitX + 20, top: 28, width: cell * 4, height: cell * 2 }}>
         {CELLS.map(([cx, cy, w, h, kind], i) => (
           <div
             key={i}
@@ -53,24 +50,13 @@ function Technical({ content, style, width, height }: TemplateProps) {
             }}
           />
         ))}
-        <svg width={cell * 4} height={cell * 3} style={{ position: "absolute", inset: 0 }}>
-          {fan.map((i) => (
-            <path
-              key={i}
-              d={`M ${cell * 3} ${cell} L ${cell * 0.4 + i * 14} ${cell * 0.4 + i * 4} L ${cell * 0.4 + i * 14} ${cell * 3}`}
-              fill="none"
-              stroke={mix(p.fg, 0.32)}
-              strokeWidth={1.2}
-            />
-          ))}
-        </svg>
         <Cross x={cell * 3} y={cell} color={p.accent} />
       </div>
       </Part>
       )}
       <Cross x={splitX} y={baseY} color={p.fg} />
       {data.length ? (
-        <div style={{ position: "absolute", right: 56, top: 64, display: "flex", flexDirection: "column", gap: 4, padding: "10px 14px", background: p.bg }}>
+        <div style={{ position: "absolute", left: splitX + 32, bottom: height - baseY + 28, display: "flex", flexDirection: "column", gap: 4 }}>
           {data.map((d, i) => (
             <Text key={i} font={bodyFont} size={bodySize - 2} color={i === 0 ? p.fg : p.muted} lines={1}>
               {d}

@@ -13,12 +13,14 @@ function Quote({ content, style, width, height }: TemplateProps) {
       <div
         style={{
           position: "absolute",
-          left: 58,
-          top: -18,
+          left: 64,
+          top: 28,
           fontFamily: titleFont.family,
           fontWeight: resolveWeight(titleFont, 700),
-          fontSize: 300,
-          lineHeight: 1,
+          fontSize: 260,
+          lineHeight: 0.8,
+          height: 150,
+          overflow: "visible",
           color: p.accent,
         }}
       >

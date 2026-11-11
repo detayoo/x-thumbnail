@@ -44,6 +44,7 @@ const SHORTCUTS: [string, string][] = [
   ["Safe area guides", "G"],
   ["Edit selected text", "Enter or double-click"],
   ["Hide selected element", "⌫"],
+  ["Move selected element", "Drag or arrows (⇧ ×10)"],
   ["Download PNG", "⌘ E"],
   ["Download PNG 2×", "⇧ ⌘ E"],
   ["Copy image", "⇧ ⌘ C"],
@@ -116,6 +117,13 @@ function EditorApp() {
       } else if ((key === "backspace" || key === "delete") && s.selected) {
         e.preventDefault();
         s.setHidden(s.selected, true);
+      } else if (key.startsWith("arrow") && s.selected) {
+        e.preventDefault();
+        const step = e.shiftKey ? 10 : 1;
+        const current = s.doc.styles[s.doc.templateId]?.layout?.[s.selected] ?? {};
+        const dx = key === "arrowleft" ? -step : key === "arrowright" ? step : 0;
+        const dy = key === "arrowup" ? -step : key === "arrowdown" ? step : 0;
+        s.setElement(s.selected, { x: (current.x ?? 0) + dx, y: (current.y ?? 0) + dy }, `nudge:${s.selected}`);
       } else if (key === "enter" && s.selected) {
         const el = document.querySelector(`[data-stage] [data-field="${s.selected}"]`);
         if (el) {

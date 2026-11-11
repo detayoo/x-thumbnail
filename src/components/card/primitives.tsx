@@ -4,20 +4,78 @@ import * as React from "react";
 
 import { resolveWeight, type FontDef } from "@/lib/fonts";
 import { initials } from "@/lib/thumbnail/content";
-import type { ResolvedStyle, TextKey } from "@/lib/thumbnail/types";
+import type { ElementLayout, ResolvedStyle, TextKey } from "@/lib/thumbnail/types";
 
 export type EditApi = {
   commit: (field: TextKey, value: string) => void;
   select: (key: string | null) => void;
+  move: (key: string, to: { x: number; y: number }) => void;
   selected: string | null;
+  scale: number;
 };
 
 export const EditContext = React.createContext<EditApi | null>(null);
 
+export const LayoutContext = React.createContext<Readonly<Record<string, ElementLayout>>>({});
+
+function useLayoutStyle(key: string | undefined): React.CSSProperties {
+  const layout = React.useContext(LayoutContext);
+  const l = key ? layout[key] : undefined;
+  if (!l) return {};
+  return {
+    ...(l.x || l.y ? { translate: `${l.x ?? 0}px ${l.y ?? 0}px` } : null),
+    ...(l.align ? { textAlign: l.align } : null),
+  };
+}
+
+function useDrag(key: string | undefined) {
+  const api = React.useContext(EditContext);
+  const layout = React.useContext(LayoutContext);
+  const dragged = React.useRef(false);
+  if (!api || !key) return null;
+  const onPointerDown = (e: React.PointerEvent<HTMLElement>) => {
+    if (e.button !== 0 || e.currentTarget.isContentEditable) return;
+    const el = e.currentTarget;
+    const start = { x: e.clientX, y: e.clientY };
+    const base = { x: layout[key]?.x ?? 0, y: layout[key]?.y ?? 0 };
+    let last: { x: number; y: number } | null = null;
+    dragged.current = false;
+    const move = (ev: PointerEvent) => {
+      if (!dragged.current && Math.hypot(ev.clientX - start.x, ev.clientY - start.y) < 4) return;
+      if (!dragged.current) {
+        dragged.current = true;
+        api.select(key);
+        el.setAttribute("data-dragging", "");
+      }
+      const dx = (ev.clientX - start.x) / api.scale;
+      const dy = (ev.clientY - start.y) / api.scale;
+      const lockY = ev.shiftKey && Math.abs(dx) > Math.abs(dy);
+      const lockX = ev.shiftKey && !lockY;
+      last = { x: Math.round(base.x + (lockX ? 0 : dx)), y: Math.round(base.y + (lockY ? 0 : dy)) };
+      el.style.translate = `${last.x}px ${last.y}px`;
+    };
+    const up = () => {
+      window.removeEventListener("pointermove", move);
+      el.removeAttribute("data-dragging");
+      if (dragged.current && last) api.move(key, last);
+    };
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", up, { once: true });
+  };
+  const consumeDrag = () => {
+    const was = dragged.current;
+    dragged.current = false;
+    return was;
+  };
+  return { onPointerDown, consumeDrag };
+}
+
 function useEditable(field: TextKey | undefined, value: string) {
   const api = React.useContext(EditContext);
   const [version, setVersion] = React.useState(0);
-  if (!api || !field) return { version, props: null };
+  const drag = useDrag(field);
+  const layoutStyle = useLayoutStyle(field);
+  if (!api || !field || !drag) return { version, props: null, layoutStyle };
   const finish = (el: HTMLElement, save: boolean) => {
     const next = el.innerText.replace(/\u00a0/g, " ").replace(/\n+$/, "");
     el.contentEditable = "false";
@@ -40,10 +98,11 @@ function useEditable(field: TextKey | undefined, value: string) {
     "data-field": field,
     "data-editable": "",
     "data-selected": api.selected === field ? "" : undefined,
+    onPointerDown: drag.onPointerDown,
     onClick: (e: React.MouseEvent<HTMLElement>) => {
       const el = e.currentTarget;
       e.stopPropagation();
-      if (el.isContentEditable) return;
+      if (drag.consumeDrag() || el.isContentEditable) return;
       if (api.selected === field) startEdit(el);
       else api.select(field);
     },
@@ -68,7 +127,7 @@ function useEditable(field: TextKey | undefined, value: string) {
       }
     },
   };
-  return { version, props };
+  return { version, props, layoutStyle };
 }
 
 type Align = "start" | "center" | "end";
@@ -199,6 +258,7 @@ export function Fit({
           marginBottom: `${-INK_PAD / 2}em`,
           ...clamp,
           ...style,
+          ...editable.layoutStyle,
         }}
       >
         {text}
@@ -257,6 +317,7 @@ export function Text({
           ? { display: "-webkit-box", WebkitLineClamp: lines, WebkitBoxOrient: "vertical", overflow: "hidden" }
           : null),
         ...style,
+        ...editable.layoutStyle,
       }}
     >
       {children}
@@ -293,7 +354,7 @@ export function CardRoot({
         flexDirection: "column",
       }}
     >
-      {children}
+      <LayoutContext.Provider value={style.layout}>{children}</LayoutContext.Provider>
     </div>
   );
 }
@@ -386,15 +447,21 @@ export function Absolute({ style, children }: { style: React.CSSProperties; chil
   return <div aria-hidden style={{ position: "absolute", pointerEvents: "none", ...style }}>{children}</div>;
 }
 
-export function Part({ name, children }: { name: string; children: React.ReactElement<Record<string, unknown>> }) {
+export function Part({ name, children }: { name: string; children: React.ReactElement<{ style?: React.CSSProperties }> }) {
   const api = React.useContext(EditContext);
-  if (!api) return children;
+  const drag = useDrag(name);
+  const layoutStyle = useLayoutStyle(name);
+  const style = { ...children.props.style, ...layoutStyle };
+  if (!api || !drag) return React.cloneElement(children, { style });
   return React.cloneElement(children, {
+    style,
     "data-part": name,
     "data-selected": api.selected === name ? "" : undefined,
+    onPointerDown: drag.onPointerDown,
     onClick: (e: React.MouseEvent) => {
       e.stopPropagation();
+      if (drag.consumeDrag()) return;
       api.select(name);
     },
-  });
+  } as Record<string, unknown>);
 }

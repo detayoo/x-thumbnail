@@ -5,6 +5,7 @@ import * as React from "react";
 import { CanvasDotPattern } from "@/toolcraft/ui";
 import { useEditor } from "@/store/editor";
 import { useThumbnail } from "./use-thumbnail";
+import { SelectionBar } from "./selection-bar";
 import { EditContext, type EditApi } from "@/components/card/primitives";
 
 export function getCardNode() {
@@ -43,8 +44,14 @@ export function Stage() {
   const Component = template.Component;
   const selected = useEditor((s) => s.selected);
   const editApi = React.useMemo<EditApi>(
-    () => ({ commit: (field, value) => useEditor.getState().setContent(field, value), select: (key) => useEditor.getState().select(key), selected }),
-    [selected],
+    () => ({
+      commit: (field, value) => useEditor.getState().setContent(field, value),
+      select: (key) => useEditor.getState().select(key),
+      move: (key, to) => useEditor.getState().setElement(key, to),
+      selected,
+      scale,
+    }),
+    [selected, scale],
   );
   const w = format.width * scale;
   const h = format.height * scale;
@@ -58,6 +65,7 @@ export function Stage() {
         data-stage
         onClick={() => useEditor.getState().select(null)}
       >
+        <SelectionBar />
         {scale > 0 ? (
           <div className="flex min-h-full min-w-full items-center justify-center p-8">
             <div className="flex flex-col gap-2" style={{ width: w }}>

@@ -258,3 +258,12 @@ body {
   outline-color: var(--accent);
   cursor: text;
 }
+
+[data-stage] [data-selected]:not([data-editing]) {
+  cursor: move;
+}
+
+[data-stage] [data-dragging] {
+  cursor: grabbing !important;
+  outline-color: var(--accent) !important;
+}

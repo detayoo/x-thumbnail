@@ -4,7 +4,7 @@ import { create } from "zustand";
 import { get as idbGet, set as idbSet } from "idb-keyval";
 
 import { LOCAL_FONT_FILES } from "@/lib/fonts";
-import type { Content, FormatId, StyleOverride, ThumbnailDoc } from "@/lib/thumbnail/types";
+import type { Content, ElementLayout, FormatId, StyleOverride, ThumbnailDoc } from "@/lib/thumbnail/types";
 import { contentFor, resolveContent } from "@/lib/thumbnail/content";
 import { DEFAULT_TEMPLATE_ID, getTemplate, TEMPLATES } from "@/templates";
 
@@ -34,6 +34,7 @@ type EditorState = {
   selected: string | null;
   select: (key: string | null) => void;
   setHidden: (key: string, hidden: boolean) => void;
+  setElement: (key: string, patch: ElementLayout | null, coalesce?: string) => void;
   localFonts: Record<string, boolean>;
   hydrate: () => Promise<void>;
   setTemplate: (id: string) => void;
@@ -114,6 +115,13 @@ export const useEditor = create<EditorState>((set, get) => {
     safeArea: false,
     selected: null,
     select: (selected) => set({ selected }),
+    setElement: (key, patch, coalesce) =>
+      updateStyle((current) => {
+        const layout = { ...current.layout };
+        if (patch === null) delete layout[key];
+        else layout[key] = { ...layout[key], ...patch };
+        return { ...current, layout };
+      }, coalesce),
     setHidden: (key, hidden) => {
       updateStyle((current) => {
         const list = new Set(current.hidden ?? []);

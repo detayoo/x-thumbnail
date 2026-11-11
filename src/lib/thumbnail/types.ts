@@ -47,7 +47,12 @@ export type StyleOverride = Partial<TemplateDefaults> & {
   accent?: string;
   options?: Record<string, string>;
   hidden?: string[];
+  layout?: Record<string, ElementLayout>;
 };
+
+export type TextAlign = "left" | "center" | "right";
+
+export type ElementLayout = { x?: number; y?: number; align?: TextAlign };
 
 export type PartSpec = { key: string; label: string };
 
@@ -59,6 +64,7 @@ export type ResolvedStyle = {
   palette: Palette;
   options: Record<string, string>;
   hidden: ReadonlySet<string>;
+  layout: Readonly<Record<string, ElementLayout>>;
 };
 
 export type TemplateProps = {
