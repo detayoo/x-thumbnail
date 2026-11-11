@@ -1,0 +1,6 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "x-thumbnail", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev", "--", "-p", "3218"], "port": 3218 }
+  ]
+}
