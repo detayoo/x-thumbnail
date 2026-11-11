@@ -3,6 +3,7 @@
 import * as React from "react";
 
 import { resolveWeight, type FontDef } from "@/lib/fonts";
+import { ImageContext } from "./scenes";
 import { initials } from "@/lib/thumbnail/content";
 import type { ElementLayout, ResolvedStyle, TextKey } from "@/lib/thumbnail/types";
 
@@ -370,7 +371,9 @@ export function CardRoot({
         flexDirection: "column",
       }}
     >
-      <LayoutContext.Provider value={style.layout}>{children}</LayoutContext.Provider>
+      <LayoutContext.Provider value={style.layout}>
+        <ImageContext.Provider value={style.image}>{children}</ImageContext.Provider>
+      </LayoutContext.Provider>
     </div>
   );
 }

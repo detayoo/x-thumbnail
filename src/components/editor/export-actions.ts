@@ -14,7 +14,7 @@ import { getCardNode } from "./stage";
 function current() {
   const { doc } = useEditor.getState();
   const template = getTemplate(doc.templateId);
-  return { format: getFormat(doc.formatId), content: resolveContent(template, contentFor(doc, template.id)), template };
+  return { format: getFormat(doc.formatId), content: resolveContent(template, contentFor(doc, template.id), doc.styles[template.id]), template };
 }
 
 let busy = false;

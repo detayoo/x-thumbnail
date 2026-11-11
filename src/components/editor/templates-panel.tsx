@@ -31,7 +31,7 @@ const Thumbnail = React.memo(function Thumbnail({
 }) {
   const scale = THUMB_WIDTH / CARD.width;
   const Component = template.Component;
-  const resolved = React.useMemo(() => resolveContent(template, content, override?.hidden), [template, content, override]);
+  const resolved = React.useMemo(() => resolveContent(template, content, override), [template, content, override]);
   const style = React.useMemo(() => resolveStyle(template, override, localFonts), [template, override, localFonts]);
   return (
     <div className="relative overflow-hidden rounded-[5px]" style={{ width: THUMB_WIDTH, height: CARD.height * scale }}>

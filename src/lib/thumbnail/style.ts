@@ -38,5 +38,6 @@ export function resolveStyle(template: TemplateDef, override: StyleOverride | un
     options,
     hidden: new Set(o.hidden ?? []),
     layout: o.layout ?? {},
+    image: o.image ?? {},
   };
 }

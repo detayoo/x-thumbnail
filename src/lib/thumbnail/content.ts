@@ -1,4 +1,5 @@
-import type { Content, TemplateDef, ThumbnailDoc } from "./types";
+import { cutoutEnabled } from "./cutout";
+import type { Content, StyleOverride, TemplateDef, ThumbnailDoc } from "./types";
 
 const today = () => new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" }).format(new Date());
 
@@ -13,17 +14,23 @@ export const DEFAULT_CONTENT: Content = {
   stat: "3.4×",
   code: `export const metadata = {\n  openGraph: {\n    images: ["/og.png"],\n  },\n};`,
   image: null,
+  cutout: null,
 };
 
-export function resolveContent(template: TemplateDef, content: Partial<Content>, hidden?: readonly string[]): Content {
+export function resolveContent(template: TemplateDef, content: Partial<Content>, override?: StyleOverride): Content {
+  const hidden = override?.hidden;
   const merged: Content = { ...DEFAULT_CONTENT, ...template.sample };
   for (const [key, value] of Object.entries(content) as [keyof Content, Content[keyof Content]][]) {
     if (value !== undefined) (merged as Record<string, unknown>)[key] = value;
   }
   for (const key of hidden ?? []) {
-    if (key === "image") merged.image = null;
+    if (key === "image") {
+      merged.image = null;
+      merged.cutout = null;
+    }
     else if (key in merged) (merged as Record<string, unknown>)[key] = "";
   }
+  if (cutoutEnabled && override?.image?.cutout && merged.image && merged.cutout) merged.image = merged.cutout;
   return merged;
 }
 

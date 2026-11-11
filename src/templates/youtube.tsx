@@ -1,4 +1,4 @@
-import { Absolute, CardRoot, Fit, Grain, Text } from "@/components/card/primitives";
+import { Absolute, CardRoot, Fit, Grain, Part, Text } from "@/components/card/primitives";
 import { Hills, Photo, Sky, Studio } from "@/components/card/scenes";
 import { resolveWeight } from "@/lib/fonts";
 import { mix } from "@/lib/thumbnail/color";
@@ -243,22 +243,31 @@ export const hotTake: TemplateDef = {
 function Sticker({ content, style, width, height }: TemplateProps) {
   const { palette: p, titleFont, bodyFont, bodySize } = style;
   const right = style.options.side === "right";
+  const fullBleed = style.options.photo === "full";
+  const frameWidth = 480;
+  const frameHeight = Math.round(height * 0.72);
   return (
     <CardRoot width={width} height={height} style={style}>
-      {content.image ? <Photo src={content.image} /> : <Studio base={p.bg} light={p.colors[0]} />}
-      {content.image ? null : (
-        <Absolute
-          style={{
-            left: right ? 120 : width - 560,
-            top: height * 0.2,
-            width: 420,
-            height: height * 0.6,
-            borderRadius: 44,
-            background: `linear-gradient(160deg, ${mix(p.fg, 0.22)}, ${mix(p.fg, 0.04)})`,
-            border: `2px solid ${mix(p.fg, 0.2)}`,
-            boxShadow: "0 40px 80px rgba(0,0,0,0.45)",
-          }}
-        />
+      {fullBleed && content.image ? <Photo src={content.image} /> : <Studio base={p.bg} light={p.colors[0]} />}
+      {fullBleed || style.hidden.has("frame") ? null : (
+        <Part name="frame">
+          <div
+            style={{
+              position: "absolute",
+              left: right ? 96 : width - 96 - frameWidth,
+              top: (height - frameHeight) / 2,
+              width: frameWidth,
+              height: frameHeight,
+              borderRadius: 40,
+              overflow: "hidden",
+              background: content.image ? mix(p.fg, 0.06) : `linear-gradient(160deg, ${mix(p.fg, 0.22)}, ${mix(p.fg, 0.04)})`,
+              border: `2px solid ${mix(p.fg, 0.2)}`,
+              boxShadow: "0 40px 80px rgba(0,0,0,0.45)",
+            }}
+          >
+            {content.image ? <Photo src={content.image} /> : null}
+          </div>
+        </Part>
       )}
       <div style={{ position: "absolute", top: 0, bottom: 0, [right ? "right" : "left"]: 72, width: 620, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: right ? "flex-end" : "flex-start", gap: 24 }}>
         <div style={{ transform: `rotate(${right ? 4 : -5}deg)`, width: "100%" }}>
@@ -319,7 +328,17 @@ export const sticker: TemplateDef = {
       ],
       defaultValue: "left",
     },
+    {
+      key: "photo",
+      label: "Photo",
+      choices: [
+        { label: "In frame", value: "frame" },
+        { label: "Full bleed", value: "full" },
+      ],
+      defaultValue: "frame",
+    },
   ],
+  parts: [{ key: "frame", label: "Photo frame" }],
   sample: { stat: "$299", title: "Worth it?" },
   Component: Sticker,
 };

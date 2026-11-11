@@ -4,7 +4,7 @@ import type { FontDef } from "@/lib/fonts";
 
 export type TextKey = "eyebrow" | "title" | "subtitle" | "author" | "role" | "date" | "site" | "stat" | "code";
 
-export type Content = Record<TextKey, string> & { image: string | null };
+export type Content = Record<TextKey, string> & { image: string | null; cutout: string | null };
 
 export type FieldSpec = {
   key: TextKey | "image";
@@ -48,7 +48,10 @@ export type StyleOverride = Partial<TemplateDefaults> & {
   options?: Record<string, string>;
   hidden?: string[];
   layout?: Record<string, ElementLayout>;
+  image?: ImageAdjust;
 };
+
+export type ImageAdjust = { fit?: "cover" | "contain"; zoom?: number; x?: number; y?: number; cutout?: boolean };
 
 export type TextAlign = "left" | "center" | "right";
 
@@ -65,6 +68,7 @@ export type ResolvedStyle = {
   options: Record<string, string>;
   hidden: ReadonlySet<string>;
   layout: Readonly<Record<string, ElementLayout>>;
+  image: ImageAdjust;
 };
 
 export type TemplateProps = {
@@ -88,6 +92,7 @@ export type TemplateDef = {
   parts?: readonly PartSpec[];
   sample?: Partial<Content>;
   preferredFormat?: FormatId;
+  imageFit?: "cover" | "contain";
   Component: React.ComponentType<TemplateProps>;
 };
 

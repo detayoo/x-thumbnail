@@ -5,6 +5,10 @@ import * as React from "react";
 import { Toaster, TooltipProvider } from "@/toolcraft/ui";
 import { useEditor } from "@/store/editor";
 import { Stage } from "./stage";
+import { useCutoutSync } from "./use-cutout";
+import { fileToDataUrl } from "./panel-parts";
+import { getTemplate } from "@/templates";
+import { toast } from "sonner";
 import { TemplatesPanel } from "./templates-panel";
 import { PropertiesPanel } from "./properties-panel";
 import { MiniHeader, stepZoom } from "./mini-header";
@@ -81,6 +85,26 @@ function EditorApp() {
 
   React.useEffect(() => {
     useEditor.getState().hydrate();
+  }, []);
+
+  useCutoutSync();
+
+  React.useEffect(() => {
+    const onPaste = async (e: ClipboardEvent) => {
+      if (isTyping(e.target)) return;
+      const file = [...(e.clipboardData?.files ?? [])].find((f) => f.type.startsWith("image/"));
+      if (!file) return;
+      const { doc, setContent } = useEditor.getState();
+      if (!getTemplate(doc.templateId).fields.some((f) => f.key === "image")) {
+        toast.message("This template has no image slot", { description: "Pick one with a photo or diagram, then paste again." });
+        return;
+      }
+      e.preventDefault();
+      setContent("image", await fileToDataUrl(file));
+      toast.success("Image added");
+    };
+    window.addEventListener("paste", onPaste);
+    return () => window.removeEventListener("paste", onPaste);
   }, []);
 
   React.useEffect(() => {

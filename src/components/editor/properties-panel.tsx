@@ -8,6 +8,7 @@ import { FontPicker } from "./font-picker";
 import { useThumbnail } from "./use-thumbnail";
 import { ContentField, ExportSections, PaletteSwatches } from "./panel-parts";
 import { LayersSection } from "./layers-section";
+import { ImageSection } from "./image-section";
 import { contentFor } from "@/lib/thumbnail/content";
 
 const isCompactScreen = () => typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches;
@@ -51,6 +52,8 @@ export function PropertiesPanel() {
               <ContentField key={field.key} field={field} content={content} />
             ))}
         </PanelSection>
+
+        <ImageSection />
 
         <LayersSection />
 

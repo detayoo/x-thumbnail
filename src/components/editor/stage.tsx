@@ -5,6 +5,7 @@ import * as React from "react";
 import { CanvasDotPattern } from "@/toolcraft/ui";
 import { useEditor } from "@/store/editor";
 import { useThumbnail } from "./use-thumbnail";
+import { fileToDataUrl } from "./panel-parts";
 import { SelectionBar } from "./selection-bar";
 import { EditContext, type EditApi } from "@/components/card/primitives";
 
@@ -42,6 +43,8 @@ export function Stage() {
     if (fit > 0) setFitScale(fit);
   }, [fit, setFitScale]);
   const Component = template.Component;
+  const acceptsImage = template.fields.some((f) => f.key === "image");
+  const [dropping, setDropping] = React.useState(false);
   const selected = useEditor((s) => s.selected);
   const editApi = React.useMemo<EditApi>(
     () => ({
@@ -64,6 +67,21 @@ export function Stage() {
         className="absolute inset-x-3 top-3 bottom-[76px] overflow-auto md:right-[336px] md:bottom-[76px] md:left-[272px]"
         data-stage
         onClick={() => useEditor.getState().select(null)}
+        onDragOver={(e) => {
+          if (!acceptsImage || ![...e.dataTransfer.types].includes("Files")) return;
+          e.preventDefault();
+          setDropping(true);
+        }}
+        onDragLeave={(e) => {
+          if (!e.currentTarget.contains(e.relatedTarget as Node)) setDropping(false);
+        }}
+        onDrop={async (e) => {
+          setDropping(false);
+          const file = [...e.dataTransfer.files].find((f) => f.type.startsWith("image/"));
+          if (!acceptsImage || !file) return;
+          e.preventDefault();
+          useEditor.getState().setContent("image", await fileToDataUrl(file));
+        }}
       >
         <SelectionBar />
         {scale > 0 ? (
@@ -93,6 +111,11 @@ export function Stage() {
                   </EditContext.Provider>
                 </div>
                 {safeArea ? <SafeArea scale={scale} width={format.width} height={format.height} /> : null}
+                {dropping ? (
+                  <div className="pointer-events-none absolute inset-0 grid place-items-center bg-[color:color-mix(in_oklab,var(--accent)_22%,transparent)] ring-2 ring-[color:var(--accent)] ring-inset">
+                    <span className="rounded-md bg-[color:var(--accent)] px-2.5 py-1 text-xs-plus font-medium text-white">Drop to add the image</span>
+                  </div>
+                ) : null}
               </div>
             </div>
           </div>

@@ -17,7 +17,7 @@ export function useThumbnail() {
       doc,
       template,
       format: getFormat(doc.formatId),
-      content: resolveContent(template, contentFor(doc, template.id), doc.styles[template.id]?.hidden),
+      content: resolveContent(template, contentFor(doc, template.id), doc.styles[template.id]),
       style: resolveStyle(template, doc.styles[template.id], localFonts),
       override: doc.styles[template.id] ?? {},
     };

@@ -1,9 +1,39 @@
+"use client";
+
 import * as React from "react";
+
+import type { ImageAdjust } from "@/lib/thumbnail/types";
 
 const fill: React.CSSProperties = { position: "absolute", inset: 0, pointerEvents: "none" };
 
-export function Photo({ src, focus = "center" }: { src: string; focus?: string }) {
-  return <div aria-hidden style={{ ...fill, backgroundImage: `url(${src})`, backgroundSize: "cover", backgroundPosition: `center ${focus}` }} />;
+export const ImageContext = React.createContext<ImageAdjust>({});
+
+const FOCUS: Record<string, number> = { top: 0, center: 50, bottom: 100 };
+
+export function Photo({ src, focus = "center", defaultFit = "cover" }: { src: string; focus?: string; defaultFit?: "cover" | "contain" }) {
+  const adjust = React.useContext(ImageContext);
+  const x = adjust.x ?? 50;
+  const y = adjust.y ?? FOCUS[focus] ?? 50;
+  return (
+    <div aria-hidden style={{ ...fill, overflow: "hidden" }}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt=""
+        draggable={false}
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: adjust.fit ?? defaultFit,
+          objectPosition: `${x}% ${y}%`,
+          transform: `scale(${adjust.zoom ?? 1})`,
+          transformOrigin: `${x}% ${y}%`,
+        }}
+      />
+    </div>
+  );
 }
 
 const CLOUDS = [

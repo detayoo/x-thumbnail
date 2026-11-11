@@ -20,7 +20,7 @@ import { Hint } from "./hint";
 
 const MAX_IMAGE_SIDE = 2000;
 
-async function fileToDataUrl(file: File) {
+export async function fileToDataUrl(file: File) {
   const bitmap = await createImageBitmap(file);
   const ratio = Math.min(1, MAX_IMAGE_SIDE / Math.max(bitmap.width, bitmap.height));
   const canvas = document.createElement("canvas");
@@ -78,7 +78,7 @@ export function ImageField({ value, onChange }: { value: string | null; onChange
           <button type="button" onClick={() => inputRef.current?.click()} className="w-fit text-xs-plus font-medium hover:underline">
             {value ? "Replace image" : "Choose image"}
           </button>
-          <span className="truncate text-2xs text-[color:var(--muted-foreground)]">{value ? "Shown full-bleed in this template" : "Or drop one here. Optional."}</span>
+          <span className="truncate text-2xs text-[color:var(--muted-foreground)]">{value ? "Adjust it in the Image section below" : "Or drop or paste (⌘V) one"}</span>
         </div>
         {value ? (
           <Hint label="Remove image">

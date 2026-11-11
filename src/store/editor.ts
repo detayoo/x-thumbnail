@@ -43,6 +43,7 @@ type EditorState = {
   setContent: <K extends keyof Content>(key: K, value: Content[K]) => void;
   resetContent: () => void;
   setSyncText: (on: boolean) => void;
+  applyCutout: (templateId: string, src: string, cutout: string | null) => void;
   setStyle: (patch: StyleOverride, coalesce?: string) => void;
   setOption: (key: string, value: string) => void;
   resetStyle: () => void;
@@ -162,10 +163,11 @@ export const useEditor = create<EditorState>((set, get) => {
     setContent: (key, value) => {
       const { doc } = get();
       const coalesce = `content:${String(key)}`;
-      if (doc.syncText) commit({ ...doc, content: { ...doc.content, [key]: value } }, coalesce);
+      const patch: Partial<Content> = key === "image" ? { image: value as Content["image"], cutout: null } : { [key]: value };
+      if (doc.syncText) commit({ ...doc, content: { ...doc.content, ...patch } }, coalesce);
       else {
         const own = doc.contents[doc.templateId] ?? {};
-        commit({ ...doc, contents: { ...doc.contents, [doc.templateId]: { ...own, [key]: value } } }, coalesce);
+        commit({ ...doc, contents: { ...doc.contents, [doc.templateId]: { ...own, ...patch } } }, coalesce);
       }
     },
 
@@ -177,6 +179,15 @@ export const useEditor = create<EditorState>((set, get) => {
         delete contents[doc.templateId];
         commit({ ...doc, contents });
       }
+    },
+
+    applyCutout: (templateId, src, cutout) => {
+      const { doc } = get();
+      const own = doc.syncText ? doc.content : doc.contents[templateId] ?? {};
+      if (own.image !== src) return;
+      const next = { ...own, cutout };
+      if (doc.syncText) commit({ ...doc, content: next });
+      else commit({ ...doc, contents: { ...doc.contents, [templateId]: next } });
     },
 
     setSyncText: (on) => {

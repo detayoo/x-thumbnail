@@ -5,6 +5,7 @@ import { lines } from "@/lib/thumbnail/content";
 import { palette } from "@/lib/thumbnail/style";
 import type { Palette, TemplateDef, TemplateProps } from "@/lib/thumbnail/types";
 import { highlight } from "./code";
+import { Photo } from "@/components/card/scenes";
 
 function Ruler({ color, width }: { color: string; width: number }) {
   const ticks = Math.floor(width / 24);
@@ -67,7 +68,9 @@ function Schematic({ content, style, width, height }: TemplateProps) {
       )}
       {content.image && !style.hidden.has("drawing") ? (
         <Part name="drawing">
-          <div style={{ position: "absolute", right: 56, top: 70, width: 540, height: height - 130, backgroundImage: `url(${content.image})`, backgroundSize: "contain", backgroundPosition: "center", backgroundRepeat: "no-repeat", mixBlendMode: "multiply" }} />
+          <div style={{ position: "absolute", right: 56, top: 70, width: 540, height: height - 130, borderRadius: 6, overflow: "hidden" }}>
+            <Photo src={content.image} defaultFit="contain" />
+          </div>
         </Part>
       ) : null}
       <div style={{ position: "relative", flex: 1, width: 620, display: "flex", flexDirection: "column", padding: "58px 0 60px 64px" }}>
@@ -75,14 +78,6 @@ function Schematic({ content, style, width, height }: TemplateProps) {
           {content.site}
         </Text>
         <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "flex-end", gap: 20, minHeight: 0 }}>
-          {content.eyebrow ? (
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <span style={{ width: 28, height: 1.5, background: p.fg }} />
-              <Text field="eyebrow" font={bodyFont} size={bodySize - 6} weight={600} uppercase tracking="0.16em" lines={1}>
-                {content.eyebrow}
-              </Text>
-            </div>
-          ) : null}
           <Fit field="title" text={content.title} max={style.titleSize} lines={3} font={titleFont} weight={400} italic lineHeight={1} tracking="-0.02em" />
         </div>
       </div>
@@ -96,11 +91,11 @@ export const schematic: TemplateDef = {
   description: "Engineering-notebook card: a line-art diagram, a ruler edge and an italic serif title.",
   category: "Developer",
   fields: [
-    { key: "eyebrow", label: "Section" },
     { key: "title", label: "Title" },
     { key: "site", label: "Brand" },
-    { key: "image", label: "Your diagram", hint: "Optional. Line art on white works best." },
+    { key: "image", label: "Your image", hint: "Optional. Drop, paste (⌘V) or choose one." },
   ],
+  imageFit: "contain",
   parts: [{ key: "drawing", label: "Diagram" }],
   palettes: [
     palette("paper", "Paper", { bg: "#ffffff", fg: "#121417", muted: "#5c6370", accent: "#2054d2", line: "#e6e8ec" }),
@@ -110,7 +105,7 @@ export const schematic: TemplateDef = {
   defaults: { titleFont: "instrument-serif", bodyFont: "geist", titleSize: 104, bodySize: 22 },
   titleRange: [56, 140],
   bodyRange: [16, 28],
-  sample: { site: "Northwind Cloud", eyebrow: "Infrastructure", title: "Persistent volumes, explained" },
+  sample: { site: "Northwind Cloud", title: "Persistent volumes, explained" },
   Component: Schematic,
 };
 
