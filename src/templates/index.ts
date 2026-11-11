@@ -15,6 +15,7 @@ import { technical } from "./technical";
 import { documentary, hotTake, serifSky, sticker } from "./youtube";
 import { api, diff, docs, schematic, terminal } from "./developer";
 import { event, hiring, milestone, version } from "./announcement";
+import { block, grain, mesh, minimal, newsletter, portfolio, poster, swiss } from "./graphic";
 
 export const TEMPLATES: readonly TemplateDef[] = [
   midnight,
@@ -37,11 +38,19 @@ export const TEMPLATES: readonly TemplateDef[] = [
   api,
   diff,
   docs,
+  minimal,
   classic,
   changelog,
   metric,
+  portfolio,
   editorial,
   article,
+  newsletter,
+  mesh,
+  grain,
+  poster,
+  swiss,
+  block,
   quote,
 ];
 

@@ -214,11 +214,11 @@ export function Fit({
       else hi = mid;
     }
     el.style.fontSize = `${lo}px`;
-  }, [max, floor, lines, lineHeight]);
+  }, [max, floor, lines]);
 
   React.useLayoutEffect(() => {
     fit();
-  }, [fit, text, font.family, weight, italic, tracking, uppercase, editable.version]);
+  }, [fit, text, font.family, weight, italic, tracking, uppercase, lineHeight, editable.version]);
 
   React.useEffect(() => {
     const box = boxRef.current;
