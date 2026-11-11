@@ -43,3 +43,9 @@ next-env.d.ts
 
 
 designsystem.md
+
+# licensed card fonts stay local (see public/fonts/local/README.md)
+/public/fonts/local/*
+!/public/fonts/local/README.md
+
+.claude/settings.local.json

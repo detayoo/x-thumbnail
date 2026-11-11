@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Vendored Toolcraft UI library (linted upstream).
+    "src/toolcraft/**",
   ]),
 ]);
 
