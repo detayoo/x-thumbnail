@@ -159,7 +159,7 @@ export const serifSky: TemplateDef = {
       defaultValue: "sky",
     },
   ],
-  sample: { eyebrow: "", title: "Introducing Studio 5" },
+  sample: { eyebrow: "", title: "What the tide leaves behind" },
   Component: SerifSky,
 };
 

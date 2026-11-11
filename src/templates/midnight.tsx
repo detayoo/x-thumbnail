@@ -1,4 +1,4 @@
-import { Absolute, CardRoot, Fit, Text } from "@/components/card/primitives";
+import { Part, Absolute, CardRoot, Fit, Text } from "@/components/card/primitives";
 import { resolveWeight } from "@/lib/fonts";
 import { mix } from "@/lib/thumbnail/color";
 import { lines } from "@/lib/thumbnail/content";
@@ -41,8 +41,8 @@ function Midnight({ content, style, width, height }: TemplateProps) {
       {panel ? (
         <div style={{ position: "relative", flex: 1, display: "flex", flexDirection: "column", alignItems: "center", padding: "64px 120px 0", gap: 40 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 22, maxWidth: "100%" }}>
-            {content.site ? <Mark site={content.site} accent={p.accent} size={56} font={titleFont} /> : null}
-            {content.site ? <span style={{ width: 1, height: 44, background: mix(p.fg, 0.2) }} /> : null}
+            {content.site && !style.hidden.has("mark") ? <Part name="mark"><div><Mark site={content.site} accent={p.accent} size={56} font={titleFont} /></div></Part> : null}
+            {content.site && !style.hidden.has("mark") ? <span style={{ width: 1, height: 44, background: mix(p.fg, 0.2) }} /> : null}
             <div style={{ minWidth: 0, maxWidth: 820 }}>
               <Fit field="title" text={content.title} max={style.titleSize} lines={1} font={titleFont} weight={500} lineHeight={1.1} tracking="-0.025em" balance={false} />
             </div>
@@ -103,8 +103,8 @@ function Midnight({ content, style, width, height }: TemplateProps) {
         </div>
       ) : (
         <div style={{ position: "relative", flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 30, padding: "0 96px" }}>
-          {content.site ? <Mark site={content.site} accent={p.accent} size={84} font={titleFont} /> : null}
-          {content.site ? <span style={{ width: 1, height: 96, background: mix(p.fg, 0.2), flexShrink: 0 }} /> : null}
+          {content.site && !style.hidden.has("mark") ? <Part name="mark"><div><Mark site={content.site} accent={p.accent} size={84} font={titleFont} /></div></Part> : null}
+          {content.site && !style.hidden.has("mark") ? <span style={{ width: 1, height: 96, background: mix(p.fg, 0.2), flexShrink: 0 }} /> : null}
           <div style={{ minWidth: 0, flex: content.site ? 1 : undefined }}>
             <Fit field="title" text={content.title} max={style.titleSize + 16} lines={2} font={titleFont} weight={500} lineHeight={1.08} tracking="-0.03em" />
           </div>
@@ -147,6 +147,7 @@ export const midnight: TemplateDef = {
       defaultValue: "panel",
     },
   ],
+  parts: [{ key: "mark", label: "Brand mark" }],
   sample: {
     title: "Stacked releases",
     subtitle: "Ship a share image with every release\nPreview cards before you publish\nExport at 1x or 2x\nCopy meta tags in one click",

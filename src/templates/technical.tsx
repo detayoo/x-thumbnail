@@ -1,4 +1,4 @@
-import { CardRoot, Fit, Text } from "@/components/card/primitives";
+import { Part, CardRoot, Fit, Text } from "@/components/card/primitives";
 import { mix } from "@/lib/thumbnail/color";
 import { lines } from "@/lib/thumbnail/content";
 import { palette } from "@/lib/thumbnail/style";
@@ -36,7 +36,9 @@ function Technical({ content, style, width, height }: TemplateProps) {
     <CardRoot width={width} height={height} style={style}>
       <div aria-hidden style={{ position: "absolute", left: splitX, top: 0, bottom: 0, width: 1, background: p.line }} />
       <div aria-hidden style={{ position: "absolute", left: 0, right: 0, top: baseY, height: 1, background: p.line }} />
-      <div aria-hidden style={{ position: "absolute", left: splitX + 20, top: 40, width: cell * 4, height: cell * 3 }}>
+      {style.hidden.has("art") ? null : (
+      <Part name="art">
+      <div style={{ position: "absolute", left: splitX + 20, top: 40, width: cell * 4, height: cell * 3 }}>
         {CELLS.map(([cx, cy, w, h, kind], i) => (
           <div
             key={i}
@@ -64,6 +66,8 @@ function Technical({ content, style, width, height }: TemplateProps) {
         </svg>
         <Cross x={cell * 3} y={cell} color={p.accent} />
       </div>
+      </Part>
+      )}
       <Cross x={splitX} y={baseY} color={p.fg} />
       {data.length ? (
         <div style={{ position: "absolute", right: 56, top: 64, display: "flex", flexDirection: "column", gap: 4, padding: "10px 14px", background: p.bg }}>
@@ -75,7 +79,7 @@ function Technical({ content, style, width, height }: TemplateProps) {
         </div>
       ) : null}
       <div style={{ position: "relative", width: splitX, height: baseY, display: "flex", flexDirection: "column", padding: "56px 56px 44px 64px" }}>
-        <div aria-hidden style={{ width: 36, height: 18, borderRadius: "36px 36px 0 0", background: p.fg, marginTop: 8 }} />
+        {style.hidden.has("mark") ? <div style={{ height: 26 }} /> : <Part name="mark"><div style={{ width: 36, height: 18, borderRadius: "36px 36px 0 0", background: p.fg, marginTop: 8 }} /></Part>}
         <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "flex-end", gap: 18, minHeight: 0 }}>
           {content.eyebrow ? (
             <Text field="eyebrow" font={bodyFont} size={bodySize - 2} uppercase tracking="0.08em" color={p.accent} lines={1}>
@@ -117,6 +121,7 @@ export const technical: TemplateDef = {
   defaults: { titleFont: "geist", bodyFont: "geist-mono", titleSize: 92, bodySize: 20 },
   titleRange: [48, 130],
   bodyRange: [14, 26],
+  parts: [{ key: "mark", label: "Corner mark" }, { key: "art", label: "Blueprint art" }],
   sample: { eyebrow: "Engineering", title: "Ship previews on every push", subtitle: "[build]   2.4s\n[cold]    38ms\n[regions] 18\n[status]  ready" },
   Component: Technical,
 };

@@ -1,4 +1,4 @@
-import { CardRoot, Fit, Text } from "@/components/card/primitives";
+import { Part, CardRoot, Fit, Text } from "@/components/card/primitives";
 import { palette } from "@/lib/thumbnail/style";
 import type { TemplateDef, TemplateProps } from "@/lib/thumbnail/types";
 
@@ -34,7 +34,9 @@ function Metric({ content, style, width, height }: TemplateProps) {
             ) : null}
           </div>
         </div>
-        <div aria-hidden style={{ height: 96, display: "flex", alignItems: "flex-end", gap: 10 }}>
+        {style.hidden.has("bars") ? <div style={{ height: 56 }} /> : (
+        <Part name="bars">
+        <div style={{ height: 96, display: "flex", alignItems: "flex-end", gap: 10 }}>
           {BARS.map((h, i) => (
             <div
               key={i}
@@ -42,6 +44,8 @@ function Metric({ content, style, width, height }: TemplateProps) {
             />
           ))}
         </div>
+        </Part>
+        )}
       </div>
     </CardRoot>
   );
@@ -68,6 +72,7 @@ export const metric: TemplateDef = {
   defaults: { titleFont: "bricolage-grotesque", bodyFont: "geist", titleSize: 260, bodySize: 24 },
   titleRange: [120, 320],
   bodyRange: [16, 32],
+  parts: [{ key: "bars", label: "Bar chart" }],
   sample: {
     stat: "3.4×",
     title: "more clicks on links with a custom share image",

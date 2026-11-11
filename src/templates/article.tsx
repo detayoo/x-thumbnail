@@ -1,4 +1,4 @@
-import { CardRoot, Fit, Monogram, Text } from "@/components/card/primitives";
+import { CardRoot, Fit, Monogram, Text, Part } from "@/components/card/primitives";
 import { mix } from "@/lib/thumbnail/color";
 import { palette } from "@/lib/thumbnail/style";
 import type { Palette, TemplateDef, TemplateProps } from "@/lib/thumbnail/types";
@@ -30,9 +30,13 @@ function Article({ content, style, width, height }: TemplateProps) {
 
   return (
     <CardRoot width={width} height={height} style={style}>
-      <div style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: 380, background: p.accent, overflow: "hidden" }}>
-        <Pattern kind={style.options.pattern} p={p} />
-      </div>
+      {style.hidden.has("panel") ? null : (
+        <Part name="panel">
+          <div style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: 380, background: p.accent, overflow: "hidden" }}>
+            <Pattern kind={style.options.pattern} p={p} />
+          </div>
+        </Part>
+      )}
       <div style={{ position: "relative", flex: 1, width: 820, display: "flex", flexDirection: "column", padding: "60px 72px 60px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           {content.site ? <span style={{ width: 16, height: 16, borderRadius: 4, background: p.accent }} /> : null}
@@ -102,6 +106,7 @@ export const article: TemplateDef = {
       defaultValue: "rings",
     },
   ],
+  parts: [{ key: "panel", label: "Pattern panel" }],
   sample: { eyebrow: "Design", role: "6 min read" },
   Component: Article,
 };

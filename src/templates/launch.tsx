@@ -19,6 +19,7 @@ function Launch({ content, style, width, height }: TemplateProps) {
           background: `radial-gradient(closest-side, ${mix(p.accent, 0.55)}, ${mix(p.accent, 0.12)} 55%, transparent)`,
         }}
       />
+      {style.hidden.has("horizon") ? null : (
       <Absolute
         style={{
           left: width / 2 - planet / 2,
@@ -30,6 +31,7 @@ function Launch({ content, style, width, height }: TemplateProps) {
           boxShadow: `0 -2px 0 0 ${mix(p.accent, 0.6, "#ffffff")}, 0 -18px 60px ${mix(p.accent, 0.7)}, inset 0 30px 80px ${mix(p.accent, 0.35)}`,
         }}
       />
+      )}
       {content.site ? (
         <div style={{ position: "absolute", top: 52, left: 64, display: "flex", alignItems: "center", gap: 12 }}>
           <span style={{ width: 18, height: 18, borderRadius: 5, background: p.accent }} />
@@ -94,6 +96,7 @@ export const launch: TemplateDef = {
   defaults: { titleFont: "geist", bodyFont: "geist", titleSize: 92, bodySize: 22 },
   titleRange: [48, 140],
   bodyRange: [16, 32],
+  parts: [{ key: "horizon", label: "Glowing horizon" }],
   sample: { eyebrow: "Now in public beta", title: "Share images, designed in seconds", subtitle: "21 templates, 35 typefaces and pixel-perfect exports for every link you post." },
   Component: Launch,
 };

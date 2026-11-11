@@ -1,4 +1,4 @@
-import { Absolute, CardRoot, Fit, Grain, Text } from "@/components/card/primitives";
+import { Part, Absolute, CardRoot, Fit, Grain, Text } from "@/components/card/primitives";
 import { resolveWeight } from "@/lib/fonts";
 import { mix } from "@/lib/thumbnail/color";
 import { palette } from "@/lib/thumbnail/style";
@@ -15,7 +15,8 @@ function Spotlight({ content, style, width, height }: TemplateProps) {
       <Absolute style={{ inset: 0, background: `radial-gradient(60% 70% at 50% -12%, ${mix(p.accent, 0.3)}, transparent 70%)` }} />
       <Grain opacity={0.35} />
       <div style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", paddingTop: 48, gap: 26 }}>
-        {letter ? (
+        {letter && !style.hidden.has("tile") ? (
+          <Part name="tile">
           <div
             style={{
               width: 64,
@@ -34,11 +35,14 @@ function Spotlight({ content, style, width, height }: TemplateProps) {
           >
             {letter}
           </div>
+          </Part>
         ) : null}
         <div style={{ width: 960 }}>
           <Fit field="title" text={content.title} max={style.titleSize} lines={1} font={titleFont} weight={400} lineHeight={1.1} tracking="-0.02em" textAlign="center" balance={false} />
         </div>
       </div>
+      {style.hidden.has("window") ? null : (
+      <Part name="window">
       <div
         style={{
           position: "absolute",
@@ -78,6 +82,8 @@ function Spotlight({ content, style, width, height }: TemplateProps) {
           </pre>
         </div>
       </div>
+      </Part>
+      )}
       <Absolute style={{ left: 0, right: 0, bottom: 0, height: 120, background: `linear-gradient(transparent, ${p.bg})` }} />
     </CardRoot>
   );
@@ -102,6 +108,7 @@ export const spotlight: TemplateDef = {
   defaults: { titleFont: "instrument-serif", bodyFont: "geist-mono", titleSize: 92, bodySize: 20 },
   titleRange: [48, 120],
   bodyRange: [14, 26],
+  parts: [{ key: "tile", label: "App tile" }, { key: "window", label: "Code window" }],
   sample: {
     eyebrow: "TypeScript",
     title: "Share images for developers",

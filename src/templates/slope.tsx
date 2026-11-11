@@ -1,4 +1,4 @@
-import { Absolute, CardRoot, Fit, Text } from "@/components/card/primitives";
+import { Absolute, CardRoot, Fit, Text, Part } from "@/components/card/primitives";
 import { mix } from "@/lib/thumbnail/color";
 import { palette } from "@/lib/thumbnail/style";
 import type { TemplateDef, TemplateProps } from "@/lib/thumbnail/types";
@@ -10,9 +10,13 @@ function Slope({ content, style, width, height }: TemplateProps) {
 
   return (
     <CardRoot width={width} height={height} style={style}>
-      <Absolute style={{ inset: 0, clipPath: "polygon(0% 92%, 100% 52%, 100% 100%, 0% 100%)" }}>
-        <div style={{ position: "absolute", inset: -40, background: band, filter: "blur(18px)" }} />
-      </Absolute>
+      {style.hidden.has("band") ? null : (
+        <Part name="band">
+          <div style={{ position: "absolute", inset: 0, clipPath: "polygon(0% 92%, 100% 52%, 100% 100%, 0% 100%)" }}>
+            <div style={{ position: "absolute", inset: -40, background: band, filter: "blur(18px)" }} />
+          </div>
+        </Part>
+      )}
       <Absolute style={{ left: 28, top: 0, bottom: 0, width: 1, background: mix(p.fg, 0.07) }} />
       <Absolute style={{ right: 28, top: 0, bottom: 0, width: 1, background: mix(p.fg, 0.07) }} />
       <div style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", gap: 34, padding: `${height * 0.15}px 110px 0` }}>
@@ -62,6 +66,7 @@ export const slope: TemplateDef = {
   defaults: { titleFont: "plus-jakarta-sans", bodyFont: "plus-jakarta-sans", titleSize: 72, bodySize: 22 },
   titleRange: [44, 104],
   bodyRange: [16, 30],
+  parts: [{ key: "band", label: "Colour band" }],
   sample: { site: "acme", eyebrow: "Blog", title: "How we cut checkout time in half", subtitle: "" },
   Component: Slope,
 };

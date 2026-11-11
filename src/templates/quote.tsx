@@ -1,4 +1,4 @@
-import { Absolute, CardRoot, Fit, Monogram, Text } from "@/components/card/primitives";
+import { CardRoot, Fit, Monogram, Text, Part } from "@/components/card/primitives";
 import { resolveWeight } from "@/lib/fonts";
 import { palette } from "@/lib/thumbnail/style";
 import type { TemplateDef, TemplateProps } from "@/lib/thumbnail/types";
@@ -8,8 +8,11 @@ function Quote({ content, style, width, height }: TemplateProps) {
 
   return (
     <CardRoot width={width} height={height} style={style}>
-      <Absolute
+      {style.hidden.has("mark") ? null : (
+      <Part name="mark">
+      <div
         style={{
+          position: "absolute",
           left: 58,
           top: -18,
           fontFamily: titleFont.family,
@@ -20,7 +23,9 @@ function Quote({ content, style, width, height }: TemplateProps) {
         }}
       >
         {"“"}
-      </Absolute>
+      </div>
+      </Part>
+      )}
       <div style={{ position: "relative", flex: 1, display: "flex", flexDirection: "column", padding: "150px 80px 60px 80px" }}>
         <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0, paddingBottom: 36 }}>
           <Fit
@@ -85,6 +90,7 @@ export const quote: TemplateDef = {
       defaultValue: "on",
     },
   ],
+  parts: [{ key: "mark", label: "Quote mark" }],
   sample: { title: "The best share card is the one you can read from across the room.", site: "@acme" },
   Component: Quote,
 };
