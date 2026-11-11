@@ -80,7 +80,7 @@ export const launch: TemplateDef = {
   id: "launch",
   name: "Launch",
   description: "Centered announcement over a glowing horizon.",
-  category: "Product",
+  category: "Announcement",
   fields: [
     { key: "eyebrow", label: "Badge" },
     { key: "title", label: "Headline" },
@@ -97,6 +97,6 @@ export const launch: TemplateDef = {
   titleRange: [48, 140],
   bodyRange: [16, 32],
   parts: [{ key: "horizon", label: "Glowing horizon" }],
-  sample: { eyebrow: "Now in public beta", title: "Share images, designed in seconds", subtitle: "21 templates, 35 typefaces and pixel-perfect exports for every link you post." },
+  sample: { eyebrow: "Now in public beta", title: "Share images, designed in seconds", subtitle: "Pick a template, type your title and export a crisp PNG for every link you post.", site: "x-thumbnail" },
   Component: Launch,
 };

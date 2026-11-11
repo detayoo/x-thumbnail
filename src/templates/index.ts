@@ -13,6 +13,8 @@ import { slope } from "./slope";
 import { spotlight } from "./spotlight";
 import { technical } from "./technical";
 import { documentary, hotTake, serifSky, sticker } from "./youtube";
+import { api, diff, docs, schematic, terminal } from "./developer";
+import { event, hiring, milestone, version } from "./announcement";
 
 export const TEMPLATES: readonly TemplateDef[] = [
   midnight,
@@ -25,12 +27,21 @@ export const TEMPLATES: readonly TemplateDef[] = [
   hotTake,
   sticker,
   launch,
+  version,
+  event,
+  hiring,
+  milestone,
+  schematic,
+  terminal,
+  code,
+  api,
+  diff,
+  docs,
+  classic,
   changelog,
   metric,
   editorial,
   article,
-  code,
-  classic,
   quote,
 ];
 

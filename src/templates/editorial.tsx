@@ -81,6 +81,6 @@ export const editorial: TemplateDef = {
       defaultValue: "off",
     },
   ],
-  sample: { eyebrow: "Essay" },
+  sample: { eyebrow: "Essay", title: "The quiet craft of making things that last", author: "Ada Okafor", role: "Contributing editor", site: "longform.press" },
   Component: Editorial,
 };

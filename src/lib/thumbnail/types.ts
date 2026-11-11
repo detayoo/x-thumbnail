@@ -33,7 +33,7 @@ export type OptionDef = {
   defaultValue: string;
 };
 
-export type TemplateCategory = "Featured" | "YouTube" | "Product" | "Editorial" | "Developer" | "Graphic" | "Social";
+export type TemplateCategory = "Featured" | "YouTube" | "Announcement" | "Developer" | "Product" | "Editorial" | "Graphic" | "Social";
 
 export type TemplateDefaults = {
   titleFont: string;

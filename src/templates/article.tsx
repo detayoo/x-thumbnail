@@ -107,6 +107,6 @@ export const article: TemplateDef = {
     },
   ],
   parts: [{ key: "panel", label: "Pattern panel" }],
-  sample: { eyebrow: "Design", role: "6 min read" },
+  sample: { eyebrow: "Accessibility", title: "A field guide to colour contrast that passes", role: "6 min read", author: "Kemi Adeyemi", site: "Pixel Notes" },
   Component: Article,
 };

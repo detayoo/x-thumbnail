@@ -155,6 +155,19 @@ type FitProps = {
 
 const INK_PAD = 0.2;
 
+function countLines(el: HTMLElement) {
+  const range = document.createRange();
+  range.selectNodeContents(el);
+  const tops = [...range.getClientRects()].filter((r) => r.width > 0).map((r) => r.top).sort((a, b) => a - b);
+  let count = 0;
+  let last = -Infinity;
+  for (const top of tops) {
+    if (top - last > 2) count += 1;
+    last = top;
+  }
+  return Math.max(count, 1);
+}
+
 const justify: Record<Align, string> = { start: "flex-start", center: "center", end: "flex-end" };
 
 export function Fit({
@@ -189,7 +202,7 @@ export function Fit({
     const fits = (size: number) => {
       el.style.fontSize = `${size}px`;
       const overflowX = el.scrollWidth > el.clientWidth + 1;
-      if (lines) return !overflowX && el.scrollHeight <= Math.ceil((lines * lineHeight + INK_PAD) * size) + 2;
+      if (lines) return !overflowX && countLines(el) <= lines;
       return !overflowX && el.scrollHeight <= box.clientHeight + 1;
     };
     if (fits(max)) return;

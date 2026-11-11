@@ -15,7 +15,7 @@ import { TEMPLATES } from "@/templates";
 
 const THUMB_WIDTH = 210;
 const CARD = { width: 1200, height: 630 };
-const CATEGORIES: TemplateCategory[] = ["Featured", "YouTube", "Product", "Editorial", "Developer", "Graphic", "Social"];
+const CATEGORIES: TemplateCategory[] = ["Featured", "YouTube", "Announcement", "Developer", "Product", "Editorial", "Graphic", "Social"];
 
 const Thumbnail = React.memo(function Thumbnail({
   template,
