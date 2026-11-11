@@ -76,7 +76,7 @@ export const changelog: TemplateDef = {
   palettes: [
     palette("graphite", "Graphite", { bg: "#0e0f12", fg: "#f4f4f5", muted: "#8b8d98", accent: "#4ade80", accentFg: "#052e16" }),
     palette("paper", "Paper", { bg: "#fbfbf9", fg: "#111111", muted: "#6b6b6b", accent: "#2563eb", accentFg: "#ffffff" }),
-    palette("midnight", "Midnight", { bg: "#0b1026", fg: "#e6e9ff", muted: "#8e95c2", accent: "#f472b6", accentFg: "#2a0518" }),
+    palette("midnight", "Midnight", { bg: "#0b1026", fg: "#e6e9ff", muted: "#8e95c2", accent: "#38bdf8", accentFg: "#06222f" }),
     palette("sand", "Sand", { bg: "#f3efe6", fg: "#2a2118", muted: "#7a6d5d", accent: "#d9480f", accentFg: "#ffffff" }),
   ],
   defaults: { titleFont: "geist", bodyFont: "geist-mono", titleSize: 76, bodySize: 22 },

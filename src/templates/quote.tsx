@@ -68,7 +68,7 @@ export const quote: TemplateDef = {
   palettes: [
     palette("cream", "Cream", { bg: "#f5efe3", fg: "#1f1b16", muted: "#6f665a", accent: "#c2410c", accentFg: "#fff7ed" }),
     palette("ink", "Ink", { bg: "#121212", fg: "#f5f3ee", muted: "#a3a3a3", accent: "#facc15", accentFg: "#1a1500" }),
-    palette("lilac", "Lilac", { bg: "#ebe7ff", fg: "#211a4a", muted: "#5d5591", accent: "#6d4aff", accentFg: "#ffffff" }),
+    palette("sky", "Sky", { bg: "#e3eefb", fg: "#0d2340", muted: "#4a6584", accent: "#2054d2", accentFg: "#ffffff" }),
     palette("mint", "Mint", { bg: "#e2f3ea", fg: "#0f2e22", muted: "#4b6b5d", accent: "#0f9d6a", accentFg: "#ffffff" }),
   ],
   defaults: { titleFont: "newsreader", bodyFont: "geist", titleSize: 68, bodySize: 22 },

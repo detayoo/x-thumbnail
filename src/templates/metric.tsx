@@ -63,7 +63,7 @@ export const metric: TemplateDef = {
     palette("forest", "Forest", { bg: "#0d1f17", fg: "#eafff3", muted: "#8fb5a2", accent: "#4ade80", line: "#1f3a2d" }),
     palette("paper", "Paper", { bg: "#f6f5f1", fg: "#111111", muted: "#6b6b6b", accent: "#ff4f00", line: "#e2dfd6" }),
     palette("cobalt", "Cobalt", { bg: "#0b1b4d", fg: "#ffffff", muted: "#a9b6e3", accent: "#7dd3fc", line: "#1f3375" }),
-    palette("plum", "Plum", { bg: "#1c0f24", fg: "#fbefff", muted: "#bb9cc8", accent: "#f0abfc", line: "#33203f" }),
+    palette("ocean", "Ocean", { bg: "#06202b", fg: "#e8fbff", muted: "#8db8c4", accent: "#22d3ee", line: "#12394a" }),
   ],
   defaults: { titleFont: "bricolage-grotesque", bodyFont: "geist", titleSize: 260, bodySize: 24 },
   titleRange: [120, 320],

@@ -28,6 +28,8 @@ type FitProps = {
   suffix?: React.ReactNode;
 };
 
+const INK_PAD = 0.2;
+
 const justify: Record<Align, string> = { start: "flex-start", center: "center", end: "flex-end" };
 
 export function Fit({
@@ -60,7 +62,7 @@ export function Fit({
     const fits = (size: number) => {
       el.style.fontSize = `${size}px`;
       const overflowX = el.scrollWidth > el.clientWidth + 1;
-      if (lines) return !overflowX && el.scrollHeight <= Math.ceil(lines * lineHeight * size) + 2;
+      if (lines) return !overflowX && el.scrollHeight <= Math.ceil((lines * lineHeight + INK_PAD) * size) + 2;
       return !overflowX && el.scrollHeight <= box.clientHeight + 1;
     };
     if (fits(max)) return;
@@ -103,7 +105,6 @@ export function Fit({
         justifyContent: justify[align],
         minWidth: 0,
         minHeight: 0,
-        overflow: "hidden",
         ...(fill ? { flex: "1 1 0" } : null),
       }}
     >
@@ -122,6 +123,10 @@ export function Fit({
           textAlign,
           color,
           whiteSpace: "pre-line",
+          paddingTop: `${INK_PAD / 2}em`,
+          paddingBottom: `${INK_PAD / 2}em`,
+          marginTop: `${-INK_PAD / 2}em`,
+          marginBottom: `${-INK_PAD / 2}em`,
           ...clamp,
           ...style,
         }}

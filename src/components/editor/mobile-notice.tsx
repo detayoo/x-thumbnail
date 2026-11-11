@@ -31,7 +31,7 @@ export function MobileNotice({ onContinue }: { onContinue: () => void }) {
       <div
         aria-hidden
         className="aspect-[1200/630] w-60 rounded-xl shadow-2xl ring-1 ring-[color:var(--tint-10)]"
-        style={{ background: "radial-gradient(closest-side at 50% 115%, #7c5cff, transparent), #07070b" }}
+        style={{ background: "radial-gradient(closest-side at 50% 115%, #2054d2, transparent), #07070b" }}
       />
       <div className="flex max-w-sm flex-col gap-3">
         <h1 className="m-0 text-xl font-semibold tracking-tight text-[color:var(--foreground)]">Made for bigger screens</h1>

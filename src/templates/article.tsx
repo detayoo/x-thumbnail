@@ -85,7 +85,7 @@ export const article: TemplateDef = {
     palette("cobalt", "Cobalt", { ...light, accent: "#2b59ff" }),
     palette("tangerine", "Tangerine", { ...light, accent: "#ff6b1a" }),
     palette("forest", "Forest", { ...light, accent: "#13795b" }),
-    palette("night", "Night", { bg: "#0b0b10", fg: "#f4f4f6", muted: "#9b9bab", accent: "#8b7bff", accentFg: "#0b0b10" }),
+    palette("night", "Night", { bg: "#0b0b10", fg: "#f4f4f6", muted: "#9b9bab", accent: "#4f8cff", accentFg: "#0b0b10" }),
   ],
   defaults: { titleFont: "plus-jakarta-sans", bodyFont: "plus-jakarta-sans", titleSize: 66, bodySize: 22 },
   titleRange: [40, 96],

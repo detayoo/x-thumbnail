@@ -121,7 +121,7 @@ export const code: TemplateDef = {
     { key: "site", label: "Site" },
   ],
   palettes: [
-    palette("night", "Night", { bg: "#0b0d12", fg: "#e6e8ef", muted: "#7c8296", surface: "#12151d", line: "#232837", accent: "#7aa2f7", colors: ["#bb9af7", "#9ece6a", "#ff9e64"] }),
+    palette("night", "Night", { bg: "#0b0d12", fg: "#e6e8ef", muted: "#7c8296", surface: "#12151d", line: "#232837", accent: "#7aa2f7", colors: ["#7dcfff", "#9ece6a", "#ff9e64"] }),
     palette("dawn", "Dawn", { bg: "#eef0f5", fg: "#1d2030", muted: "#6b7085", surface: "#ffffff", line: "#dfe2ea", accent: "#d6336c", colors: ["#d6336c", "#2f9e44", "#e8590c"] }),
     palette("aurora", "Aurora", { bg: "#07130f", fg: "#e7fff5", muted: "#6f9a88", surface: "#0c1d17", line: "#18342a", accent: "#34d399", colors: ["#34d399", "#facc15", "#60a5fa"] }),
   ],

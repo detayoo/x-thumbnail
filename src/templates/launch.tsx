@@ -86,7 +86,7 @@ export const launch: TemplateDef = {
     { key: "site", label: "Product" },
   ],
   palettes: [
-    palette("violet", "Violet", { ...dark, accent: "#7c5cff" }),
+    palette("cobalt", "Cobalt", { ...dark, accent: "#2f7bff" }),
     palette("ember", "Ember", { ...dark, accent: "#ff6a3d" }),
     palette("aqua", "Aqua", { ...dark, accent: "#2dd4bf" }),
     palette("lime", "Lime", { ...dark, accent: "#a3e635" }),
