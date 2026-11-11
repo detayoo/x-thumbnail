@@ -2,11 +2,13 @@
 
 import * as React from "react";
 
-import { ColorControl, Panel, PanelSection, SegmentedControl, SliderControl } from "@/toolcraft/ui";
+import { ColorControl, Panel, PanelSection, SegmentedControl, SliderControl, SwitchControl } from "@/toolcraft/ui";
 import { useEditor } from "@/store/editor";
 import { FontPicker } from "./font-picker";
 import { useThumbnail } from "./use-thumbnail";
 import { ContentField, ExportSections, PaletteSwatches } from "./panel-parts";
+import { LayersSection } from "./layers-section";
+import { contentFor } from "@/lib/thumbnail/content";
 
 const isCompactScreen = () => typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches;
 
@@ -18,8 +20,9 @@ export function Kbd({ children }: { children: React.ReactNode }) {
 
 export function PropertiesPanel() {
   const { template, content, style, override } = useThumbnail();
-  const { setStyle, setOption, resetStyle, resetContent } = useEditor.getState();
-  const touchedContent = useEditor((s) => Object.keys(s.doc.content).length > 0);
+  const { setStyle, setOption, resetStyle, resetContent, setSyncText } = useEditor.getState();
+  const touchedContent = useEditor((s) => Object.keys(contentFor(s.doc, s.doc.templateId)).length > 0);
+  const syncText = useEditor((s) => s.doc.syncText);
 
   return (
     <div className="pointer-events-none absolute top-[62px] right-3 bottom-[72px] left-3 flex flex-col items-end md:bottom-3 md:left-auto" data-testid="properties">
@@ -32,7 +35,7 @@ export function PropertiesPanel() {
       >
         <PanelSection
           title="Text"
-          description="Your text carries across every template."
+          description={syncText ? "This text shows on every template." : "Each template keeps its own text. Click text on the canvas to edit it there."}
           action={
             touchedContent ? (
               <button type="button" onClick={resetContent} className="text-2xs text-[color:var(--muted-foreground)] hover:text-[color:var(--foreground)]">
@@ -41,10 +44,15 @@ export function PropertiesPanel() {
             ) : undefined
           }
         >
-          {template.fields.map((field) => (
-            <ContentField key={field.key} field={field} content={content} />
-          ))}
+          <SwitchControl name="Use this text on every template" checked={syncText} onCheckedChange={setSyncText} />
+          {template.fields
+            .filter((field) => !style.hidden.has(field.key))
+            .map((field) => (
+              <ContentField key={field.key} field={field} content={content} />
+            ))}
         </PanelSection>
+
+        <LayersSection />
 
         <PanelSection title="Type">
           <FontPicker name="Title font" value={style.titleFont.id} onChange={(id) => setStyle({ titleFont: id })} />

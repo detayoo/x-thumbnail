@@ -5,9 +5,10 @@ import { get as idbGet, set as idbSet } from "idb-keyval";
 
 import { LOCAL_FONT_FILES } from "@/lib/fonts";
 import type { Content, FormatId, StyleOverride, ThumbnailDoc } from "@/lib/thumbnail/types";
+import { contentFor, resolveContent } from "@/lib/thumbnail/content";
 import { DEFAULT_TEMPLATE_ID, getTemplate, TEMPLATES } from "@/templates";
 
-const STORAGE_KEY = "x-thumbnail:doc:v2";
+const STORAGE_KEY = "x-thumbnail:doc:v3";
 const HISTORY_LIMIT = 100;
 const COALESCE_MS = 900;
 
@@ -17,6 +18,8 @@ const initialDoc: ThumbnailDoc = {
   templateId: DEFAULT_TEMPLATE_ID,
   formatId: "og",
   content: {},
+  contents: {},
+  syncText: false,
   styles: {},
 };
 
@@ -28,6 +31,9 @@ type EditorState = {
   zoom: Zoom;
   fitScale: number;
   safeArea: boolean;
+  selected: string | null;
+  select: (key: string | null) => void;
+  setHidden: (key: string, hidden: boolean) => void;
   localFonts: Record<string, boolean>;
   hydrate: () => Promise<void>;
   setTemplate: (id: string) => void;
@@ -35,6 +41,7 @@ type EditorState = {
   setFormat: (id: FormatId) => void;
   setContent: <K extends keyof Content>(key: K, value: Content[K]) => void;
   resetContent: () => void;
+  setSyncText: (on: boolean) => void;
   setStyle: (patch: StyleOverride, coalesce?: string) => void;
   setOption: (key: string, value: string) => void;
   resetStyle: () => void;
@@ -105,17 +112,29 @@ export const useEditor = create<EditorState>((set, get) => {
     zoom: "fit",
     fitScale: 1,
     safeArea: false,
+    selected: null,
+    select: (selected) => set({ selected }),
+    setHidden: (key, hidden) => {
+      updateStyle((current) => {
+        const list = new Set(current.hidden ?? []);
+        if (hidden) list.add(key);
+        else list.delete(key);
+        return { ...current, hidden: [...list] };
+      });
+      if (hidden) set({ selected: null });
+    },
     localFonts: {},
 
     hydrate: async () => {
       const [saved, localFonts] = await Promise.all([idbGet<ThumbnailDoc>(STORAGE_KEY).catch(() => undefined), detectLocalFonts()]);
-      const doc = saved && typeof saved === "object" ? { ...initialDoc, ...saved, templateId: getTemplate(saved.templateId ?? "").id } : initialDoc;
+      const doc = saved && typeof saved === "object" ? { ...initialDoc, ...saved, contents: saved.contents ?? {}, templateId: getTemplate(saved.templateId ?? "").id } : initialDoc;
       set({ doc, hydrated: true, localFonts });
     },
 
     setTemplate: (id) => {
       const { doc } = get();
       if (doc.templateId === id) return;
+      set({ selected: null });
       commit(withTemplate(doc, id));
     },
 
@@ -123,6 +142,7 @@ export const useEditor = create<EditorState>((set, get) => {
       const { doc } = get();
       const index = TEMPLATES.findIndex((t) => t.id === doc.templateId);
       const next = TEMPLATES[(index + delta + TEMPLATES.length) % TEMPLATES.length];
+      set({ selected: null });
       commit(withTemplate(doc, next.id));
     },
 
@@ -133,12 +153,32 @@ export const useEditor = create<EditorState>((set, get) => {
 
     setContent: (key, value) => {
       const { doc } = get();
-      commit({ ...doc, content: { ...doc.content, [key]: value } }, `content:${String(key)}`);
+      const coalesce = `content:${String(key)}`;
+      if (doc.syncText) commit({ ...doc, content: { ...doc.content, [key]: value } }, coalesce);
+      else {
+        const own = doc.contents[doc.templateId] ?? {};
+        commit({ ...doc, contents: { ...doc.contents, [doc.templateId]: { ...own, [key]: value } } }, coalesce);
+      }
     },
 
     resetContent: () => {
       const { doc } = get();
-      commit({ ...doc, content: {} });
+      if (doc.syncText) commit({ ...doc, content: {} });
+      else {
+        const contents = { ...doc.contents };
+        delete contents[doc.templateId];
+        commit({ ...doc, contents });
+      }
+    },
+
+    setSyncText: (on) => {
+      const { doc } = get();
+      if (!on) return commit({ ...doc, syncText: false });
+      const template = getTemplate(doc.templateId);
+      const current = resolveContent(template, contentFor(doc, template.id));
+      const shared: Partial<Content> = {};
+      for (const field of template.fields) (shared as Record<string, unknown>)[field.key] = current[field.key];
+      commit({ ...doc, syncText: true, content: shared });
     },
 
     setStyle: (patch, coalesce) => updateStyle((current) => ({ ...current, ...patch }), coalesce),

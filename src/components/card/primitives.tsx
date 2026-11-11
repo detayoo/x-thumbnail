@@ -6,7 +6,11 @@ import { resolveWeight, type FontDef } from "@/lib/fonts";
 import { initials } from "@/lib/thumbnail/content";
 import type { ResolvedStyle, TextKey } from "@/lib/thumbnail/types";
 
-export type EditApi = { commit: (field: TextKey, value: string) => void };
+export type EditApi = {
+  commit: (field: TextKey, value: string) => void;
+  select: (key: string | null) => void;
+  selected: string | null;
+};
 
 export const EditContext = React.createContext<EditApi | null>(null);
 
@@ -21,22 +25,31 @@ function useEditable(field: TextKey | undefined, value: string) {
     if (save && next !== value) api.commit(field, next);
     setVersion((v) => v + 1);
   };
+  const startEdit = (el: HTMLElement) => {
+    api.select(field);
+    el.contentEditable = "plaintext-only";
+    el.setAttribute("data-editing", "");
+    el.focus();
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    const selection = window.getSelection();
+    selection?.removeAllRanges();
+    selection?.addRange(range);
+  };
   const props = {
     "data-field": field,
     "data-editable": "",
-    title: "Click to edit",
+    "data-selected": api.selected === field ? "" : undefined,
     onClick: (e: React.MouseEvent<HTMLElement>) => {
       const el = e.currentTarget;
-      if (el.isContentEditable) return;
       e.stopPropagation();
-      el.contentEditable = "plaintext-only";
-      el.setAttribute("data-editing", "");
-      el.focus();
-      const range = document.createRange();
-      range.selectNodeContents(el);
-      const selection = window.getSelection();
-      selection?.removeAllRanges();
-      selection?.addRange(range);
+      if (el.isContentEditable) return;
+      if (api.selected === field) startEdit(el);
+      else api.select(field);
+    },
+    onDoubleClick: (e: React.MouseEvent<HTMLElement>) => {
+      e.stopPropagation();
+      if (!e.currentTarget.isContentEditable) startEdit(e.currentTarget);
     },
     onBlur: (e: React.FocusEvent<HTMLElement>) => {
       if (e.currentTarget.isContentEditable) finish(e.currentTarget, true);
@@ -371,4 +384,17 @@ export function Monogram({
 
 export function Absolute({ style, children }: { style: React.CSSProperties; children?: React.ReactNode }) {
   return <div aria-hidden style={{ position: "absolute", pointerEvents: "none", ...style }}>{children}</div>;
+}
+
+export function Part({ name, children }: { name: string; children: React.ReactElement<Record<string, unknown>> }) {
+  const api = React.useContext(EditContext);
+  if (!api) return children;
+  return React.cloneElement(children, {
+    "data-part": name,
+    "data-selected": api.selected === name ? "" : undefined,
+    onClick: (e: React.MouseEvent) => {
+      e.stopPropagation();
+      api.select(name);
+    },
+  });
 }

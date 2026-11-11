@@ -99,7 +99,7 @@ export const spotlight: TemplateDef = {
     palette("ocean", "Ocean", { bg: "#06121f", fg: "#e8f2ff", muted: "#7891ad", surface: "#0b1b2e", accent: "#5aa9ff", colors: ["#5aa9ff", "#7ee2b8", "#ffb86b"] }),
     palette("ember", "Ember", { bg: "#140b07", fg: "#fff1e8", muted: "#a3877a", surface: "#1e120c", accent: "#ff8a4c", colors: ["#ff8a4c", "#d8e37b", "#7cc6ff"] }),
   ],
-  defaults: { titleFont: "instrument-serif", bodyFont: "local-mono", titleSize: 92, bodySize: 20 },
+  defaults: { titleFont: "instrument-serif", bodyFont: "geist-mono", titleSize: 92, bodySize: 20 },
   titleRange: [48, 120],
   bodyRange: [14, 26],
   sample: {

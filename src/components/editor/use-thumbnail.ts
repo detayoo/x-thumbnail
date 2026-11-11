@@ -3,7 +3,7 @@
 import * as React from "react";
 
 import { useEditor } from "@/store/editor";
-import { resolveContent } from "@/lib/thumbnail/content";
+import { contentFor, resolveContent } from "@/lib/thumbnail/content";
 import { getFormat } from "@/lib/thumbnail/formats";
 import { resolveStyle } from "@/lib/thumbnail/style";
 import { getTemplate } from "@/templates";
@@ -17,7 +17,7 @@ export function useThumbnail() {
       doc,
       template,
       format: getFormat(doc.formatId),
-      content: resolveContent(template, doc.content),
+      content: resolveContent(template, contentFor(doc, template.id), doc.styles[template.id]?.hidden),
       style: resolveStyle(template, doc.styles[template.id], localFonts),
       override: doc.styles[template.id] ?? {},
     };

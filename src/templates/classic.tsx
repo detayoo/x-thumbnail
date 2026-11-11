@@ -48,7 +48,7 @@ export const classic: TemplateDef = {
     palette("paper", "Paper", { bg: "#fafafa", fg: "#0a0a0a", accent: "#0a0a0a", muted: "#3f3f46" }),
     palette("blueprint", "Blueprint", { bg: "#0b3fa8", fg: "#ffffff", accent: "#9fd0ff", muted: "#dbe8ff" }),
   ],
-  defaults: { titleFont: "local-mono", bodyFont: "local-mono", titleSize: 84, bodySize: 30 },
+  defaults: { titleFont: "geist-mono", bodyFont: "geist-mono", titleSize: 84, bodySize: 30 },
   titleRange: [40, 160],
   bodyRange: [18, 48],
   options: [

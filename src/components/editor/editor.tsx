@@ -42,6 +42,8 @@ const SHORTCUTS: [string, string][] = [
   ["Previous / next template", "[ / ]"],
   ["Next palette", "P"],
   ["Safe area guides", "G"],
+  ["Edit selected text", "Enter or double-click"],
+  ["Hide selected element", "⌫"],
   ["Download PNG", "⌘ E"],
   ["Download PNG 2×", "⇧ ⌘ E"],
   ["Copy image", "⇧ ⌘ C"],
@@ -108,7 +110,19 @@ function EditorApp() {
       else if (key === "p") s.shufflePalette();
       else if (key === "g") s.toggleSafeArea();
       else if (key === "?") setShowHelp((v) => !v);
-      else if (key === "escape") setShowHelp(false);
+      else if (key === "escape") {
+        setShowHelp(false);
+        s.select(null);
+      } else if ((key === "backspace" || key === "delete") && s.selected) {
+        e.preventDefault();
+        s.setHidden(s.selected, true);
+      } else if (key === "enter" && s.selected) {
+        const el = document.querySelector(`[data-stage] [data-field="${s.selected}"]`);
+        if (el) {
+          e.preventDefault();
+          el.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+        }
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);

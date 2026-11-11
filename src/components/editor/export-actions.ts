@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { slug } from "@/lib/thumbnail/content";
 import { downloadBlob, renderPng } from "@/lib/thumbnail/export";
 import { getFormat } from "@/lib/thumbnail/formats";
-import { resolveContent } from "@/lib/thumbnail/content";
+import { contentFor, resolveContent } from "@/lib/thumbnail/content";
 import { useEditor } from "@/store/editor";
 import type { FormatId } from "@/lib/thumbnail/types";
 import { getTemplate } from "@/templates";
@@ -14,7 +14,7 @@ import { getCardNode } from "./stage";
 function current() {
   const { doc } = useEditor.getState();
   const template = getTemplate(doc.templateId);
-  return { format: getFormat(doc.formatId), content: resolveContent(template, doc.content), template };
+  return { format: getFormat(doc.formatId), content: resolveContent(template, contentFor(doc, template.id)), template };
 }
 
 let busy = false;

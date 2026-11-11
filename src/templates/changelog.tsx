@@ -79,7 +79,7 @@ export const changelog: TemplateDef = {
     palette("midnight", "Midnight", { bg: "#0b1026", fg: "#e6e9ff", muted: "#8e95c2", accent: "#38bdf8", accentFg: "#06222f" }),
     palette("sand", "Sand", { bg: "#f3efe6", fg: "#2a2118", muted: "#7a6d5d", accent: "#d9480f", accentFg: "#ffffff" }),
   ],
-  defaults: { titleFont: "geist", bodyFont: "local-mono", titleSize: 76, bodySize: 22 },
+  defaults: { titleFont: "geist", bodyFont: "geist-mono", titleSize: 76, bodySize: 22 },
   titleRange: [44, 110],
   bodyRange: [16, 30],
   sample: {

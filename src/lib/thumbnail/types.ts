@@ -46,7 +46,10 @@ export type StyleOverride = Partial<TemplateDefaults> & {
   paletteId?: string;
   accent?: string;
   options?: Record<string, string>;
+  hidden?: string[];
 };
+
+export type PartSpec = { key: string; label: string };
 
 export type ResolvedStyle = {
   titleFont: FontDef;
@@ -55,6 +58,7 @@ export type ResolvedStyle = {
   bodySize: number;
   palette: Palette;
   options: Record<string, string>;
+  hidden: ReadonlySet<string>;
 };
 
 export type TemplateProps = {
@@ -75,6 +79,7 @@ export type TemplateDef = {
   titleRange: readonly [number, number];
   bodyRange: readonly [number, number];
   options?: readonly OptionDef[];
+  parts?: readonly PartSpec[];
   sample?: Partial<Content>;
   preferredFormat?: FormatId;
   Component: React.ComponentType<TemplateProps>;
@@ -96,5 +101,7 @@ export type ThumbnailDoc = {
   templateId: string;
   formatId: FormatId;
   content: Partial<Content>;
+  contents: Record<string, Partial<Content>>;
+  syncText: boolean;
   styles: Record<string, StyleOverride>;
 };

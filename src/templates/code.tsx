@@ -125,7 +125,7 @@ export const code: TemplateDef = {
     palette("dawn", "Dawn", { bg: "#eef0f5", fg: "#1d2030", muted: "#6b7085", surface: "#ffffff", line: "#dfe2ea", accent: "#d6336c", colors: ["#d6336c", "#2f9e44", "#e8590c"] }),
     palette("aurora", "Aurora", { bg: "#07130f", fg: "#e7fff5", muted: "#6f9a88", surface: "#0c1d17", line: "#18342a", accent: "#34d399", colors: ["#34d399", "#facc15", "#60a5fa"] }),
   ],
-  defaults: { titleFont: "geist", bodyFont: "local-mono", titleSize: 58, bodySize: 22 },
+  defaults: { titleFont: "geist", bodyFont: "geist-mono", titleSize: 58, bodySize: 22 },
   titleRange: [36, 84],
   bodyRange: [14, 30],
   sample: { eyebrow: "app/layout.tsx", title: "Add share images in one line", subtitle: "Point your metadata at a PNG and every link gets a card." },

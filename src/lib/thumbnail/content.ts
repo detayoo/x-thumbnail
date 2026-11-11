@@ -1,4 +1,4 @@
-import type { Content, TemplateDef } from "./types";
+import type { Content, TemplateDef, ThumbnailDoc } from "./types";
 
 const today = () => new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" }).format(new Date());
 
@@ -15,10 +15,14 @@ export const DEFAULT_CONTENT: Content = {
   image: null,
 };
 
-export function resolveContent(template: TemplateDef, content: Partial<Content>): Content {
+export function resolveContent(template: TemplateDef, content: Partial<Content>, hidden?: readonly string[]): Content {
   const merged: Content = { ...DEFAULT_CONTENT, ...template.sample };
   for (const [key, value] of Object.entries(content) as [keyof Content, Content[keyof Content]][]) {
     if (value !== undefined) (merged as Record<string, unknown>)[key] = value;
+  }
+  for (const key of hidden ?? []) {
+    if (key === "image") merged.image = null;
+    else if (key in merged) (merged as Record<string, unknown>)[key] = "";
   }
   return merged;
 }
@@ -45,4 +49,10 @@ export function slug(text: string) {
       .replace(/^-|-$/g, "")
       .slice(0, 60) || "thumbnail"
   );
+}
+
+const EMPTY: Partial<Content> = {};
+
+export function contentFor(doc: Pick<ThumbnailDoc, "content" | "contents" | "syncText">, templateId: string): Partial<Content> {
+  return doc.syncText ? doc.content : (doc.contents?.[templateId] ?? EMPTY);
 }

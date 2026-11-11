@@ -36,5 +36,6 @@ export function resolveStyle(template: TemplateDef, override: StyleOverride | un
     bodySize: o.bodySize ?? template.defaults.bodySize,
     palette: o.accent ? { ...base, accent: o.accent, colors: [o.accent, ...base.colors.slice(1)] } : base,
     options,
+    hidden: new Set(o.hidden ?? []),
   };
 }

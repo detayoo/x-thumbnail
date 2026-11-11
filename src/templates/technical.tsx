@@ -114,7 +114,7 @@ export const technical: TemplateDef = {
     palette("white", "White", { bg: "#fafafa", fg: "#0a0a0a", muted: "#6f6f6f", accent: "#2054d2", line: "#e2e2e2" }),
     palette("signal", "Signal", { bg: "#000000", fg: "#ffffff", muted: "#8f8f8f", accent: "#ff4d2e", line: "#2a2a2a" }),
   ],
-  defaults: { titleFont: "geist", bodyFont: "local-mono", titleSize: 92, bodySize: 20 },
+  defaults: { titleFont: "geist", bodyFont: "geist-mono", titleSize: 92, bodySize: 20 },
   titleRange: [48, 130],
   bodyRange: [14, 26],
   sample: { eyebrow: "Engineering", title: "Ship previews on every push", subtitle: "[build]   2.4s\n[cold]    38ms\n[regions] 18\n[status]  ready" },

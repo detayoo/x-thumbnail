@@ -8,7 +8,7 @@ import { PanelSurface } from "@/toolcraft/ui";
 import { cn } from "@/toolcraft/ui/lib/utils";
 import { useEditor } from "@/store/editor";
 import { site } from "@/lib/site";
-import { resolveContent } from "@/lib/thumbnail/content";
+import { contentFor, resolveContent } from "@/lib/thumbnail/content";
 import { resolveStyle } from "@/lib/thumbnail/style";
 import type { Content, StyleOverride, TemplateCategory, TemplateDef } from "@/lib/thumbnail/types";
 import { TEMPLATES } from "@/templates";
@@ -30,7 +30,7 @@ const Thumbnail = React.memo(function Thumbnail({
 }) {
   const scale = THUMB_WIDTH / CARD.width;
   const Component = template.Component;
-  const resolved = React.useMemo(() => resolveContent(template, content), [template, content]);
+  const resolved = React.useMemo(() => resolveContent(template, content, override?.hidden), [template, content, override]);
   const style = React.useMemo(() => resolveStyle(template, override, localFonts), [template, override, localFonts]);
   return (
     <div className="relative overflow-hidden rounded-[5px]" style={{ width: THUMB_WIDTH, height: CARD.height * scale }}>
@@ -44,6 +44,9 @@ const Thumbnail = React.memo(function Thumbnail({
 export function TemplatesPanel() {
   const templateId = useEditor((s) => s.doc.templateId);
   const liveContent = useEditor((s) => s.doc.content);
+  const liveContents = useEditor((s) => s.doc.contents);
+  const syncText = useEditor((s) => s.doc.syncText);
+  const contents = React.useDeferredValue(liveContents);
   const styles = useEditor((s) => s.doc.styles);
   const localFonts = useEditor((s) => s.localFonts);
   const content = React.useDeferredValue(liveContent);
@@ -115,7 +118,7 @@ export function TemplatesPanel() {
                           : "shadow-[0_0_0_1px_var(--tint-10)] group-hover:shadow-[0_0_0_1px_var(--tint-25)] group-focus-visible:shadow-[0_0_0_2px_var(--accent)]",
                       )}
                     >
-                      <Thumbnail template={template} content={content} override={styles[template.id]} localFonts={localFonts} />
+                      <Thumbnail template={template} content={contentFor({ content, contents, syncText }, template.id)} override={styles[template.id]} localFonts={localFonts} />
                       {active ? (
                         <span className="absolute -top-1.5 -right-1.5 grid size-5 place-items-center rounded-full bg-[color:var(--accent)] text-white shadow-[0_0_0_2px_var(--card)]">
                           <CheckIcon weight="bold" className="size-3" />

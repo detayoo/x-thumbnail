@@ -7,8 +7,6 @@ import { useEditor } from "@/store/editor";
 import { useThumbnail } from "./use-thumbnail";
 import { EditContext, type EditApi } from "@/components/card/primitives";
 
-const editApi: EditApi = { commit: (field, value) => useEditor.getState().setContent(field, value) };
-
 export function getCardNode() {
   return document.querySelector<HTMLElement>("[data-stage] [data-card-root]");
 }
@@ -43,6 +41,11 @@ export function Stage() {
     if (fit > 0) setFitScale(fit);
   }, [fit, setFitScale]);
   const Component = template.Component;
+  const selected = useEditor((s) => s.selected);
+  const editApi = React.useMemo<EditApi>(
+    () => ({ commit: (field, value) => useEditor.getState().setContent(field, value), select: (key) => useEditor.getState().select(key), selected }),
+    [selected],
+  );
   const w = format.width * scale;
   const h = format.height * scale;
 
@@ -53,6 +56,7 @@ export function Stage() {
         ref={areaRef}
         className="absolute inset-x-3 top-3 bottom-[76px] overflow-auto md:right-[336px] md:bottom-[76px] md:left-[272px]"
         data-stage
+        onClick={() => useEditor.getState().select(null)}
       >
         {scale > 0 ? (
           <div className="flex min-h-full min-w-full items-center justify-center p-8">
