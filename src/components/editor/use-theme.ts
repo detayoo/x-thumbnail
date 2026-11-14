@@ -6,7 +6,7 @@ export type Theme = "light" | "dark";
 const KEY = "x-thumbnail:theme";
 
 function read(): Theme {
-  return document.documentElement.dataset.theme === "light" ? "light" : "dark";
+  return document.documentElement.dataset.theme === "dark" ? "dark" : "light";
 }
 
 function subscribe(onChange: () => void) {
@@ -26,6 +26,6 @@ export function applyTheme(theme: Theme) {
 }
 
 export function useTheme(): [Theme, (theme: Theme) => void] {
-  const theme = React.useSyncExternalStore(subscribe, read, () => "dark" as Theme);
+  const theme = React.useSyncExternalStore(subscribe, read, () => "light" as Theme);
   return [theme, applyTheme];
 }

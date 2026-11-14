@@ -41,17 +41,14 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#1e1e1e" },
-    { media: "(prefers-color-scheme: light)", color: "#f2f2f2" },
-  ],
+  themeColor: "#f2f2f2",
 };
 
-const themeScript = `(function(){try{var t=localStorage.getItem("x-thumbnail:theme");if(t!=="light"&&t!=="dark"){t=window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}var d=document.documentElement;d.dataset.theme=t;d.classList.toggle("dark",t==="dark")}catch(e){}})();`;
+const themeScript = `(function(){try{var t=localStorage.getItem("x-thumbnail:theme");if(t!=="dark")t="light";var d=document.documentElement;d.dataset.theme=t;d.classList.toggle("dark",t==="dark")}catch(e){}})();`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" data-theme="dark" className={`dark h-full ${fontVariables}`} suppressHydrationWarning>
+    <html lang="en" data-theme="light" className={`h-full ${fontVariables}`} suppressHydrationWarning>
       <body className="h-full">
         <Script id="theme" strategy="beforeInteractive">
           {themeScript}
